@@ -1,0 +1,14 @@
+{
+  "slug": "ai-verification-cost-principle",
+  "title": "AI 輔助開發的核心原則：驗證成本決定適用範圍",
+  "titleEn": "The Core Principle of AI-Assisted Development: Verification Cost Determines Applicability",
+  "date": "2025-01-27",
+  "tags": ["AI開發", "開發哲學", "效率", "最佳實踐", "VibeBlog"],
+  "tagsEn": ["AI Development", "Development Philosophy", "Efficiency", "Best Practices", "VibeBlog"],
+  "summary": "探討 AI 輔助開發的核心限制：自然語言的歧義性會導致累積偏差。提出「驗證成本原則」：只有在能用極小時間成本判斷 AI 輸出是否正確的範圍內，才能扎實地完成工作。並以 VibeBlog 專案為例，分析哪些部分最符合低驗證成本原則。",
+  "summaryEn": "Exploring the core limitations of AI-assisted development: the ambiguity of natural language leads to cumulative errors. Proposing the 'Verification Cost Principle': you can only build solidly within the scope where you can verify AI output correctness with minimal time cost. Using the VibeBlog project as an example to analyze which parts best fit the low verification cost principle.",
+  "description": "深入分析 AI 輔助開發的適用範圍，以及如何透過驗證成本原則來判斷哪些任務適合交給 AI 處理。",
+  "descriptionEn": "An in-depth analysis of the applicability scope of AI-assisted development, and how to use the verification cost principle to determine which tasks are suitable for AI processing.",
+  "heroImage": "/images/ai-generated/ai-verification-cost-principle.png"
+}
+
