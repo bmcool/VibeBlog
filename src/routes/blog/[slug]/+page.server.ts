@@ -1,23 +1,23 @@
-import { getPost } from '$lib/data/posts';
+import { getPostMeta, getPostContent } from '$lib/content';
+import { parseLanguage } from '$lib/utils/language';
 import { error } from '@sveltejs/kit';
-import { marked } from 'marked';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ params }) => {
-	const post = getPost(params.slug);
+export const load: PageServerLoad = async ({ params, url }) => {
+	const lang = parseLanguage(url);
+	const meta = getPostMeta(params.slug, lang);
+	const htmlContent = getPostContent(params.slug, lang);
 
-	if (!post) {
+	if (!meta || !htmlContent) {
 		throw error(404, '文章未找到');
 	}
 
-	// 在 server 端轉換 markdown 為 HTML
-	const htmlContent = await marked.parse(post.content);
-
 	return {
 		post: {
-			...post,
+			...meta,
 			htmlContent
-		}
+		},
+		lang
 	};
 };
 

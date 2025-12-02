@@ -4,8 +4,10 @@ import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ url }) => {
 	const lang = parseLanguage(url);
+	const posts = getAllPostsMeta(lang);
+	
 	return {
-		posts: getAllPostsMeta(lang),
+		latestPost: posts[0] || null,
 		lang
 	};
 };

@@ -1,7 +1,16 @@
 <script lang="ts">
 	import favicon from '$lib/assets/favicon.svg';
+	import LanguageSwitcher from '$lib/components/LanguageSwitcher.svelte';
+	import { page } from '$app/stores';
+	import { parseLanguage } from '$lib/utils/language';
 
 	let { children } = $props();
+	
+	// 使用 $derived 来响应式地获取语言
+	const lang = $derived(parseLanguage($page.url));
+	
+	// 计算语言参数
+	const langParam = $derived(lang === 'en' ? '?lang=en' : '');
 </script>
 
 <svelte:head>
@@ -10,10 +19,12 @@
 
 <nav class="main-nav">
 	<div class="nav-container">
-		<a href="/" class="logo">VibeBlog</a>
+		<a href={langParam ? `/${langParam}` : '/'} class="logo">VibeBlog</a>
 		<div class="nav-links">
-			<a href="/">首頁</a>
-			<a href="/blog">文章</a>
+			<a href={langParam ? `/${langParam}` : '/'}>{lang === 'en' ? 'Home' : '首頁'}</a>
+			<a href={langParam ? `/blog${langParam}` : '/blog'}>{lang === 'en' ? 'Posts' : '文章'}</a>
+			<a href={langParam ? `/tags${langParam}` : '/tags'}>{lang === 'en' ? 'Tags' : '標籤'}</a>
+			<LanguageSwitcher />
 		</div>
 	</div>
 </nav>

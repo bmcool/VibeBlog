@@ -2,24 +2,36 @@
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
+	
+	// 计算语言参数
+	const langParam = $derived(data.lang === 'en' ? '?lang=en' : '');
 </script>
 
 <svelte:head>
 	<title>{data.post.title} - VibeBlog</title>
-	<meta name="description" content={data.post.description} />
+	<meta name="description" content={data.post.summary || data.post.description || ''} />
 </svelte:head>
 
 <div class="post-container">
 	<article class="post">
 		<header class="post-header">
-			<a href="/blog" class="back-link">← 返回文章列表</a>
+			<a href={langParam ? `/blog${langParam}` : '/blog'} class="back-link">← {data.lang === 'en' ? 'Back to Posts' : '返回文章列表'}</a>
 			<h1>{data.post.title}</h1>
 			<p class="post-meta">
-				<span class="date">{new Date(data.post.date).toLocaleDateString('zh-TW')}</span>
+				<span class="date">{new Date(data.post.date).toLocaleDateString(data.lang === 'en' ? 'en-US' : 'zh-TW')}</span>
 			</p>
+			{#if data.post.tags && data.post.tags.length > 0}
+				<div class="post-tags">
+					{#each data.post.tags as tag}
+						<a href={langParam ? `/tags/${encodeURIComponent(tag)}${langParam}` : `/tags/${encodeURIComponent(tag)}`} class="tag-badge">{tag}</a>
+					{/each}
+				</div>
+			{/if}
 		</header>
 
-		{#if data.post.image}
+		{#if data.post.heroImage}
+			<img src={data.post.heroImage} alt={data.post.title} class="post-featured-image" />
+		{:else if data.post.image}
 			<img src={data.post.image} alt={data.post.title} class="post-featured-image" />
 		{/if}
 
@@ -67,7 +79,30 @@
 	.post-meta {
 		color: #666;
 		font-size: 0.9rem;
-		margin: 0;
+		margin: 0 0 1rem 0;
+	}
+
+	.post-tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		margin-bottom: 1rem;
+	}
+
+	.tag-badge {
+		display: inline-block;
+		padding: 0.25rem 0.75rem;
+		background: #f0f0f0;
+		border-radius: 12px;
+		font-size: 0.85rem;
+		color: #666;
+		text-decoration: none;
+		transition: all 0.2s;
+	}
+
+	.tag-badge:hover {
+		background: #0066cc;
+		color: white;
 	}
 
 	.post-featured-image {

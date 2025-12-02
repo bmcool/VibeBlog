@@ -8,10 +8,44 @@
 ## [Unreleased]
 
 ### 計劃中
-- 更多部落格功能
-- 文章分類和標籤
 - 搜尋功能
 - RSS Feed
+
+## [0.1.0] - 2025-12-02
+
+### Added
+- **Precomputed Tags 架構**：實現預計算標籤索引系統
+  - 使用 `content/indexes/tags.json` 和 `tags.en.json` 預計算標籤索引
+  - 零運行時計算，O(1) 查詢效能
+  - 自動生成標籤索引腳本 (`npm run generate:tags`)
+- **多語言支持（中英文）**：
+  - 完整的雙語內容管理系統
+  - URL 參數語言切換 (`?lang=en` / `?lang=zh`)
+  - 語言切換器組件
+  - 所有頁面支持中英文切換
+- **標籤系統**：
+  - 標籤列表頁面 (`/tags`)
+  - 標籤詳情頁面 (`/tags/[tag]`)
+  - 文章標籤顯示和導航
+- **內容管理架構**：
+  - `content/` 目錄結構（raw, processed, meta, indexes）
+  - 文章 metadata JSON 格式（支持多語言字段）
+  - 處理後的 HTML 內容存儲
+- **新文章**：
+  - "Precomputed Tags：用預計算索引取代動態搜尋的標籤系統"
+  - 中英文完整版本
+
+### Changed
+- 重構內容讀取系統，使用文件系統而非內存數組
+- 更新所有路由以支持多語言
+- 優化導航鏈接，保持語言參數
+
+### Technical Details
+- 新增 `tsx` 作為腳本執行工具
+- 新增 `src/lib/content.ts` 內容管理模組
+- 新增 `src/lib/utils/language.ts` 語言工具
+- 新增 `src/lib/components/LanguageSwitcher.svelte` 語言切換組件
+- 更新類型定義，支持 `PostMeta` 和 `Language` 類型
 
 ## [0.0.1] - 2025-12-02
 

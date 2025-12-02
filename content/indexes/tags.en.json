@@ -1,0 +1,26 @@
+{
+  "MCP": [
+    "installing-mcp-servers"
+  ],
+  "Development Environment": [
+    "installing-mcp-servers"
+  ],
+  "Tools": [
+    "installing-mcp-servers"
+  ],
+  "Architecture": [
+    "precomputed-tags-architecture"
+  ],
+  "SvelteKit": [
+    "precomputed-tags-architecture"
+  ],
+  "Static Site": [
+    "precomputed-tags-architecture"
+  ],
+  "Performance": [
+    "precomputed-tags-architecture"
+  ],
+  "AI-Blogging": [
+    "precomputed-tags-architecture"
+  ]
+}

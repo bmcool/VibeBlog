@@ -1,0 +1,26 @@
+{
+  "MCP": [
+    "installing-mcp-servers"
+  ],
+  "開發環境": [
+    "installing-mcp-servers"
+  ],
+  "工具設置": [
+    "installing-mcp-servers"
+  ],
+  "架構設計": [
+    "precomputed-tags-architecture"
+  ],
+  "SvelteKit": [
+    "precomputed-tags-architecture"
+  ],
+  "靜態網站": [
+    "precomputed-tags-architecture"
+  ],
+  "效能優化": [
+    "precomputed-tags-architecture"
+  ],
+  "AI-Blogging": [
+    "precomputed-tags-architecture"
+  ]
+}

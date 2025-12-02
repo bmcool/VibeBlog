@@ -1,0 +1,212 @@
+<h1>Precomputed Tags：用預計算索引取代動態搜尋的標籤系統</h1>
+
+<p>在設計 VibeBlog 的標籤系統時，我遇到了一個關鍵問題：<strong>如何在不使用資料庫的情況下，實現高效能的標籤分類瀏覽？</strong></p>
+
+<p>傳統的 CMS 做法是：每次請求時動態掃描所有文章，然後用 for-loop 過濾出符合標籤的文章。但這種做法有幾個問題：</p>
+
+<ul>
+<li>❌ 每次請求都要掃描整個 content 資料夾</li>
+<li>❌ 需要動態計算，無法充分利用 SSG 的優勢</li>
+<li>❌ 文章數量增加時效能會線性下降</li>
+<li>❌ 不適合 CDN 快取</li>
+</ul>
+
+<p>於是，我選擇了 <strong>Precomputed Tags（預計算標籤）</strong> 架構。</p>
+
+<h2>什麼是 Precomputed Tags？</h2>
+
+<p>Precomputed Tags 的核心概念是：<strong>在 build 時就把所有分類關係計算好，存成靜態 JSON 檔案，前端只需要讀取，零計算。</strong></p>
+
+<p>這就像圖書館的索引卡片系統：</p>
+
+<ul>
+<li>傳統方式：每次有人問「有哪些關於 LLM 的書？」，圖書館員就要跑遍整個圖書館去找</li>
+<li>Precomputed 方式：圖書館已經準備好索引卡片，直接翻到「LLM」那一頁，上面列好了所有相關書籍的編號</li>
+</ul>
+
+<h2>資料結構設計</h2>
+
+<h3>1. 文章 Metadata（每篇文章一份 JSON）</h3>
+
+<p>每篇文章在 <code>content/meta/</code> 目錄下都有一份對應的 JSON 檔案：</p>
+
+<pre><code>content/meta/how-i-use-vllm.json
+{
+  "slug": "how-i-use-vllm",
+  "title": "我怎麼在本機用 vLLM 玩 7B 模型",
+  "date": "2025-12-02",
+  "tags": ["LLM", "vLLM", "本地部署", "實驗筆記"],
+  "summary": "紀錄我怎麼在家用單張 GPU 跑 vLLM 的過程。",
+  "heroImage": "/images/2025-12-02-vllm-hero.png"
+}
+</code></pre>
+
+<p>標籤就存在這裡的 <code>tags</code> 陣列中。</p>
+
+<h3>2. 預計算的標籤索引（tags.json）</h3>
+
+<p>在 <code>content/indexes/tags.json</code> 中，我們預先建立好「標籤 → 文章 slug 列表」的映射：</p>
+
+<pre><code>content/indexes/tags.json
+{
+  "LLM": ["how-i-use-vllm", "llm-metrics", "runtime-benchmark"],
+  "SvelteKit": ["vibeblog-infra", "routing-idea"],
+  "AI-Blogging": ["ai-html-pipeline", "meta-generator"]
+}
+</code></pre>
+
+<p>這個檔案在 build 前由腳本自動生成，不需要手動維護。</p>
+
+<h2>實作方式</h2>
+
+<h3>生成 tags.json 的腳本</h3>
+
+<p>我寫了一個簡單的 Node.js 腳本來掃描所有 meta JSON 檔案，自動生成索引：</p>
+
+<pre><code>scripts/generate-tags-index.ts
+
+// 掃描所有 meta 文件
+for (const file of jsonFiles) {
+  const meta = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+  
+  // 將文章 slug 加入對應的 tag
+  for (const tag of meta.tags) {
+    if (!tagsIndex[tag]) {
+      tagsIndex[tag] = [];
+    }
+    tagsIndex[tag].push(meta.slug);
+  }
+}
+
+// 寫入 tags.json
+fs.writeFileSync('content/indexes/tags.json', 
+  JSON.stringify(tagsIndex, null, 2));
+</code></pre>
+
+<p>執行 <code>npm run generate:tags</code> 就能更新索引。</p>
+
+<h3>SvelteKit 端：只讀取，不計算</h3>
+
+<p>在 SvelteKit 的 server load 函數中，我們只需要讀取預計算好的 JSON：</p>
+
+<pre><code>// src/routes/tags/[tag]/+page.server.ts
+import { getTagsIndex, getPostMeta } from '$lib/content';
+
+export const load = ({ params }) => {
+  const tagsIndex = getTagsIndex(); // 讀取預計算的 JSON
+  const slugs = tagsIndex[params.tag] || [];
+  
+  // 只讀取需要的文章 meta，不需要掃描全部
+  const posts = slugs.map(slug => getPostMeta(slug));
+  
+  return { tag: params.tag, posts };
+};
+</code></pre>
+
+<p>完全零動態計算，純資料查表（O(1)）。</p>
+
+<h2>與 AI Pipeline 的完美整合</h2>
+
+<p>這個架構特別適合 AI 自動化的內容生產流程：</p>
+
+<pre><code>raw 文章 
+  → AI 處理 
+    → processed HTML（AI 排版的 HTML）
+    → meta JSON（AI 生成的 metadata，包含 tags）
+      → 執行 generate:tags 腳本
+        → tags.json 自動更新
+          → build → deploy
+</code></pre>
+
+<p>AI 在生成文章時，可以同時：</p>
+
+<ul>
+<li>分析文章內容，自動產生相關標籤</li>
+<li>生成 meta JSON（包含 tags 陣列）</li>
+<li>生成 processed HTML</li>
+</ul>
+
+<p>然後執行一次 <code>npm run generate:tags</code>，所有分類索引就自動更新了。</p>
+
+<h2>優點總結</h2>
+
+<h3>✅ 效能極高</h3>
+
+<ul>
+<li>所有分類在 build 時完成</li>
+<li>前端只讀取 JSON，零計算</li>
+<li>完美搭配 SSG + CDN</li>
+</ul>
+
+<h3>✅ 完全可版本控制</h3>
+
+<ul>
+<li>分類是檔案，commit 可看變動</li>
+<li>所有內容都是檔案，易於追蹤</li>
+</ul>
+
+<h3>✅ 適合大量文章</h3>
+
+<ul>
+<li>幾百篇、幾千篇文章也沒差</li>
+<li>查詢複雜度是 O(1)，不會隨文章數量增加而變慢</li>
+</ul>
+
+<h3>✅ 適合 AI 自動化</h3>
+
+<ul>
+<li>AI 直接產出分類資料結構</li>
+<li>不需要複雜的資料庫 schema</li>
+<li>所有邏輯在 build 前跑完</li>
+</ul>
+
+<h3>✅ 與「文章由 AI 生成」的概念超契合</h3>
+
+<ul>
+<li>AI 產文章時同步決定標籤</li>
+<li>自動更新 tags.json</li>
+<li>完全自動化的內容管理流程</li>
+</ul>
+
+<h2>實際應用</h2>
+
+<p>在 VibeBlog 中，這個架構實現了：</p>
+
+<ul>
+<li><code>/tags</code> - 所有標籤一覽（從 tags.json 讀取）</li>
+<li><code>/tags/LLM</code> - 所有 LLM 相關文章（O(1) 查詢）</li>
+<li>文章列表頁面顯示標籤（從 meta JSON 讀取）</li>
+<li>文章詳情頁面顯示標籤（可點擊跳轉到標籤頁）</li>
+</ul>
+
+<p>所有這些功能都是<strong>零運行時計算，純靜態資料</strong>。</p>
+
+<h2>擴展性</h2>
+
+<p>這個模式可以輕鬆擴展到其他分類方式：</p>
+
+<ul>
+<li><code>content/indexes/years.json</code> - 按年份分類</li>
+<li><code>content/indexes/categories.json</code> - 按類別分類</li>
+<li><code>content/indexes/authors.json</code> - 按作者分類</li>
+</ul>
+
+<p>只需要在 build 前生成對應的索引檔案，SvelteKit 端就能直接使用。</p>
+
+<h2>結論</h2>
+
+<p>Precomputed Tags 架構證明了：<strong>不需要資料庫，不需要動態查詢，用檔案 + 預計算就能實現高效能的標籤系統。</strong></p>
+
+<p>這種方法特別適合：</p>
+
+<ul>
+<li>靜態網站生成（SSG）</li>
+<li>AI 自動化的內容生產</li>
+<li>需要版本控制的內容管理</li>
+<li>追求極致效能的部落格系統</li>
+</ul>
+
+<p>在 VibeBlog 的實作中，這個架構不僅解決了標籤分類的問題，更成為整個 AI-First 內容管理系統的基礎。</p>
+
+<p>如果你也在建立類似的系統，不妨試試 Precomputed Tags 架構，你會發現它比傳統的動態搜尋方式更簡單、更快、更可控。</p>
+

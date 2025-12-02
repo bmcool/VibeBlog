@@ -1,0 +1,13 @@
+{
+  "slug": "precomputed-tags-architecture",
+  "title": "Precomputed Tags：用預計算索引取代動態搜尋的標籤系統",
+  "titleEn": "Precomputed Tags: Replacing Dynamic Search with Pre-computed Indexes",
+  "date": "2025-12-02",
+  "tags": ["架構設計", "SvelteKit", "靜態網站", "效能優化", "AI-Blogging"],
+  "tagsEn": ["Architecture", "SvelteKit", "Static Site", "Performance", "AI-Blogging"],
+  "summary": "介紹 VibeBlog 使用的 Precomputed Tags 架構，如何用預計算的 JSON 索引取代傳統的動態搜尋，實現零運行時計算的高效能標籤系統。",
+  "summaryEn": "Introducing the Precomputed Tags architecture used in VibeBlog, how to replace traditional dynamic search with pre-computed JSON indexes, achieving a high-performance tag system with zero runtime computation.",
+  "description": "深入解析預計算標籤架構的設計理念、實作方式，以及如何與 AI pipeline 完美整合。",
+  "descriptionEn": "An in-depth analysis of the design philosophy, implementation approach, and seamless integration with AI pipeline for the precomputed tags architecture."
+}
+

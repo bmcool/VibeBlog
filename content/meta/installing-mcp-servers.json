@@ -1,0 +1,15 @@
+{
+  "slug": "installing-mcp-servers",
+  "title": "安裝 MCP Servers - 我的開發環境設置",
+  "titleEn": "Installing MCP Servers - My Development Environment Setup",
+  "date": "2025-12-02",
+  "tags": ["MCP", "開發環境", "工具設置"],
+  "tagsEn": ["MCP", "Development Environment", "Tools"],
+  "summary": "記錄我為 VibeBlog 專案設置開發環境時安裝的 MCP (Model Context Protocol) servers。",
+  "summaryEn": "Documenting the MCP (Model Context Protocol) servers I installed when setting up the development environment for the VibeBlog project.",
+  "heroImage": "/mcp-servers.png",
+  "description": "記錄我為 VibeBlog 專案設置開發環境時安裝的 MCP (Model Context Protocol) servers。",
+  "descriptionEn": "Documenting the MCP (Model Context Protocol) servers I installed when setting up the development environment for the VibeBlog project."
+}
+
+

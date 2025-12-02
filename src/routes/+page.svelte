@@ -1,34 +1,44 @@
 <script lang="ts">
-	import { getAllPosts } from '$lib/data/posts';
+	import type { PageData } from './$types';
+	import { parseLanguage } from '$lib/utils/language';
+	import { page } from '$app/stores';
 	
-	const latestPost = getAllPosts()[0];
+	let { data }: { data: PageData } = $props();
+	
+	// 计算语言和语言参数
+	const lang = $derived(parseLanguage($page.url));
+	const langParam = $derived(lang === 'en' ? '?lang=en' : '');
 </script>
 
 <div class="home-container">
 	<header class="hero">
 		<h1>Welcome to VibeBlog</h1>
-		<p class="subtitle">基於 SvelteKit 建立的部落格應用程式</p>
+		<p class="subtitle">{lang === 'en' ? 'A blog application built with SvelteKit' : '基於 SvelteKit 建立的部落格應用程式'}</p>
 	</header>
 
-	{#if latestPost}
+	{#if data.latestPost}
 		<section class="latest-post">
-			<h2>最新文章</h2>
+			<h2>{lang === 'en' ? 'Latest Post' : '最新文章'}</h2>
 			<article class="post-preview">
-				{#if latestPost.image}
-					<img src={latestPost.image} alt={latestPost.title} class="preview-image" />
+				{#if data.latestPost.heroImage}
+					<img src={data.latestPost.heroImage} alt={data.latestPost.title} class="preview-image" />
 				{/if}
 				<div class="preview-content">
-					<h3><a href="/blog/{latestPost.slug}">{latestPost.title}</a></h3>
-					<p class="post-date">{new Date(latestPost.date).toLocaleDateString('zh-TW')}</p>
-					<p class="post-description">{latestPost.description}</p>
-					<a href="/blog/{latestPost.slug}" class="read-more">閱讀全文 →</a>
+					<h3><a href={langParam ? `/blog/${data.latestPost.slug}${langParam}` : `/blog/${data.latestPost.slug}`}>{data.latestPost.title}</a></h3>
+					<p class="post-date">{new Date(data.latestPost.date).toLocaleDateString(lang === 'en' ? 'en-US' : 'zh-TW')}</p>
+					{#if data.latestPost.summary}
+						<p class="post-description">{data.latestPost.summary}</p>
+					{:else if data.latestPost.description}
+						<p class="post-description">{data.latestPost.description}</p>
+					{/if}
+					<a href={langParam ? `/blog/${data.latestPost.slug}${langParam}` : `/blog/${data.latestPost.slug}`} class="read-more">{lang === 'en' ? 'Read more →' : '閱讀全文 →'}</a>
 				</div>
 			</article>
 		</section>
 	{/if}
 
 	<nav class="cta">
-		<a href="/blog" class="btn">查看所有文章</a>
+		<a href={langParam ? `/blog${langParam}` : '/blog'} class="btn">{lang === 'en' ? 'View All Posts' : '查看所有文章'}</a>
 	</nav>
 </div>
 
