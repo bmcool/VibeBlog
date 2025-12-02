@@ -1,38 +1,197 @@
 <h1>安裝 MCP Servers</h1>
+
 <p>在開始建立 VibeBlog 之前，我先設置了開發環境，安裝了幾個有用的 MCP (Model Context Protocol) servers 來提升開發效率。</p>
+
+<h2>🔗 快速連結</h2>
+
+<p>以下是本文提到的所有 MCP servers 和相關資源的快速連結，點擊即可直接訪問：</p>
+
+<div style="background: #f5f5f5; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; border-left: 4px solid #0066cc;">
+<h3 style="margin-top: 0; color: #0066cc;">MCP 官方資源</h3>
+<ul style="list-style: none; padding-left: 0;">
+<li style="margin-bottom: 0.5rem;">🌐 <a href="https://modelcontextprotocol.io/" target="_blank" rel="noopener noreferrer" style="color: #0066cc; text-decoration: none; font-weight: 600;">MCP 官方網站</a> - <small>https://modelcontextprotocol.io/</small></li>
+<li style="margin-bottom: 0.5rem;">📦 <a href="https://github.com/modelcontextprotocol" target="_blank" rel="noopener noreferrer" style="color: #0066cc; text-decoration: none; font-weight: 600;">MCP GitHub 組織</a> - <small>https://github.com/modelcontextprotocol</small></li>
+<li style="margin-bottom: 0.5rem;">🇨🇳 <a href="https://mcpcn.com/" target="_blank" rel="noopener noreferrer" style="color: #0066cc; text-decoration: none; font-weight: 600;">MCP 中文站</a> - <small>https://mcpcn.com/</small></li>
+</ul>
+
+<h3 style="color: #0066cc;">已安裝的 MCP Servers</h3>
+<ul style="list-style: none; padding-left: 0;">
+<li style="margin-bottom: 0.75rem;">
+  <strong>sequential-thinking</strong><br>
+  <small>順序思考工具（MCP 內建工具，無需額外安裝）</small>
+</li>
+<li style="margin-bottom: 0.75rem;">
+  <strong>chrome-devtools</strong><br>
+  🔗 <a href="https://chromedevtools.github.io/devtools-protocol/" target="_blank" rel="noopener noreferrer" style="color: #0066cc; text-decoration: none; font-weight: 600;">Chrome DevTools Protocol 文檔</a><br>
+  <small>https://chromedevtools.github.io/devtools-protocol/</small><br>
+  <small>提供 26 個工具，用於瀏覽器調試、網路監控、性能分析等</small>
+</li>
+<li style="margin-bottom: 0.75rem;">
+  <strong>context7</strong><br>
+  🔗 <a href="https://context7.com/" target="_blank" rel="noopener noreferrer" style="color: #0066cc; text-decoration: none; font-weight: 600;">Context7 官方網站</a><br>
+  <small>https://context7.com/</small><br>
+  <small>用於獲取程式庫文檔和代碼範例，支持多種程式庫</small>
+</li>
+<li style="margin-bottom: 0.75rem;">
+  <strong>gitmcp</strong><br>
+  🔗 <a href="https://github.com/modelcontextprotocol/servers" target="_blank" rel="noopener noreferrer" style="color: #0066cc; text-decoration: none; font-weight: 600;">MCP Servers 列表（GitHub）</a><br>
+  <small>https://github.com/modelcontextprotocol/servers</small><br>
+  🔗 <a href="https://github.com" target="_blank" rel="noopener noreferrer" style="color: #0066cc; text-decoration: none; font-weight: 600;">GitHub 官方網站</a><br>
+  <small>https://github.com</small><br>
+  <small>用於搜尋 GitHub 代碼、獲取文檔、語義搜尋等</small>
+</li>
+<li style="margin-bottom: 0.75rem;">
+  <strong>awslabs.openapi-mcp-server</strong><br>
+  🔗 <a href="https://github.com/awslabs" target="_blank" rel="noopener noreferrer" style="color: #0066cc; text-decoration: none; font-weight: 600;">AWS Labs GitHub</a><br>
+  <small>https://github.com/awslabs</small><br>
+  🔗 <a href="https://www.openapis.org/" target="_blank" rel="noopener noreferrer" style="color: #0066cc; text-decoration: none; font-weight: 600;">OpenAPI 官方網站</a><br>
+  <small>https://www.openapis.org/</small><br>
+  <small>⚠️ 目前有配置問題，待修復</small>
+</li>
+</ul>
+
+<h3 style="color: #0066cc;">相關技術文檔</h3>
+<ul style="list-style: none; padding-left: 0;">
+<li style="margin-bottom: 0.5rem;">🔗 <a href="https://chromedevtools.github.io/devtools-protocol/" target="_blank" rel="noopener noreferrer" style="color: #0066cc; text-decoration: none; font-weight: 600;">Chrome DevTools Protocol 文檔</a> - <small>https://chromedevtools.github.io/devtools-protocol/</small></li>
+<li style="margin-bottom: 0.5rem;">🔗 <a href="https://www.anthropic.com/" target="_blank" rel="noopener noreferrer" style="color: #0066cc; text-decoration: none; font-weight: 600;">Anthropic 官方網站</a> - <small>https://www.anthropic.com/</small></li>
+</ul>
+</div>
+
+<p style="background: #e8f4f8; padding: 1rem; border-radius: 5px; border-left: 4px solid #0066cc;"><strong>💡 提示</strong>: 所有連結都在新分頁開啟，方便您隨時回來繼續閱讀。每個連結都顯示了完整的網址，方便您複製或分享。</p>
+
+<h2>什麼是 MCP？</h2>
+
+<p><a href="https://modelcontextprotocol.io/" target="_blank" rel="noopener noreferrer">Model Context Protocol (MCP)</a> 是由 <a href="https://www.anthropic.com/" target="_blank" rel="noopener noreferrer">Anthropic</a> 於 2024 年 11 月推出的開放標準，旨在為大型語言模型（LLM）應用提供標準化接口，使其能夠連接並交互外部數據源和工具。</p>
+
+<p>MCP 的核心目標是克服 LLM 應用僅依賴其訓練數據的局限性，使其能夠動態獲取所需的上下文信息，以執行更廣泛的任務。通過定義一套通用的準則和格式，MCP 使 LLM 應用可以在需要時獲取相關信息、執行操作，從而增強其功能和使用範圍。</p>
+
+<p>更多關於 MCP 的資訊，可以參考：</p>
+<ul>
+<li><a href="https://modelcontextprotocol.io/" target="_blank" rel="noopener noreferrer">MCP 官方網站</a></li>
+<li><a href="https://github.com/modelcontextprotocol" target="_blank" rel="noopener noreferrer">MCP GitHub 組織</a></li>
+<li><a href="https://mcpcn.com/" target="_blank" rel="noopener noreferrer">MCP 中文站</a></li>
+</ul>
+
 <h2>已安裝的 MCP Servers</h2>
+
 <h3>1. sequential-thinking</h3>
 <ul>
 <li><strong>工具數量</strong>: 1 個工具已啟用</li>
 <li><strong>狀態</strong>: ✅ 啟用中</li>
 <li><strong>用途</strong>: 提供順序思考功能，幫助進行複雜的問題分析和解決</li>
+<li><strong>說明</strong>: 這個工具可以幫助 AI 進行結構化的思考過程，將複雜問題分解成多個步驟，逐步分析和解決。</li>
+<li><strong>相關連結</strong>: 
+  <ul>
+    <li>這是 MCP 協議內建的思考工具，無需額外安裝</li>
+    <li>了解更多：<a href="https://modelcontextprotocol.io/" target="_blank" rel="noopener noreferrer">MCP 官方文檔</a></li>
+  </ul>
+</li>
 </ul>
+
 <h3>2. chrome-devtools</h3>
 <ul>
 <li><strong>工具數量</strong>: 26 個工具已啟用</li>
 <li><strong>狀態</strong>: ✅ 啟用中</li>
 <li><strong>用途</strong>: 強大的 Chrome 開發工具整合，可以進行瀏覽器調試、網路監控等功能</li>
+<li><strong>功能</strong>:
+  <ul>
+    <li>瀏覽器頁面截圖和快照</li>
+    <li>網路請求監控和分析</li>
+    <li>控制台訊息查看</li>
+    <li>頁面元素操作（點擊、填寫表單等）</li>
+    <li>性能分析</li>
+  </ul>
+</li>
+<li><strong>相關資源</strong>:
+  <ul>
+    <li><a href="https://chromedevtools.github.io/devtools-protocol/" target="_blank" rel="noopener noreferrer">Chrome DevTools Protocol 文檔</a></li>
+  </ul>
+</li>
 </ul>
+
 <h3>3. context7</h3>
 <ul>
 <li><strong>工具數量</strong>: 2 個工具已啟用</li>
 <li><strong>狀態</strong>: ✅ 啟用中</li>
 <li><strong>用途</strong>: 提供最新的程式庫文檔和代碼範例，非常適合快速查找 API 文檔</li>
+<li><strong>功能</strong>:
+  <ul>
+    <li>自動解析程式庫名稱並獲取對應的 Context7 兼容 ID</li>
+    <li>獲取最新的程式庫文檔和代碼範例</li>
+    <li>支持多種模式：code（API 參考和代碼範例）和 info（概念指南和架構說明）</li>
+  </ul>
+</li>
+<li><strong>使用場景</strong>: 在開發 VibeBlog 時，我經常使用 context7 來快速查找 SvelteKit、TypeScript 等框架的最新文檔和最佳實踐。</li>
+<li><strong>相關連結</strong>:
+  <ul>
+    <li><a href="https://context7.com/" target="_blank" rel="noopener noreferrer">🔗 Context7 官方網站</a></li>
+  </ul>
+</li>
 </ul>
+
 <h3>4. gitmcp</h3>
 <ul>
 <li><strong>工具數量</strong>: 4 個工具已啟用</li>
 <li><strong>狀態</strong>: ✅ 啟用中</li>
 <li><strong>用途</strong>: Git 和 GitHub 整合，可以搜尋代碼、獲取文檔等</li>
+<li><strong>功能</strong>:
+  <ul>
+    <li>從 GitHub 倉庫獲取完整文檔</li>
+    <li>語義搜尋文檔內容</li>
+    <li>搜尋代碼（使用 GitHub Search API）</li>
+    <li>獲取任意 URL 的內容</li>
+  </ul>
+</li>
+<li><strong>使用場景</strong>: 在開發過程中，我使用 gitmcp 來搜尋 VibeBlog 相關的代碼和文檔，幫助理解專案結構和實現細節。</li>
+<li><strong>相關連結</strong>:
+  <ul>
+    <li><a href="https://github.com/modelcontextprotocol/servers" target="_blank" rel="noopener noreferrer">🔗 MCP Servers 列表（GitHub）</a> - 查找 gitmcp 相關資訊</li>
+    <li><a href="https://github.com" target="_blank" rel="noopener noreferrer">🔗 GitHub 官方網站</a></li>
+  </ul>
+</li>
 </ul>
+
 <h3>5. awslabs.openapi-mcp-server</h3>
 <ul>
 <li><strong>狀態</strong>: ❌ 錯誤</li>
 <li><strong>備註</strong>: 此 server 目前有錯誤，需要進一步檢查配置</li>
+<li><strong>預期功能</strong>: 提供 OpenAPI 規範的 API 整合功能</li>
+<li><strong>相關連結</strong>:
+  <ul>
+    <li><a href="https://github.com/awslabs" target="_blank" rel="noopener noreferrer">🔗 AWS Labs GitHub</a></li>
+    <li><a href="https://www.openapis.org/" target="_blank" rel="noopener noreferrer">🔗 OpenAPI 官方網站</a></li>
+  </ul>
+</li>
 </ul>
+
+<h2>為什麼選擇這些 MCP Servers？</h2>
+
+<p>在開發 VibeBlog 的過程中，我選擇這些 MCP servers 的原因：</p>
+
+<ol>
+<li><strong>提升開發效率</strong>: context7 和 gitmcp 讓我可以快速查找文檔和代碼，不需要頻繁切換瀏覽器標籤。</li>
+<li><strong>增強 AI 能力</strong>: sequential-thinking 幫助 AI 進行更結構化的思考，解決複雜問題時更加可靠。</li>
+<li><strong>實際測試</strong>: chrome-devtools 讓 AI 可以直接操作瀏覽器，測試網站功能，確保開發的每個步驟都經過驗證。</li>
+<li><strong>符合工作流程</strong>: 根據 <a href="/blog/precomputed-tags-architecture">VibeBlog 的設計理念</a>，我們強調「每個需要的步驟，都用 chrome-devtools 打開瀏覽器實際根據功能操作看看，確認沒問題再繼續下一步」。</li>
+</ol>
+
 <h2>設置截圖</h2>
+
 <p><img src="/mcp-servers.png" alt="已安裝的 MCP Servers"></p>
+
+<h2>實際應用案例</h2>
+
+<p>在開發 VibeBlog 的過程中，這些 MCP servers 發揮了重要作用：</p>
+
+<ul>
+<li><strong>使用 context7 查找 SvelteKit 文檔</strong>: 在實現多語言支持時，快速查找 SvelteKit 5 的 runes 模式文檔，了解 <code>$derived</code> 和 <code>$state</code> 的正確用法。</li>
+<li><strong>使用 chrome-devtools 測試功能</strong>: 在實現標籤系統時，實際打開瀏覽器測試路由和語言切換功能，確保一切正常運作。</li>
+<li><strong>使用 gitmcp 搜尋專案文檔</strong>: 在需要了解專案結構時，直接搜尋 GitHub 倉庫中的相關文檔和代碼。</li>
+<li><strong>使用 sequential-thinking 解決複雜問題</strong>: 在設計 Precomputed Tags 架構時，使用順序思考工具來分析問題、設計方案並驗證可行性。</li>
+</ul>
+
 <h2>下一步</h2>
+
 <p>有了這些 MCP servers，我可以更高效地：</p>
 <ul>
 <li>快速查找和學習新的程式庫</li>
@@ -40,4 +199,14 @@
 <li>調試和測試應用程式</li>
 <li>管理 Git 倉庫和代碼</li>
 </ul>
-<p>接下來，我將使用這些工具來建立 VibeBlog 的基礎架構。</p>
+
+<p>接下來，我將繼續使用這些工具來完善 VibeBlog 的功能，並探索更多 MCP servers 的可能性。</p>
+
+<h2>參考資源</h2>
+
+<ul>
+<li><a href="https://modelcontextprotocol.io/" target="_blank" rel="noopener noreferrer">MCP 官方網站</a> - 了解 MCP 協議的詳細資訊</li>
+<li><a href="https://github.com/modelcontextprotocol" target="_blank" rel="noopener noreferrer">MCP GitHub 組織</a> - 查看官方 MCP servers 和工具</li>
+<li><a href="https://mcpcn.com/" target="_blank" rel="noopener noreferrer">MCP 中文站</a> - 中文資源和文檔</li>
+<li><a href="https://chromedevtools.github.io/devtools-protocol/" target="_blank" rel="noopener noreferrer">Chrome DevTools Protocol</a> - Chrome 開發工具協議文檔</li>
+</ul>

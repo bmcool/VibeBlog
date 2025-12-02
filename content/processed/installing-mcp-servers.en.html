@@ -1,0 +1,204 @@
+<h1>Installing MCP Servers</h1>
+
+<p>Before starting to build VibeBlog, I set up my development environment and installed several useful MCP (Model Context Protocol) servers to improve development efficiency.</p>
+
+<h2>🔗 Quick Links</h2>
+
+<p>Here are quick links to all MCP servers and related resources mentioned in this article. Click to access directly:</p>
+
+<div style="background: #f5f5f5; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0; border-left: 4px solid #0066cc;">
+<h3 style="margin-top: 0; color: #0066cc;">MCP Official Resources</h3>
+<ul style="list-style: none; padding-left: 0;">
+<li style="margin-bottom: 0.5rem;">🌐 <a href="https://modelcontextprotocol.io/" target="_blank" rel="noopener noreferrer" style="color: #0066cc; text-decoration: none; font-weight: 600;">MCP Official Website</a> - <small>https://modelcontextprotocol.io/</small></li>
+<li style="margin-bottom: 0.5rem;">📦 <a href="https://github.com/modelcontextprotocol" target="_blank" rel="noopener noreferrer" style="color: #0066cc; text-decoration: none; font-weight: 600;">MCP GitHub Organization</a> - <small>https://github.com/modelcontextprotocol</small></li>
+</ul>
+
+<h3 style="color: #0066cc;">Installed MCP Servers</h3>
+<ul style="list-style: none; padding-left: 0;">
+<li style="margin-bottom: 0.75rem;">
+  <strong>sequential-thinking</strong><br>
+  <small>Sequential thinking tool (built-in MCP tool, no additional installation needed)</small>
+</li>
+<li style="margin-bottom: 0.75rem;">
+  <strong>chrome-devtools</strong><br>
+  🔗 <a href="https://chromedevtools.github.io/devtools-protocol/" target="_blank" rel="noopener noreferrer" style="color: #0066cc; text-decoration: none; font-weight: 600;">Chrome DevTools Protocol Documentation</a><br>
+  <small>https://chromedevtools.github.io/devtools-protocol/</small><br>
+  <small>Provides 26 tools for browser debugging, network monitoring, performance analysis, etc.</small>
+</li>
+<li style="margin-bottom: 0.75rem;">
+  <strong>context7</strong><br>
+  🔗 <a href="https://context7.com/" target="_blank" rel="noopener noreferrer" style="color: #0066cc; text-decoration: none; font-weight: 600;">Context7 Official Website</a><br>
+  <small>https://context7.com/</small><br>
+  <small>For fetching library documentation and code examples, supports multiple libraries</small>
+</li>
+<li style="margin-bottom: 0.75rem;">
+  <strong>gitmcp</strong><br>
+  🔗 <a href="https://github.com/modelcontextprotocol/servers" target="_blank" rel="noopener noreferrer" style="color: #0066cc; text-decoration: none; font-weight: 600;">MCP Servers List (GitHub)</a><br>
+  <small>https://github.com/modelcontextprotocol/servers</small><br>
+  🔗 <a href="https://github.com" target="_blank" rel="noopener noreferrer" style="color: #0066cc; text-decoration: none; font-weight: 600;">GitHub Official Website</a><br>
+  <small>https://github.com</small><br>
+  <small>For searching GitHub code, fetching documentation, semantic search, etc.</small>
+</li>
+<li style="margin-bottom: 0.75rem;">
+  <strong>awslabs.openapi-mcp-server</strong><br>
+  🔗 <a href="https://github.com/awslabs" target="_blank" rel="noopener noreferrer" style="color: #0066cc; text-decoration: none; font-weight: 600;">AWS Labs GitHub</a><br>
+  <small>https://github.com/awslabs</small><br>
+  🔗 <a href="https://www.openapis.org/" target="_blank" rel="noopener noreferrer" style="color: #0066cc; text-decoration: none; font-weight: 600;">OpenAPI Official Website</a><br>
+  <small>https://www.openapis.org/</small><br>
+  <small>⚠️ Currently has configuration issues, pending fix</small>
+</li>
+</ul>
+
+<h3 style="color: #0066cc;">Related Technical Documentation</h3>
+<ul style="list-style: none; padding-left: 0;">
+<li style="margin-bottom: 0.5rem;">🔗 <a href="https://chromedevtools.github.io/devtools-protocol/" target="_blank" rel="noopener noreferrer" style="color: #0066cc; text-decoration: none; font-weight: 600;">Chrome DevTools Protocol Documentation</a> - <small>https://chromedevtools.github.io/devtools-protocol/</small></li>
+<li style="margin-bottom: 0.5rem;">🔗 <a href="https://www.anthropic.com/" target="_blank" rel="noopener noreferrer" style="color: #0066cc; text-decoration: none; font-weight: 600;">Anthropic Official Website</a> - <small>https://www.anthropic.com/</small></li>
+</ul>
+</div>
+
+<p style="background: #e8f4f8; padding: 1rem; border-radius: 5px; border-left: 4px solid #0066cc;"><strong>💡 Tip</strong>: All links open in new tabs, so you can easily return to continue reading. Each link shows the full URL for easy copying or sharing.</p>
+
+<h2>What is MCP?</h2>
+
+<p><a href="https://modelcontextprotocol.io/" target="_blank" rel="noopener noreferrer">Model Context Protocol (MCP)</a> is an open standard launched by <a href="https://www.anthropic.com/" target="_blank" rel="noopener noreferrer">Anthropic</a> in November 2024, designed to provide standardized interfaces for Large Language Model (LLM) applications, enabling them to connect and interact with external data sources and tools.</p>
+
+<p>The core goal of MCP is to overcome the limitations of LLM applications that rely solely on their training data, enabling them to dynamically acquire the contextual information needed to perform a wider range of tasks. By defining a set of common guidelines and formats, MCP enables LLM applications to acquire relevant information and perform operations when needed, thereby enhancing their functionality and scope of use.</p>
+
+<p>For more information about MCP, you can refer to:</p>
+<ul>
+<li><a href="https://modelcontextprotocol.io/" target="_blank" rel="noopener noreferrer">MCP Official Website</a></li>
+<li><a href="https://github.com/modelcontextprotocol" target="_blank" rel="noopener noreferrer">MCP GitHub Organization</a></li>
+</ul>
+
+<h2>Installed MCP Servers</h2>
+
+<h3>1. sequential-thinking</h3>
+<ul>
+<li><strong>Number of Tools</strong>: 1 tool enabled</li>
+<li><strong>Status</strong>: ✅ Active</li>
+<li><strong>Purpose</strong>: Provides sequential thinking functionality to help with complex problem analysis and solving</li>
+<li><strong>Description</strong>: This tool helps AI perform structured thinking processes, breaking down complex problems into multiple steps for step-by-step analysis and resolution.</li>
+</ul>
+
+<h3>2. chrome-devtools</h3>
+<ul>
+<li><strong>Number of Tools</strong>: 26 tools enabled</li>
+<li><strong>Status</strong>: ✅ Active</li>
+<li><strong>Purpose</strong>: Powerful Chrome DevTools integration for browser debugging, network monitoring, and more</li>
+<li><strong>Features</strong>:
+  <ul>
+    <li>Browser page screenshots and snapshots</li>
+    <li>Network request monitoring and analysis</li>
+    <li>Console message viewing</li>
+    <li>Page element manipulation (clicking, filling forms, etc.)</li>
+    <li>Performance analysis</li>
+  </ul>
+</li>
+<li><strong>Related Resources</strong>:
+  <ul>
+    <li><a href="https://chromedevtools.github.io/devtools-protocol/" target="_blank" rel="noopener noreferrer">Chrome DevTools Protocol Documentation</a></li>
+  </ul>
+</li>
+</ul>
+
+<h3>3. context7</h3>
+<ul>
+<li><strong>Number of Tools</strong>: 2 tools enabled</li>
+<li><strong>Status</strong>: ✅ Active</li>
+<li><strong>Purpose</strong>: Provides the latest library documentation and code examples, perfect for quickly finding API documentation</li>
+<li><strong>Features</strong>:
+  <ul>
+    <li>Automatically resolves library names and retrieves corresponding Context7-compatible IDs</li>
+    <li>Fetches the latest library documentation and code examples</li>
+    <li>Supports multiple modes: code (API references and code examples) and info (conceptual guides and architectural explanations)</li>
+  </ul>
+</li>
+<li><strong>Use Cases</strong>: When developing VibeBlog, I frequently use context7 to quickly find the latest documentation and best practices for frameworks like SvelteKit and TypeScript.</li>
+<li><strong>Related Links</strong>:
+  <ul>
+    <li><a href="https://context7.com/" target="_blank" rel="noopener noreferrer">🔗 Context7 Official Website</a></li>
+  </ul>
+</li>
+</ul>
+
+<h3>4. gitmcp</h3>
+<ul>
+<li><strong>Number of Tools</strong>: 4 tools enabled</li>
+<li><strong>Status</strong>: ✅ Active</li>
+<li><strong>Purpose</strong>: Git and GitHub integration for searching code, fetching documentation, etc.</li>
+<li><strong>Features</strong>:
+  <ul>
+    <li>Fetch complete documentation from GitHub repositories</li>
+    <li>Semantic search within documentation</li>
+    <li>Search code (using GitHub Search API)</li>
+    <li>Fetch content from any URL</li>
+  </ul>
+</li>
+<li><strong>Use Cases</strong>: During development, I use gitmcp to search for VibeBlog-related code and documentation, helping understand project structure and implementation details.</li>
+<li><strong>Related Links</strong>:
+  <ul>
+    <li><a href="https://github.com/modelcontextprotocol/servers" target="_blank" rel="noopener noreferrer">🔗 MCP Servers List (GitHub)</a> - Find gitmcp related information</li>
+    <li><a href="https://github.com" target="_blank" rel="noopener noreferrer">🔗 GitHub Official Website</a></li>
+  </ul>
+</li>
+</ul>
+
+<h3>5. awslabs.openapi-mcp-server</h3>
+<ul>
+<li><strong>Status</strong>: ❌ Error</li>
+<li><strong>Note</strong>: This server currently has an error and requires further configuration checks</li>
+<li><strong>Expected Functionality</strong>: Provides OpenAPI specification API integration features</li>
+<li><strong>Related Links</strong>:
+  <ul>
+    <li><a href="https://github.com/awslabs" target="_blank" rel="noopener noreferrer">🔗 AWS Labs GitHub</a></li>
+    <li><a href="https://www.openapis.org/" target="_blank" rel="noopener noreferrer">🔗 OpenAPI Official Website</a></li>
+  </ul>
+</li>
+</ul>
+
+<h2>Why Choose These MCP Servers?</h2>
+
+<p>Reasons for choosing these MCP servers during VibeBlog development:</p>
+
+<ol>
+<li><strong>Improve Development Efficiency</strong>: context7 and gitmcp allow me to quickly find documentation and code without frequently switching browser tabs.</li>
+<li><strong>Enhance AI Capabilities</strong>: sequential-thinking helps AI perform more structured thinking, making it more reliable when solving complex problems.</li>
+<li><strong>Real Testing</strong>: chrome-devtools allows AI to directly operate browsers, test website functionality, ensuring every development step is verified.</li>
+<li><strong>Aligns with Workflow</strong>: According to <a href="/blog/precomputed-tags-architecture?lang=en">VibeBlog's design philosophy</a>, we emphasize "for each required step, use chrome-devtools to open the browser and actually operate according to functionality, confirming everything works before proceeding to the next step."</li>
+</ol>
+
+<h2>Setup Screenshot</h2>
+
+<p><img src="/mcp-servers.png" alt="Installed MCP Servers"></p>
+
+<h2>Real-World Use Cases</h2>
+
+<p>These MCP servers played important roles during VibeBlog development:</p>
+
+<ul>
+<li><strong>Using context7 to Find SvelteKit Documentation</strong>: When implementing multi-language support, quickly found SvelteKit 5 runes mode documentation to understand the correct usage of <code>$derived</code> and <code>$state</code>.</li>
+<li><strong>Using chrome-devtools to Test Features</strong>: When implementing the tag system, actually opened the browser to test routing and language switching functionality, ensuring everything works correctly.</li>
+<li><strong>Using gitmcp to Search Project Documentation</strong>: When needing to understand project structure, directly searched for relevant documentation and code in the GitHub repository.</li>
+<li><strong>Using sequential-thinking to Solve Complex Problems</strong>: When designing the Precomputed Tags architecture, used the sequential thinking tool to analyze problems, design solutions, and verify feasibility.</li>
+</ul>
+
+<h2>Next Steps</h2>
+
+<p>With these MCP servers, I can more efficiently:</p>
+<ul>
+<li>Quickly find and learn new libraries</li>
+<li>Perform complex problem analysis</li>
+<li>Debug and test applications</li>
+<li>Manage Git repositories and code</li>
+</ul>
+
+<p>Next, I will continue using these tools to improve VibeBlog's functionality and explore more possibilities with MCP servers.</p>
+
+<h2>References</h2>
+
+<ul>
+<li><a href="https://modelcontextprotocol.io/" target="_blank" rel="noopener noreferrer">MCP Official Website</a> - Learn detailed information about the MCP protocol</li>
+<li><a href="https://github.com/modelcontextprotocol" target="_blank" rel="noopener noreferrer">MCP GitHub Organization</a> - View official MCP servers and tools</li>
+<li><a href="https://chromedevtools.github.io/devtools-protocol/" target="_blank" rel="noopener noreferrer">Chrome DevTools Protocol</a> - Chrome DevTools Protocol documentation</li>
+</ul>
+

@@ -26,7 +26,7 @@
 					{#if post.summary}
 						<p class="post-description">{post.summary}</p>
 					{:else if post.description}
-						<p class="post-description">{post.description}</p>
+					<p class="post-description">{post.description}</p>
 					{/if}
 					{#if post.tags && post.tags.length > 0}
 						<div class="post-tags">
