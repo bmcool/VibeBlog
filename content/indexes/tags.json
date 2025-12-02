@@ -1,6 +1,19 @@
 {
   "MCP": [
+    "building-deapi-txt2img-mcp-server",
     "installing-mcp-servers"
+  ],
+  "AI": [
+    "building-deapi-txt2img-mcp-server"
+  ],
+  "圖片生成": [
+    "building-deapi-txt2img-mcp-server"
+  ],
+  "FastMCP": [
+    "building-deapi-txt2img-mcp-server"
+  ],
+  "deapi.ai": [
+    "building-deapi-txt2img-mcp-server"
   ],
   "開發環境": [
     "installing-mcp-servers"

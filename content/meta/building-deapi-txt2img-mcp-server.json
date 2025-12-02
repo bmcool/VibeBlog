@@ -1,0 +1,14 @@
+{
+  "slug": "building-deapi-txt2img-mcp-server",
+  "title": "打造 deapi.ai 圖片生成 MCP Server - 從 API 整合到成功產圖",
+  "titleEn": "Building deapi.ai Image Generation MCP Server - From API Integration to Successful Image Generation",
+  "date": "2025-12-02",
+  "tags": ["MCP", "AI", "圖片生成", "FastMCP", "deapi.ai"],
+  "tagsEn": ["MCP", "AI", "Image Generation", "FastMCP", "deapi.ai"],
+  "summary": "記錄如何從零開始建立 deapi.ai 文字轉圖片 API 的 MCP Server，並成功生成第一張 AI 圖片。",
+  "summaryEn": "Documenting the process of building a MCP Server for deapi.ai text-to-image API from scratch and successfully generating the first AI image.",
+  "heroImage": "/images/ai-generated/97a2036b-79f5-4a29-8d92-bde0217f6c5b.png",
+  "description": "完整記錄建立 deapi-txt2img MCP Server 的過程，包括 API 整合、工具實現、bug 修復，以及最終成功生成並下載 AI 圖片的全過程。",
+  "descriptionEn": "Complete documentation of building the deapi-txt2img MCP Server, including API integration, tool implementation, bug fixes, and the successful generation and download of AI images."
+}
+

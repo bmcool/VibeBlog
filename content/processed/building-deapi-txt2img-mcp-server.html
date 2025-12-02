@@ -1,0 +1,175 @@
+<h1>打造 deapi.ai 圖片生成 MCP Server - 從 API 整合到成功產圖</h1>
+
+<p>今天完成了一個重要的里程碑：成功建立了 deapi.ai 文字轉圖片 API 的 MCP Server，並成功生成了第一張 AI 圖片！這篇文章記錄了整個開發過程，從 API 規範分析到最終成功產圖的完整歷程。</p>
+
+<h2>🎯 專案目標</h2>
+
+<p>建立一個 FastMCP Server，整合 deapi.ai 的文字轉圖片 API，讓 AI 助手能夠直接生成圖片並下載到本地。這個工具將大大提升內容創作的效率。</p>
+
+<h2>📋 開發過程</h2>
+
+<h3>1. API 規範分析與實作</h3>
+
+<p>首先，我收到了 deapi.ai 的 OpenAPI 規範文件。分析後發現需要實現以下端點：</p>
+
+<ul>
+<li><strong>POST /api/v1/client/txt2img</strong> - 發送圖片生成請求</li>
+<li><strong>GET /api/v1/client/request-status/{job_request}</strong> - 查詢生成狀態</li>
+</ul>
+
+<p>根據 API 規範，我更新了代碼以符合所有必需參數：</p>
+
+<ul>
+<li><code>prompt</code> - 圖片生成提示詞（必填）</li>
+<li><code>model</code> - 使用的模型（默認 "Flux1schnell"）</li>
+<li><code>width</code>、<code>height</code> - 圖片尺寸（默認 768x768）</li>
+<li><code>seed</code> - 隨機種子（默認 -1）</li>
+<li><code>steps</code> - 推理步數（默認 4）</li>
+<li><code>guidance</code> - Guidance scale（默認 7.5）</li>
+<li><code>loras</code> - LoRA 模型數組（默認空數組）</li>
+<li><code>negative_prompt</code> - 負面提示詞（可選）</li>
+</ul>
+
+<h3>2. 環境變數配置</h3>
+
+<p>實現了從項目根目錄的 <code>.env</code> 文件自動讀取 <code>DEAPI_API_KEY</code>，讓配置更加便捷。</p>
+
+<h3>3. 工具功能實現</h3>
+
+<p>實現了三個核心 MCP 工具：</p>
+
+<ul>
+<li><strong>generate_image</strong> - 完整的圖片生成工具，支持所有參數</li>
+<li><strong>generate_image_quick</strong> - 快速生成工具，使用默認參數</li>
+<li><strong>get_request_status</strong> - 查詢生成狀態</li>
+<li><strong>download_image</strong> - 自動查詢狀態並下載完成的圖片</li>
+</ul>
+
+<h3>4. Bug 修復</h3>
+
+<p>在開發過程中遇到了一個關鍵問題：<code>download_image</code> 工具無法直接調用 <code>get_request_status</code>，因為 FastMCP 的工具函數不能直接調用。</p>
+
+<p><strong>解決方案</strong>：創建了內部輔助函數 <code>_get_request_status_internal()</code>，讓兩個工具都能調用相同的邏輯，避免了工具間直接調用的問題。</p>
+
+<h2>🎨 AI 產圖成果</h2>
+
+<p>經過完整的開發和測試，我們成功生成了多張 AI 圖片來展示這個 MCP Server 的能力！</p>
+
+<h3>第一張圖片：簡約咖啡</h3>
+
+<p>使用最經濟的配置生成的第一張測試圖片：</p>
+
+<ul>
+<li><strong>提示詞</strong>：<code>"a cup of coffee, simple, minimalist, clean background"</code></li>
+<li><strong>尺寸</strong>：512x512 像素（為了降低成本）</li>
+<li><strong>步數</strong>：4 步（最少步數，最經濟的配置）</li>
+<li><strong>模型</strong>：Flux1schnell</li>
+</ul>
+
+<div style="text-align: center; margin: 2rem 0;">
+  <img src="/images/ai-generated/97a2036b-79f5-4a29-8d92-bde0217f6c5b.png" alt="AI 生成的咖啡圖片" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+  <p style="margin-top: 1rem; color: #666; font-size: 0.9rem;">AI 生成的簡約風格咖啡圖片</p>
+</div>
+
+<h3>更多成果展示</h3>
+
+<p>為了展示 MCP Server 的完整能力，我們還生成了以下圖片：</p>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin: 2rem 0;">
+  <div style="text-align: center;">
+    <img src="/images/ai-generated/6681b111-32c0-46c5-a5bd-c9e3d668e3cc.png" alt="開發者工作環境" style="width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+    <p style="margin-top: 1rem; color: #666; font-size: 0.9rem;">開發者工作環境與 MCP Server 架構</p>
+  </div>
+  <div style="text-align: center;">
+    <img src="/images/ai-generated/685eea24-041f-41d9-a877-d302276a5d00.png" alt="工作流程圖" style="width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+    <p style="margin-top: 1rem; color: #666; font-size: 0.9rem;">AI 圖片生成工作流程示意圖</p>
+  </div>
+  <div style="text-align: center;">
+    <img src="/images/ai-generated/dcf0c526-b42c-40ea-9cbe-2de97d5fa44f.png" alt="成功慶祝" style="width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+    <p style="margin-top: 1rem; color: #666; font-size: 0.9rem;">成功慶祝 - AI 圖片生成成果</p>
+  </div>
+</div>
+
+<p><strong>生成統計</strong>：</p>
+<ul>
+<li>✅ 總共生成：4 張圖片</li>
+<li>✅ 成功率：100%</li>
+<li>✅ 平均文件大小：約 140 KB</li>
+<li>✅ 所有圖片都已自動保存 metadata</li>
+</ul>
+
+<h3>Metadata 管理功能</h3>
+
+<p>為了方便未來搜索和再利用生成的圖片，我們實現了完整的 metadata 管理系統：</p>
+
+<ul>
+<li><strong>自動保存</strong>：每次下載圖片時，自動保存生成參數（prompt, model, 尺寸等）到 JSON 文件</li>
+<li><strong>索引系統</strong>：所有圖片 metadata 統一管理在 <code>static/images/ai-generated/.metadata/index.json</code></li>
+<li><strong>搜索功能</strong>：可以根據提示詞、模型、標籤等條件搜索已生成的圖片</li>
+<li><strong>再利用</strong>：通過 metadata 可以輕鬆找到相似的圖片或重複使用相同的參數</li>
+</ul>
+
+<p>Metadata 包含的信息：</p>
+<ul>
+<li>生成參數（prompt, model, width, height, steps, guidance, seed, loras）</li>
+<li>文件路徑和 URL</li>
+<li>生成時間</li>
+<li>標籤和描述（可手動添加）</li>
+</ul>
+
+<h3>技術亮點</h3>
+
+<p>這次成功產圖展示了以下技術能力：</p>
+
+<ol>
+<li><strong>完整的 API 整合</strong>：成功整合了 deapi.ai 的異步 API，包括請求發送、狀態查詢和下載功能</li>
+<li><strong>MCP 工具生態</strong>：建立了可重用的 MCP 工具，讓 AI 助手能夠直接調用圖片生成功能</li>
+<li><strong>自動化流程</strong>：實現了從生成請求到自動下載的完整自動化流程</li>
+<li><strong>Metadata 管理</strong>：自動保存生成參數，方便未來搜索和再利用</li>
+<li><strong>成本優化</strong>：使用最經濟的參數配置（512x512, 4 steps），在保證質量的同時降低成本</li>
+</ol>
+
+<h2>🚀 未來應用</h2>
+
+<p>有了這個 MCP Server，我們現在可以：</p>
+
+<ul>
+<li>✅ 在文章創作過程中自動生成配圖</li>
+<li>✅ 根據內容自動生成合適的插圖和示意圖</li>
+<li>✅ 為博客文章生成封面圖片</li>
+<li>✅ 快速生成各種視覺素材</li>
+</ul>
+
+<p>這將大大提升內容創作的效率和視覺質量！</p>
+
+<h2>📝 技術總結</h2>
+
+<p>這次開發過程涵蓋了：</p>
+
+<ul>
+<li>FastMCP Server 開發</li>
+<li>OpenAPI 規範分析與實作</li>
+<li>異步 API 整合</li>
+<li>環境變數管理</li>
+<li>MCP 工具間調用問題解決</li>
+<li>圖片下載與文件管理</li>
+<li><strong>Metadata 管理系統</strong>：自動保存生成參數，支持搜索和再利用</li>
+</ul>
+
+<h3>Metadata 功能詳解</h3>
+
+<p>為了實現圖片的可搜索和再利用，我們實現了完整的 metadata 管理系統：</p>
+
+<ul>
+<li><strong>自動保存</strong>：在 <code>generate_image</code> 時會緩存生成參數，在 <code>download_image</code> 時自動保存完整的 metadata</li>
+<li><strong>JSON 格式</strong>：每個圖片都有對應的 <code>{request_id}.json</code> metadata 文件</li>
+<li><strong>統一索引</strong>：所有 metadata 統一管理在 <code>index.json</code> 中，方便批量搜索</li>
+<li><strong>搜索工具</strong>：<code>search_generated_images</code> 工具支持根據提示詞、模型、標籤等條件搜索</li>
+</ul>
+
+<p>最重要的是，我們成功驗證了整個流程，從 API 調用到最終圖片下載和 metadata 保存，所有環節都運作正常！</p>
+
+<h2>🎉 結語</h2>
+
+<p>這次成功建立 deapi-txt2img MCP Server 並生成第一張 AI 圖片，標誌著 VibeBlog 項目在 AI 內容創作能力上邁出了重要一步。未來，我們可以更高效地創作視覺豐富的內容，讓 AI 成為真正的創作夥伴！</p>
+

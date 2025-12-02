@@ -1,6 +1,19 @@
 {
   "MCP": [
+    "building-deapi-txt2img-mcp-server",
     "installing-mcp-servers"
+  ],
+  "AI": [
+    "building-deapi-txt2img-mcp-server"
+  ],
+  "Image Generation": [
+    "building-deapi-txt2img-mcp-server"
+  ],
+  "FastMCP": [
+    "building-deapi-txt2img-mcp-server"
+  ],
+  "deapi.ai": [
+    "building-deapi-txt2img-mcp-server"
   ],
   "Development Environment": [
     "installing-mcp-servers"

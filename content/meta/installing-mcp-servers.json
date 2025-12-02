@@ -7,7 +7,7 @@
   "tagsEn": ["MCP", "Development Environment", "Tools"],
   "summary": "詳細記錄我為 VibeBlog 專案設置開發環境時安裝的 MCP (Model Context Protocol) servers，包括每個 server 的功能、用途、實際應用案例和相關資源連結。",
   "summaryEn": "A detailed documentation of the MCP (Model Context Protocol) servers I installed when setting up the development environment for the VibeBlog project, including each server's functionality, purpose, real-world use cases, and related resource links.",
-  "heroImage": "/mcp-servers.png",
+  "heroImage": "/images/mcp-servers.png",
   "description": "記錄我為 VibeBlog 專案設置開發環境時安裝的 MCP (Model Context Protocol) servers。",
   "descriptionEn": "Documenting the MCP (Model Context Protocol) servers I installed when setting up the development environment for the VibeBlog project."
 }

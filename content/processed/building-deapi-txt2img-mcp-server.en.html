@@ -1,0 +1,175 @@
+<h1>Building deapi.ai Image Generation MCP Server - From API Integration to Successful Image Generation</h1>
+
+<p>Today marks an important milestone: successfully building a MCP Server for deapi.ai's text-to-image API and generating the first AI image! This article documents the entire development process, from API specification analysis to the successful image generation.</p>
+
+<h2>🎯 Project Goals</h2>
+
+<p>Build a FastMCP Server that integrates deapi.ai's text-to-image API, enabling AI assistants to directly generate images and download them locally. This tool will significantly improve content creation efficiency.</p>
+
+<h2>📋 Development Process</h2>
+
+<h3>1. API Specification Analysis & Implementation</h3>
+
+<p>First, I received deapi.ai's OpenAPI specification. After analysis, I identified the following endpoints to implement:</p>
+
+<ul>
+<li><strong>POST /api/v1/client/txt2img</strong> - Send image generation request</li>
+<li><strong>GET /api/v1/client/request-status/{job_request}</strong> - Query generation status</li>
+</ul>
+
+<p>According to the API specification, I updated the code to include all required parameters:</p>
+
+<ul>
+<li><code>prompt</code> - Image generation prompt (required)</li>
+<li><code>model</code> - Model to use (default "Flux1schnell")</li>
+<li><code>width</code>, <code>height</code> - Image dimensions (default 768x768)</li>
+<li><code>seed</code> - Random seed (default -1)</li>
+<li><code>steps</code> - Inference steps (default 4)</li>
+<li><code>guidance</code> - Guidance scale (default 7.5)</li>
+<li><code>loras</code> - LoRA model array (default empty array)</li>
+<li><code>negative_prompt</code> - Negative prompt (optional)</li>
+</ul>
+
+<h3>2. Environment Variable Configuration</h3>
+
+<p>Implemented automatic reading of <code>DEAPI_API_KEY</code> from the project root's <code>.env</code> file, making configuration more convenient.</p>
+
+<h3>3. Tool Function Implementation</h3>
+
+<p>Implemented three core MCP tools:</p>
+
+<ul>
+<li><strong>generate_image</strong> - Complete image generation tool with all parameters</li>
+<li><strong>generate_image_quick</strong> - Quick generation tool with default parameters</li>
+<li><strong>get_request_status</strong> - Query generation status</li>
+<li><strong>download_image</strong> - Automatically query status and download completed images</li>
+</ul>
+
+<h3>4. Bug Fixes</h3>
+
+<p>During development, I encountered a critical issue: the <code>download_image</code> tool couldn't directly call <code>get_request_status</code> because FastMCP tool functions cannot be called directly.</p>
+
+<p><strong>Solution</strong>: Created an internal helper function <code>_get_request_status_internal()</code>, allowing both tools to call the same logic, avoiding direct tool-to-tool calls.</p>
+
+<h2>🎨 AI Image Generation Results</h2>
+
+<p>After complete development and testing, we successfully generated multiple AI images to demonstrate the capabilities of this MCP Server!</p>
+
+<h3>First Image: Minimalist Coffee</h3>
+
+<p>The first test image generated using the most economical configuration:</p>
+
+<ul>
+<li><strong>Prompt</strong>: <code>"a cup of coffee, simple, minimalist, clean background"</code></li>
+<li><strong>Dimensions</strong>: 512x512 pixels (to reduce costs)</li>
+<li><strong>Steps</strong>: 4 steps (minimum steps, most economical configuration)</li>
+<li><strong>Model</strong>: Flux1schnell</li>
+</ul>
+
+<div style="text-align: center; margin: 2rem 0;">
+  <img src="/images/ai-generated/97a2036b-79f5-4a29-8d92-bde0217f6c5b.png" alt="AI Generated Coffee Image" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+  <p style="margin-top: 1rem; color: #666; font-size: 0.9rem;">AI Generated Minimalist Coffee Image</p>
+</div>
+
+<h3>More Results</h3>
+
+<p>To demonstrate the full capabilities of the MCP Server, we also generated the following images:</p>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin: 2rem 0;">
+  <div style="text-align: center;">
+    <img src="/images/ai-generated/6681b111-32c0-46c5-a5bd-c9e3d668e3cc.png" alt="Developer Workspace" style="width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+    <p style="margin-top: 1rem; color: #666; font-size: 0.9rem;">Developer Workspace and MCP Server Architecture</p>
+  </div>
+  <div style="text-align: center;">
+    <img src="/images/ai-generated/685eea24-041f-41d9-a877-d302276a5d00.png" alt="Workflow Diagram" style="width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+    <p style="margin-top: 1rem; color: #666; font-size: 0.9rem;">AI Image Generation Workflow Diagram</p>
+  </div>
+  <div style="text-align: center;">
+    <img src="/images/ai-generated/dcf0c526-b42c-40ea-9cbe-2de97d5fa44f.png" alt="Success Celebration" style="width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+    <p style="margin-top: 1rem; color: #666; font-size: 0.9rem;">Success Celebration - AI Image Generation Achievement</p>
+  </div>
+</div>
+
+<p><strong>Generation Statistics</strong>:</p>
+<ul>
+<li>✅ Total generated: 4 images</li>
+<li>✅ Success rate: 100%</li>
+<li>✅ Average file size: ~140 KB</li>
+<li>✅ All images have metadata automatically saved</li>
+</ul>
+
+<h3>Metadata Management Feature</h3>
+
+<p>To facilitate future search and reuse of generated images, we implemented a complete metadata management system:</p>
+
+<ul>
+<li><strong>Auto-save</strong>: Automatically saves generation parameters (prompt, model, dimensions, etc.) to JSON files when downloading images</li>
+<li><strong>Index System</strong>: All image metadata is centrally managed in <code>static/images/ai-generated/.metadata/index.json</code></li>
+<li><strong>Search Function</strong>: Can search generated images by prompt, model, tags, and other criteria</li>
+<li><strong>Reusability</strong>: Easily find similar images or reuse the same parameters through metadata</li>
+</ul>
+
+<p>Metadata includes:</p>
+<ul>
+<li>Generation parameters (prompt, model, width, height, steps, guidance, seed, loras)</li>
+<li>File path and URL</li>
+<li>Generation timestamp</li>
+<li>Tags and description (can be manually added)</li>
+</ul>
+
+<h3>Technical Highlights</h3>
+
+<p>This successful image generation demonstrates the following technical capabilities:</p>
+
+<ol>
+<li><strong>Complete API Integration</strong>: Successfully integrated deapi.ai's asynchronous API, including request sending, status querying, and download functionality</li>
+<li><strong>MCP Tool Ecosystem</strong>: Built reusable MCP tools that allow AI assistants to directly call image generation functions</li>
+<li><strong>Automated Workflow</strong>: Implemented a complete automated workflow from generation request to automatic download</li>
+<li><strong>Metadata Management</strong>: Automatically saves generation parameters for future search and reuse</li>
+<li><strong>Cost Optimization</strong>: Used the most economical parameter configuration (512x512, 4 steps), ensuring quality while reducing costs</li>
+</ol>
+
+<h2>🚀 Future Applications</h2>
+
+<p>With this MCP Server, we can now:</p>
+
+<ul>
+<li>✅ Automatically generate images during article creation</li>
+<li>✅ Generate appropriate illustrations and diagrams based on content</li>
+<li>✅ Generate cover images for blog posts</li>
+<li>✅ Quickly generate various visual materials</li>
+</ul>
+
+<p>This will significantly improve content creation efficiency and visual quality!</p>
+
+<h2>📝 Technical Summary</h2>
+
+<p>This development process covered:</p>
+
+<ul>
+<li>FastMCP Server development</li>
+<li>OpenAPI specification analysis and implementation</li>
+<li>Asynchronous API integration</li>
+<li>Environment variable management</li>
+<li>MCP tool-to-tool call issue resolution</li>
+<li>Image download and file management</li>
+<li><strong>Metadata Management System</strong>: Automatically saves generation parameters, supports search and reuse</li>
+</ul>
+
+<h3>Metadata Feature Details</h3>
+
+<p>To enable searchable and reusable images, we implemented a complete metadata management system:</p>
+
+<ul>
+<li><strong>Auto-save</strong>: Generation parameters are cached during <code>generate_image</code> and automatically saved as complete metadata during <code>download_image</code></li>
+<li><strong>JSON Format</strong>: Each image has a corresponding <code>{request_id}.json</code> metadata file</li>
+<li><strong>Unified Index</strong>: All metadata is centrally managed in <code>index.json</code> for batch searching</li>
+<li><strong>Search Tool</strong>: The <code>search_generated_images</code> tool supports searching by prompt, model, tags, and other criteria</li>
+</ul>
+
+<p>Most importantly, we successfully verified the entire workflow, from API calls to final image download and metadata saving, with all components working correctly!</p>
+
+<h2>🎉 Conclusion</h2>
+
+<p>Successfully building the deapi-txt2img MCP Server and generating the first AI image marks an important step forward for the VibeBlog project in AI content creation capabilities. In the future, we can more efficiently create visually rich content, making AI a true creative partner!</p>
+

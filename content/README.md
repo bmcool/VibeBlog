@@ -53,6 +53,42 @@ AI 處理後的 HTML 內容，直接由前端讀取顯示。
    - AI 可以自動生成 processed HTML
    - 執行 `npm run generate:tags` 更新索引
 
+## 圖片管理
+
+所有圖片統一存放在 `static/images/` 目錄下：
+
+```
+static/
+  ├── images/                    # 主要圖片目錄
+  │   ├── mcp-servers.png       # 一般圖片（手動上傳）
+  │   └── ai-generated/         # AI 生成的圖片專用目錄
+  │       ├── article-1.png
+  │       └── article-2-hero.png
+  └── robots.txt
+```
+
+### 圖片路徑規範
+
+- **一般圖片**：放在 `static/images/`，引用路徑為 `/images/filename.png`
+- **AI 生成的圖片**：放在 `static/images/ai-generated/`，引用路徑為 `/images/ai-generated/filename.png`
+
+### 在文章中使用圖片
+
+在 HTML 內容中：
+```html
+<img src="/images/mcp-servers.png" alt="描述">
+<!-- 或 AI 生成的圖片 -->
+<img src="/images/ai-generated/article-hero.png" alt="描述">
+```
+
+在 meta JSON 中：
+```json
+{
+  "heroImage": "/images/hero.png",
+  "heroImage": "/images/ai-generated/article-hero.png"
+}
+```
+
 ## 優點
 
 - ✅ **靜態、預計算**：所有分類在 build 時完成
@@ -60,5 +96,6 @@ AI 處理後的 HTML 內容，直接由前端讀取顯示。
 - ✅ **版本控制友好**：所有內容都是檔案
 - ✅ **適合 AI 自動化**：AI 可以直接產出分類資料結構
 - ✅ **高效能**：SSG + CDN 完美搭配
+- ✅ **圖片管理清晰**：區分一般圖片和 AI 生成圖片，便於維護
 
 

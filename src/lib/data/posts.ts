@@ -39,7 +39,7 @@ export const posts: BlogPost[] = [
 
 ## 設置截圖
 
-![已安裝的 MCP Servers](/mcp-servers.png)
+![已安裝的 MCP Servers](/images/mcp-servers.png)
 
 ## 下一步
 
@@ -51,7 +51,7 @@ export const posts: BlogPost[] = [
 
 接下來，我將使用這些工具來建立 VibeBlog 的基礎架構。
 		`,
-		image: '/mcp-servers.png'
+		image: '/images/mcp-servers.png'
 	}
 ];
 

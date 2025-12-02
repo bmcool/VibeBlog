@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "deapi-txt2img": {
+      "command": "/bin/bash",
+      "args": [
+        "/Users/zephyrlin/Desktop/VibeBlog/mcp_servers/run_deapi.sh"
+      ],
+      "env": {
+        "DEAPI_API_KEY": "your_api_key_here"
+      }
+    }
+  }
+}

@@ -38,7 +38,7 @@ const content = `# 安裝 MCP Servers
 
 ## 設置截圖
 
-![已安裝的 MCP Servers](/mcp-servers.png)
+![已安裝的 MCP Servers](/images/mcp-servers.png)
 
 ## 下一步
 
