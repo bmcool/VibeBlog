@@ -14,6 +14,21 @@
   "VibeBlog": [
     "ai-verification-cost-principle"
   ],
+  "自動化": [
+    "automated-official-website-finder"
+  ],
+  "Python": [
+    "automated-official-website-finder"
+  ],
+  "LLM": [
+    "automated-official-website-finder"
+  ],
+  "網絡搜索": [
+    "automated-official-website-finder"
+  ],
+  "爬蟲": [
+    "automated-official-website-finder"
+  ],
   "MCP": [
     "building-deapi-txt2img-mcp-server",
     "installing-mcp-servers"

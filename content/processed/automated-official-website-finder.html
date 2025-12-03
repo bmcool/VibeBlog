@@ -1,0 +1,325 @@
+<h1>自動化找回 1000+ 軟體官方網站：一個智能搜索腳本的設計邏輯</h1>
+<h2>背景：從人工維護到自動化的挑戰</h2>
+<p><img src="/images/ai-generated/automated-official-website-finder.png" alt="自動化工作流程"></p>
+<p>有一間軟體經銷商，原本是靠人工在維護網站上所有的產品。面對 1000 多個軟體，每個軟體的網站結構都不一樣，如果一路以來都寫好爬蟲，這水到渠成，但一個爬蟲都沒有的情況下，要一蹴可及，也並非簡單的事情。</p>
+<p>從一開始例如 Cursor 這類的 agent，配合 Playwright MCP 來做，發現雖然做得到，但效率極差，且成本高昂，甚至準確度也無法放心的大量跑。中間也換過好幾次做法，在 1000 多檔軟體的各種例外狀況下（官網早失聯、產品變成子產品、換了網址...etc），其實還是應該要按部就班的來做。</p>
+<p><strong>第一件事情就是先找回這些軟體的官方網站。</strong> 這就是 <code>openai_web_search.py</code> 腳本的使命。</p>
+<h2>腳本整體架構</h2>
+<p>這個腳本的核心目標是：<strong>自動化地從產品名稱找到對應的官方網站域名</strong>。整個系統分為三個主要層次：</p>
+<ol>
+<li><strong>WebSearchTool</strong>：底層的網絡搜索工具，負責實際的搜索和網頁抓取</li>
+<li><strong>OpenAISearchAssistant</strong>：中層的 AI 助手，負責優化搜索策略和判斷結果</li>
+<li><strong>主函數流程</strong>：頂層的批量處理邏輯，負責從數據庫讀取產品並批量處理</li>
+</ol>
+<h2>核心組件一：WebSearchTool 類</h2>
+<h3>搜索基礎設施</h3>
+<p><code>WebSearchTool</code> 使用 <code>crawl4ai</code> 作為底層爬蟲引擎，配置如下：</p>
+<pre><code class="language-python">self.browser_config = BrowserConfig(
+    headless=True,
+    verbose=False
+)
+self.run_config = CrawlerRunConfig(
+    cache_mode=CacheMode.BYPASS,
+    delay_before_return_html=2.0,  # 等待 2 秒讓頁面載入
+    wait_for_images=False,
+    screenshot=False
+)
+</code></pre>
+<p>選擇 <code>crawl4ai</code> 而非傳統的 <code>requests</code> 是因為：</p>
+<ul>
+<li>可以處理 JavaScript 渲染的頁面</li>
+<li>更好的反爬蟲對抗能力</li>
+<li>支持異步操作，提高效率</li>
+</ul>
+<h3>搜索執行邏輯</h3>
+<p><code>_search_with_language</code> 方法的核心流程：</p>
+<ol>
+<li><p><strong>構建搜索 URL</strong>：使用 DuckDuckGo 的 HTML 搜索接口</p>
+<pre><code class="language-python">search_url = f&quot;https://html.duckduckgo.com/html/?q={urllib.parse.quote(query)}&quot;
+</code></pre>
+</li>
+<li><p><strong>重試機制</strong>：最多重試 3 次，每次重試前等待時間遞增（10秒、20秒、30秒）</p>
+<ul>
+<li>特別處理 403 錯誤（速率限制）</li>
+<li>其他錯誤也會重試，但會記錄並繼續</li>
+</ul>
+</li>
+<li><p><strong>解析搜索結果</strong>：從 HTML 中提取標題、URL 和摘要</p>
+<ul>
+<li>處理 DuckDuckGo 的重定向 URL（<code>/l/?uddg=...</code> 格式）</li>
+<li>提取真實的目標 URL</li>
+</ul>
+</li>
+</ol>
+<h3>簡單的官方域名查找</h3>
+<p><code>find_official_domain</code> 方法使用基於分數的匹配算法：</p>
+<pre><code class="language-python"># 計算匹配分數
+score = 0
+
+# 域名中包含產品名稱（不區分大小寫）- 最高優先級
+if product_name_clean in domain_lower:
+    score += 10  # 域名匹配是最重要的指標
+
+# 標題中包含產品名稱
+if product_name.lower() in title:
+    score += 5
+
+# 標題中包含 &quot;official&quot;
+if &#39;official&#39; in title:
+    score += 3
+
+# 摘要中包含產品名稱
+if product_name.lower() in snippet:
+    score += 2
+
+# 常見的官方域名模式（.com 優先）
+if &#39;.com&#39; in domain:
+    score += 2
+</code></pre>
+<p>這個方法簡單直接，但準確度有限，因為：</p>
+<ul>
+<li>無法區分官方網站和第三方網站</li>
+<li>無法處理產品名稱模糊的情況</li>
+<li>無法理解產品描述來輔助判斷</li>
+</ul>
+<h2>核心組件二：優化的官方域名查找</h2>
+<h3>為什麼需要優化？</h3>
+<p>簡單的基於分數的匹配在實際應用中遇到很多問題：</p>
+<ul>
+<li>產品名稱可能有多種表達方式（如 &quot;Adobe Photoshop&quot; vs &quot;Photoshop&quot;）</li>
+<li>第三方網站可能包含產品名稱但並非官方網站</li>
+<li>產品可能已經改名或合併到其他產品線</li>
+</ul>
+<p>因此，我們需要引入 <strong>LLM 來進行智能判斷</strong>。</p>
+<h3>優化流程的三個階段</h3>
+<h4>階段一：提取搜索關鍵詞</h4>
+<p><code>extract_product_search_keywords</code> 方法使用 LLM 將產品名稱轉換為 1-3 個最有效的搜索關鍵詞：</p>
+<pre><code class="language-python">extraction_prompt = f&quot;&quot;&quot;請為以下產品名稱提取1-3個英文搜索關鍵詞，這些關鍵詞應該是最容易搜尋到官方網站的名稱。
+
+要求：
+1. 如果是中文產品名，先翻譯成官方英文名稱
+2. 提取1-3個關鍵詞組合，優先級從高到低：
+   - 公司名 + 產品名（如 &quot;adobe photoshop&quot;）
+   - 公司名（如 &quot;adobe&quot;）
+   - 產品名（如 &quot;photoshop&quot;）
+3. 只使用官方英文名稱，不要使用常見單字
+</code></pre>
+<p>這個階段的關鍵是：<strong>找到最容易搜到官網的關鍵詞組合</strong>，而不是最完整的產品名稱。</p>
+<h4>階段二：順序搜索並批量判斷</h4>
+<p><code>find_official_domain_optimized</code> 方法的核心邏輯：</p>
+<ol>
+<li><p><strong>順序搜索關鍵詞</strong>：按優先級順序搜索每個關鍵詞</p>
+<pre><code class="language-python">for keyword_idx, keyword in enumerate(search_keywords, 1):
+    results = await self.search(keyword, num_results=num_results_per_keyword)
+</code></pre>
+</li>
+<li><p><strong>提取候選域名</strong>：從搜索結果中提取所有可能的域名</p>
+<ul>
+<li>處理 DuckDuckGo 重定向 URL</li>
+<li>跨關鍵詞去重（同一個域名只保留一次）</li>
+</ul>
+</li>
+<li><p><strong>批量 LLM 判斷</strong>：一次性將所有候選域名提交給 LLM 判斷</p>
+<pre><code class="language-python">async def judge_candidates(candidates: List[Dict[str, str]]) -&gt; List[Dict[str, Any]]:
+    judgment_prompt = f&quot;&quot;&quot;請判斷以下多個網站是否為產品 &quot;{product_name}&quot; 的官方網站。
+    
+    請仔細分析每個網站，判斷是否為該產品的官方網站。請考慮：
+    1. 域名是否與產品名稱相關
+    2. 標題和摘要是否與產品名稱和描述匹配
+    3. 是否看起來像官方網站（而非第三方網站、新聞網站、字典網站等）
+    
+    請以 JSON 格式返回一個數組，每個元素對應一個網站的判斷結果：
+    [
+        {{
+            &quot;domain&quot;: &quot;域名1&quot;,
+            &quot;is_official&quot;: true/false,
+            &quot;confidence&quot;: 0.0-1.0,
+            &quot;reason&quot;: &quot;判斷理由&quot;
+        }},
+        ...
+    ]
+    &quot;&quot;&quot;
+</code></pre>
+</li>
+<li><p><strong>早期終止策略</strong>：如果找到信心度 &gt; 0.9 的官方域名，立即返回，跳過剩餘關鍵詞</p>
+<pre><code class="language-python">if best_domain and best_confidence &gt; 0.9:
+    print(f&quot;✅ 找到高信心度官方域名: {best_domain}&quot;)
+    return best_domain
+</code></pre>
+</li>
+</ol>
+<h3>批量判斷的優勢</h3>
+<p>為什麼要批量判斷而不是逐個判斷？</p>
+<ol>
+<li><strong>成本效率</strong>：一次 API 調用可以判斷多個候選域名，比逐個調用更節省成本</li>
+<li><strong>上下文一致性</strong>：LLM 可以同時比較多個候選域名，做出更準確的判斷</li>
+<li><strong>速度提升</strong>：減少 API 調用次數，提高整體處理速度</li>
+</ol>
+<h3>錯誤處理和速率限制</h3>
+<p>腳本實現了完善的錯誤處理機制：</p>
+<pre><code class="language-python"># 如果遇到 403 錯誤，等待更長時間（30-60秒）
+if &quot;403&quot; in error_msg or &quot;Forbidden&quot; in error_msg:
+    delay = 30 + random.uniform(0, 30)  # 30-60 秒隨機延遲
+    await asyncio.sleep(delay)
+elif keyword != search_keywords[-1]:
+    # 其他錯誤也添加延遲（15-20秒）
+    delay = 15 + random.uniform(0, 5)
+    await asyncio.sleep(delay)
+</code></pre>
+<p>關鍵設計點：</p>
+<ul>
+<li><strong>隨機延遲</strong>：避免被識別為機器人行為</li>
+<li><strong>分級延遲</strong>：403 錯誤等待更長時間</li>
+<li><strong>繼續執行</strong>：即使某個關鍵詞失敗，也會繼續處理下一個</li>
+</ul>
+<h2>核心組件三：主函數批量處理流程</h2>
+<h3>產品過濾策略</h3>
+<p><code>main_async</code> 函數實現了智能的產品過濾邏輯：</p>
+<pre><code class="language-python"># 默認行為：跳過已有 URL 的產品，以及1天內已處理過的產品
+# 但優先處理：沒有網址但有時間戳的（代表抓取失敗的）
+failed_products = []  # 沒有網址但有時間戳的產品（優先處理）
+new_products = []     # 完全沒有記錄的產品
+
+for product_id in all_product_ids[:args.limit * 3]:
+    url_info = get_product_url_with_timestamp(conn, product_id)
+    
+    # 如果有 URL，跳過
+    if url_info and url_info.get(&#39;url&#39;):
+        skip_count += 1
+        continue
+    
+    # 如果1天內已處理過，跳過（除非是失敗的）
+    if url_info and url_info.get(&#39;last_fetched_at&#39;):
+        last_fetched = datetime.fromisoformat(...)
+        if last_fetched.isoformat() &gt; one_day_ago:
+            if not url_info.get(&#39;url&#39;):
+                failed_products.append(product_id)  # 優先處理失敗的
+            else:
+                skip_count += 1
+            continue
+    
+    # 分類處理
+    if url_info and url_info.get(&#39;last_fetched_at&#39;) and not url_info.get(&#39;url&#39;):
+        failed_products.append(product_id)
+    elif not url_info:
+        new_products.append(product_id)
+
+# 優先處理失敗的產品，然後處理新產品
+product_ids_to_process = (failed_products + new_products)[:args.limit]
+</code></pre>
+<p>這個策略的優勢：</p>
+<ol>
+<li><strong>避免重複處理</strong>：已有 URL 的產品直接跳過</li>
+<li><strong>優先重試失敗</strong>：之前失敗的產品優先處理</li>
+<li><strong>時間窗口控制</strong>：1 天內已處理過的產品跳過（除非失敗）</li>
+</ol>
+<h3>處理流程</h3>
+<p>對每個產品的處理流程：</p>
+<pre><code class="language-python"># 1. 獲取產品信息
+product_data = get_latest_version(conn, product_id)
+product_name = product_data.get(&#39;name&#39;, &#39;&#39;)
+product_desc1 = product_data.get(&#39;desc1&#39;, &#39;&#39;) or &#39;&#39;
+
+# 2. 查找官方域名
+official_domain = await find_official_domain_optimized(
+    product_name=product_name,
+    product_desc1=product_desc1,
+    api_key=args.api_key
+)
+
+# 3. 保存結果
+if official_domain:
+    official_url = f&quot;https://{official_domain}&quot;
+    set_product_url(conn, product_id, official_url)
+    success_count += 1
+else:
+    # 未找到官方域名，清空現有網址但更新撷取時間
+    delete_product_url(conn, product_id)
+    update_product_url_fetched_time(conn, product_id)
+    cleared_count += 1
+</code></pre>
+<p>關鍵設計點：</p>
+<ul>
+<li><strong>即使失敗也更新時間戳</strong>：避免無限重試同一個產品</li>
+<li><strong>清空無效 URL</strong>：如果找不到官方域名，清空現有的錯誤 URL</li>
+<li><strong>統計信息</strong>：記錄成功、失敗、跳過的數量</li>
+</ul>
+<h2>技術細節：URL 處理和域名提取</h2>
+<h3>DuckDuckGo 重定向處理</h3>
+<p>DuckDuckGo 使用重定向 URL 來保護用戶隱私，格式為 <code>/l/?uddg=...</code>。腳本需要提取真實的目標 URL：</p>
+<pre><code class="language-python"># 處理 DuckDuckGo 的重定向 URL
+if url.startswith(&#39;//duckduckgo.com/l/&#39;) or url.startswith(&#39;/l/?&#39;):
+    try:
+        parsed = urllib.parse.urlparse(url if url.startswith(&#39;//&#39;) else f&quot;https:{url}&quot;)
+        params = urllib.parse.parse_qs(parsed.query)
+        if &#39;uddg&#39; in params:
+            real_url = urllib.parse.unquote(params[&#39;uddg&#39;][0])
+    except Exception as e:
+        print(f&quot;⚠️  解析 URL 失敗: {url}, 錯誤: {e}&quot;)
+        continue
+</code></pre>
+<h3>域名提取邏輯</h3>
+<p><code>_extract_domain_from_url</code> 方法處理各種 URL 格式：</p>
+<pre><code class="language-python">def _extract_domain_from_url(self, url: str) -&gt; Optional[str]:
+    # 1. 處理 DuckDuckGo 重定向
+    if url.startswith(&#39;//duckduckgo.com/l/&#39;) or url.startswith(&#39;/l/?&#39;):
+        # 提取 uddg 參數中的真實 URL
+        ...
+    
+    # 2. 跳過 DuckDuckGo 的域名
+    if &#39;duckduckgo.com&#39; in url.lower():
+        return None
+    
+    # 3. 如果 URL 沒有協議，添加 https://
+    if not url.startswith((&#39;http://&#39;, &#39;https://&#39;)):
+        url = f&quot;https://{url}&quot;
+    
+    # 4. 解析域名
+    parsed = urlparse(url)
+    domain = parsed.netloc
+    
+    # 5. 移除 www. 前綴和端口號
+    if domain.startswith(&#39;www.&#39;):
+        domain = domain[4:]
+    if &#39;:&#39; in domain:
+        domain = domain.split(&#39;:&#39;)[0]
+    
+    # 6. 驗證域名格式
+    if &#39;.&#39; not in domain or len(domain.split(&#39;.&#39;)) &lt; 2:
+        return None
+    
+    return domain
+</code></pre>
+<h2>實際應用效果</h2>
+<p>這個腳本在實際應用中表現如何？</p>
+<h3>優勢</h3>
+<ol>
+<li><strong>自動化程度高</strong>：可以批量處理大量產品，無需人工介入</li>
+<li><strong>準確度提升</strong>：使用 LLM 判斷，比簡單的關鍵詞匹配更準確</li>
+<li><strong>成本可控</strong>：批量判斷和早期終止策略降低了 API 調用成本</li>
+<li><strong>錯誤恢復</strong>：完善的重試機制和錯誤處理</li>
+</ol>
+<h3>挑戰</h3>
+<ol>
+<li><strong>速率限制</strong>：DuckDuckGo 和目標網站可能限制爬蟲訪問</li>
+<li><strong>特殊情況</strong>：產品改名、合併、官網失聯等情況需要人工處理</li>
+<li><strong>成本</strong>：雖然有優化，但 LLM API 調用仍有成本</li>
+</ol>
+<h3>改進方向</h3>
+<ol>
+<li><strong>緩存機制</strong>：對已處理的產品進行緩存，避免重複處理</li>
+<li><strong>並發控制</strong>：在遵守速率限制的前提下，提高並發處理能力</li>
+<li><strong>結果驗證</strong>：定期驗證已保存的 URL 是否仍然有效</li>
+</ol>
+<h2>總結</h2>
+<p><code>openai_web_search.py</code> 腳本展示了一個實用的自動化解決方案，它：</p>
+<ol>
+<li><strong>分層設計</strong>：將搜索、判斷、批量處理分離，各司其職</li>
+<li><strong>智能判斷</strong>：使用 LLM 進行語義理解，而非簡單的關鍵詞匹配</li>
+<li><strong>成本優化</strong>：批量處理和早期終止策略降低 API 成本</li>
+<li><strong>錯誤處理</strong>：完善的重試機制和錯誤恢復策略</li>
+<li><strong>實際可用</strong>：針對 1000+ 軟體的實際場景設計，處理各種邊緣情況</li>
+</ol>
+<p>這個腳本不僅解決了「找回官方網站」這個具體問題，更重要的是展示了如何在複雜的實際場景中，平衡自動化程度、準確度和成本。</p>
+<hr>
+<p><em>這篇文章詳細講述了自動化找回軟體官方網站的腳本設計邏輯，希望對正在構建類似自動化系統的開發者有所幫助。</em></p>

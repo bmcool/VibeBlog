@@ -1,0 +1,13 @@
+{
+  "slug": "automated-official-website-finder",
+  "title": "自動化找回 1000+ 軟體官方網站：一個智能搜索腳本的設計邏輯",
+  "titleEn": "Automating Official Website Discovery for 1000+ Software Products: Design Logic of an Intelligent Search Script",
+  "date": "2025-12-03",
+  "tags": ["自動化", "Python", "LLM", "網絡搜索", "爬蟲"],
+  "tagsEn": ["Automation", "Python", "LLM", "Web Search", "Crawler"],
+  "summary": "詳細講述如何使用 LLM 和網絡搜索技術，自動化地從產品名稱找到對應的官方網站域名。涵蓋搜索策略優化、批量判斷、錯誤處理等核心設計邏輯。",
+  "summaryEn": "Detailed explanation of how to use LLM and web search technologies to automatically find corresponding official website domains from product names. Covers core design logic including search strategy optimization, batch judgment, and error handling.",
+  "heroImage": "/images/ai-generated/automated-official-website-finder.png",
+  "description": "面對 1000+ 軟體產品的維護挑戰，如何設計一個智能搜索腳本來自動化找回官方網站？本文詳細解析 openai_web_search.py 的設計邏輯，包括 WebSearchTool、OpenAISearchAssistant 等核心組件的實現細節。"
+}
+
