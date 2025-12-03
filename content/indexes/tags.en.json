@@ -15,7 +15,8 @@
     "ai-verification-cost-principle"
   ],
   "Automation": [
-    "automated-official-website-finder"
+    "automated-official-website-finder",
+    "cursor-metabase-push-list-management"
   ],
   "Python": [
     "automated-official-website-finder"
@@ -31,6 +32,7 @@
   ],
   "MCP": [
     "building-deapi-txt2img-mcp-server",
+    "cursor-metabase-push-list-management",
     "installing-mcp-servers"
   ],
   "AI": [
@@ -44,6 +46,15 @@
   ],
   "deapi.ai": [
     "building-deapi-txt2img-mcp-server"
+  ],
+  "Metabase": [
+    "cursor-metabase-push-list-management"
+  ],
+  "Cursor": [
+    "cursor-metabase-push-list-management"
+  ],
+  "Marketing Automation": [
+    "cursor-metabase-push-list-management"
   ],
   "Development Environment": [
     "installing-mcp-servers"

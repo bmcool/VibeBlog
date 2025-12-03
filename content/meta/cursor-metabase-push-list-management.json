@@ -1,0 +1,14 @@
+{
+  "slug": "cursor-metabase-push-list-management",
+  "title": "用 Cursor Agent + Metabase MCP 解決行銷人員的「改來改去」問題",
+  "titleEn": "Solving Marketing Team's Constant Changes with Cursor Agent + Metabase MCP",
+  "date": "2025-01-15",
+  "tags": ["MCP", "Metabase", "Cursor", "自動化", "行銷自動化"],
+  "tagsEn": ["MCP", "Metabase", "Cursor", "Automation", "Marketing Automation"],
+  "summary": "面對行銷人員頻繁修改推送名單的需求，數據人員不堪其擾。本文介紹如何使用 Cursor Agent 配合 Metabase MCP，讓行銷人員用自然語言直接操作，同時保持 API KEY 權限的完整控制。",
+  "summaryEn": "Facing marketing teams' constant requests to modify push notification lists, data analysts are overwhelmed. This article introduces how to use Cursor Agent with Metabase MCP, allowing marketers to operate directly using natural language while maintaining full control over API KEY permissions.",
+  "heroImage": "/images/ai-generated/cursor-metabase-push-list-management.png",
+  "description": "透過 Cursor Agent 的自然語言介面，結合 Metabase MCP Server 的強大功能，讓行銷人員可以即時調整推送名單，同時技術端完全掌控 API KEY 權限，解決了彈性與安全性的平衡問題。",
+  "descriptionEn": "Through Cursor Agent's natural language interface, combined with Metabase MCP Server's powerful features, marketers can adjust push notification lists in real-time while the technical team maintains full control over API KEY permissions, solving the balance between flexibility and security."
+}
+

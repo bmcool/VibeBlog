@@ -1,0 +1,228 @@
+<h1>Solving Marketing Team&#39;s Constant Changes with Cursor Agent + Metabase MCP</h1>
+<h2>Background: The Pain Point of Data Analysts</h2>
+<p><img src="/images/ai-generated/cursor-metabase-push-list-management.png" alt="Cursor Agent + Metabase MCP Solution"></p>
+<p>In many companies, the push notification system workflow is as follows:</p>
+<ol>
+<li><strong>Marketing team</strong> decides the logic for push notification lists (e.g., &quot;users who made purchases in the last 30 days&quot;)</li>
+<li><strong>Data analysts</strong> aggregate these logics into forms through Metabase</li>
+<li>The system sends push notifications based on the Metabase form data</li>
+</ol>
+<p>This workflow seems reasonable, but in practice, there&#39;s a common problem: <strong>Marketing team requirements change frequently</strong>.</p>
+<p>Today it&#39;s &quot;users who made purchases in the last 30 days&quot;, tomorrow it changes to &quot;users who made purchases in the last 14 days with amounts over 1000&quot;, and the day after it becomes &quot;users who made purchases in the last 7 days but haven&#39;t returned items&quot;.</p>
+<p>Data analysts have to:</p>
+<ul>
+<li>Understand marketing team requirements</li>
+<li>Create or modify queries in Metabase</li>
+<li>Verify if results are correct</li>
+<li>Handle various edge cases</li>
+</ul>
+<p><strong>The result: Data analysts are overwhelmed by marketing team&#39;s constant changes.</strong></p>
+<h2>The Dilemma of Traditional Solutions</h2>
+<p>When data analysts propose &quot;can we build an interface for marketing to adjust themselves?&quot;, the technical team faces a classic dilemma:</p>
+<h3>Solution A: Simple Interface, Limited Functionality</h3>
+<ul>
+<li>✅ Marketing team can learn easily</li>
+<li>❌ Limited functionality, still need constant changes</li>
+<li>❌ Cannot handle complex query requirements</li>
+</ul>
+<h3>Solution B: Highly Flexible Interface</h3>
+<ul>
+<li>✅ Powerful functionality, can handle various requirements</li>
+<li>❌ High complexity, marketing team cannot learn</li>
+<li>❌ High development cost, difficult to maintain</li>
+</ul>
+<p><strong>This is the classic contradiction between flexibility and usability.</strong></p>
+<h2>Our Solution: Cursor Agent + Metabase MCP</h2>
+<p>After consideration, we found a balance: <strong>Using Cursor Agent with Metabase MCP Server</strong>.</p>
+<h3>Core Concept</h3>
+<ol>
+<li><strong>Natural Language Input</strong>: Marketing team describes requirements in natural language</li>
+<li><strong>AI Understanding and Conversion</strong>: Cursor Agent understands requirements and converts them to Metabase queries</li>
+<li><strong>Direct Metabase Operation</strong>: Create or modify queries directly through Metabase MCP</li>
+<li><strong>Full Permission Control</strong>: API KEY managed by technical team, marketing team cannot access directly</li>
+</ol>
+<h3>Technical Architecture</h3>
+<pre><code>Marketing Team
+  ↓ (Natural Language)
+Cursor Agent
+  ↓ (Understand requirements, generate queries)
+Metabase MCP Server
+  ↓ (API calls)
+Metabase
+  ↓ (Execute queries, generate lists)
+Push Notification System
+</code></pre>
+<h2>Metabase MCP Server Configuration</h2>
+<p>First, we need to configure Metabase MCP Server in Cursor. Add the following configuration to <code>mcp.json</code>:</p>
+<pre><code class="language-json">{
+  &quot;mcpServers&quot;: {
+    &quot;metabase-server&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [&quot;@easecloudio/mcp-metabase-server&quot;],
+      &quot;env&quot;: {
+        &quot;METABASE_URL&quot;: &quot;http://your-metabase-url:3000/&quot;,
+        &quot;METABASE_API_KEY&quot;: &quot;your-api-key-here&quot;
+      }
+    }
+  }
+}
+</code></pre>
+<p><strong>Key Points</strong>:</p>
+<ul>
+<li><code>METABASE_URL</code>: Your Metabase instance address</li>
+<li><code>METABASE_API_KEY</code>: API KEY managed by technical team</li>
+<li>Marketing team cannot directly see or modify these configurations</li>
+</ul>
+<h2>Real-World Usage Scenarios</h2>
+<h3>Scenario 1: Creating a New Push List</h3>
+<p><strong>Marketing Team Input</strong>:</p>
+<blockquote>
+<p>&quot;Create a list containing users who made purchases in the last 30 days with purchase amounts over 1000, maximum 5000 users&quot;</p>
+</blockquote>
+<p><strong>Cursor Agent Execution</strong>:</p>
+<ol>
+<li>Understand requirements: time range (30 days), conditions (purchase amount &gt; 1000), limit (max 5000 users)</li>
+<li>Query related table structures through Metabase MCP</li>
+<li>Create Metabase query (Card)</li>
+<li>Execute query and generate list</li>
+<li>Save list to specified table in Metabase</li>
+</ol>
+<p><strong>Result</strong>:</p>
+<ul>
+<li>Marketing team completed complex query creation using natural language</li>
+<li>Data analysts don&#39;t need to intervene</li>
+<li>API KEY permissions fully controlled by technical team</li>
+</ul>
+<h3>Scenario 2: Modifying Existing List</h3>
+<p><strong>Marketing Team Input</strong>:</p>
+<blockquote>
+<p>&quot;Change yesterday&#39;s push list to the last 14 days, keep other conditions unchanged&quot;</p>
+</blockquote>
+<p><strong>Cursor Agent Execution</strong>:</p>
+<ol>
+<li>Find yesterday&#39;s push list (query through Metabase MCP)</li>
+<li>Understand the semantics of &quot;keep other conditions unchanged&quot;</li>
+<li>Modify time range in query</li>
+<li>Update query in Metabase</li>
+<li>Re-execute and generate new list</li>
+</ol>
+<h3>Scenario 3: Complex Multi-Condition Query</h3>
+<p><strong>Marketing Team Input</strong>:</p>
+<blockquote>
+<p>&quot;I want users who made purchases in the last 7 days, but have no return records, and are not in the blacklist, sorted by purchase amount in descending order, top 3000&quot;</p>
+</blockquote>
+<p><strong>Cursor Agent Execution</strong>:</p>
+<ol>
+<li>Parse multiple conditions: time, purchase behavior, return exclusion, blacklist exclusion, sorting, limit</li>
+<li>Query related table relationships through Metabase MCP</li>
+<li>Create complex JOIN query</li>
+<li>Execute and verify results</li>
+<li>Generate and save list</li>
+</ol>
+<h2>Advantages Analysis</h2>
+<h3>1. Solving the Flexibility vs. Usability Contradiction</h3>
+<ul>
+<li><strong>Natural Language</strong>: Marketing team doesn&#39;t need to learn complex query syntax</li>
+<li><strong>High Flexibility</strong>: AI can understand various complex requirement descriptions</li>
+<li><strong>Real-time Feedback</strong>: Can immediately see query results and adjust quickly</li>
+</ul>
+<h3>2. Full Permission Control</h3>
+<ul>
+<li><strong>API KEY Management</strong>: Unified management by technical team, marketing team cannot access directly</li>
+<li><strong>Operation Logging</strong>: All operations go through Cursor Agent, can be logged and audited</li>
+<li><strong>Secure and Controllable</strong>: Technical team can adjust permission scope at any time</li>
+</ul>
+<h3>3. Reducing Communication Costs</h3>
+<ul>
+<li><strong>Reduce Back-and-Forth Confirmation</strong>: Marketing team can directly describe requirements without repeated communication</li>
+<li><strong>Real-time Adjustment</strong>: Can modify immediately if problems are found, no need to wait for data analysts</li>
+<li><strong>Low Learning Cost</strong>: Marketing team only needs to know how to describe requirements in natural language</li>
+</ul>
+<h3>4. Freeing Up Data Analyst Time</h3>
+<ul>
+<li><strong>Focus on High-Value Work</strong>: Data analysts can focus on data analysis, modeling, and other high-value work</li>
+<li><strong>Reduce Repetitive Labor</strong>: No need to repeatedly create and modify simple queries</li>
+<li><strong>Improve Overall Efficiency</strong>: The entire team&#39;s efficiency is improved</li>
+</ul>
+<h2>Technical Implementation Details</h2>
+<h3>Main Features of Metabase MCP Server</h3>
+<p>Metabase MCP Server provides rich features, including:</p>
+<ol>
+<li><strong>Query Execution</strong>: Execute SQL queries or MBQL queries</li>
+<li><strong>Card Management</strong>: Create, update, delete query cards</li>
+<li><strong>Dashboard Management</strong>: Manage dashboards</li>
+<li><strong>Database Structure Query</strong>: Query table structures, field information, etc.</li>
+<li><strong>Result Export</strong>: Export query results in various formats</li>
+</ol>
+<h3>Cursor Agent Workflow</h3>
+<ol>
+<li><strong>Requirement Understanding</strong>: Use LLM to understand marketing team&#39;s natural language requirements</li>
+<li><strong>Query Generation</strong>: Generate Metabase queries based on requirements</li>
+<li><strong>Structure Query</strong>: First query related table structures to ensure query correctness</li>
+<li><strong>Execution Verification</strong>: Execute query and verify results</li>
+<li><strong>Result Saving</strong>: Save results to specified table or Card</li>
+</ol>
+<h3>Error Handling</h3>
+<ul>
+<li><strong>Semantic Understanding Errors</strong>: If AI misunderstands, marketing team can re-describe</li>
+<li><strong>Query Errors</strong>: If query has problems, AI will adjust based on error messages</li>
+<li><strong>Permission Errors</strong>: If permissions are insufficient, will clearly prompt that technical team assistance is needed</li>
+</ul>
+<h2>Actual Results</h2>
+<h3>Before Implementation</h3>
+<ul>
+<li>Marketing team proposes requirement → Data analyst understands (may misunderstand) → Create query → Marketing team verifies → Finds problems → Modify again → ...</li>
+<li><strong>Average 2-3 rounds per requirement</strong></li>
+<li><strong>Data analysts handle 10+ similar requirements daily</strong></li>
+</ul>
+<h3>After Implementation</h3>
+<ul>
+<li>Marketing team directly describes requirement → Cursor Agent executes → Immediately see results → Adjust directly if problems found</li>
+<li><strong>Most requirements completed in one go</strong></li>
+<li><strong>Data analysts can focus on more complex analysis work</strong></li>
+</ul>
+<h2>Considerations</h2>
+<h3>1. API KEY Security</h3>
+<ul>
+<li><strong>Do not write API KEY in articles or public places</strong></li>
+<li>Use environment variables or secure configuration management systems</li>
+<li>Regularly rotate API KEYs</li>
+</ul>
+<h3>2. Permission Scope Control</h3>
+<ul>
+<li>Recommend creating dedicated Metabase users with only necessary permissions</li>
+<li>Limit accessible databases and tables</li>
+<li>Avoid granting permissions to delete or modify core data</li>
+</ul>
+<h3>3. Query Verification</h3>
+<ul>
+<li>For important push lists, recommend adding manual review process</li>
+<li>Can set reasonableness checks for query results (e.g., number of users cannot exceed a certain limit)</li>
+<li>Log all operations for traceability and auditing</li>
+</ul>
+<h3>4. Training and Documentation</h3>
+<ul>
+<li>Although using natural language, marketing team still needs training on how to better describe requirements</li>
+<li>Provide examples of common requirements</li>
+<li>Establish problem feedback mechanism</li>
+</ul>
+<h2>Future Extensions</h2>
+<p>This solution has many directions for extension:</p>
+<ol>
+<li><strong>Templating</strong>: Template common requirements to further simplify operations</li>
+<li><strong>Preview Function</strong>: Preview query results before execution to avoid errors</li>
+<li><strong>Version Control</strong>: Record historical versions of queries for easy rollback</li>
+<li><strong>Automated Scheduling</strong>: Regularly automatically execute certain queries and update lists</li>
+<li><strong>Result Analysis</strong>: Automatically analyze query results and provide insights</li>
+</ol>
+<h2>Conclusion</h2>
+<p>Using <strong>Cursor Agent + Metabase MCP</strong> successfully solves the problem of marketing team&#39;s constant changes:</p>
+<ul>
+<li>✅ <strong>Flexibility and Usability Coexist</strong>: Natural language input with highly flexible query capabilities</li>
+<li>✅ <strong>Full Permission Control</strong>: API KEY managed by technical team, secure and controllable</li>
+<li>✅ <strong>Reduce Communication Costs</strong>: Reduce back-and-forth confirmation, improve efficiency</li>
+<li>✅ <strong>Free Up Data Analyst Time</strong>: Focus on high-value work</li>
+</ul>
+<p>This solution not only solves current pain points but more importantly demonstrates <strong>the application value of AI Agent in real business scenarios</strong>. Through reasonable architectural design, we can significantly improve business efficiency while maintaining security.</p>
+<hr>
+<p><em>This article documents the experience of using Cursor Agent with Metabase MCP to solve real business problems, hoping to help teams facing similar challenges.</em></p>
