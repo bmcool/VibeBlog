@@ -231,7 +231,7 @@
 
 	.posts-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 		gap: 2rem;
 		margin-bottom: 2rem;
 	}
@@ -403,12 +403,14 @@
 		}
 
 		.btn {
-			width: 100%;
-			max-width: 300px;
+			width: auto;
+			padding: 0.75rem 1.5rem;
+			font-size: 0.9rem;
 		}
 
 		.posts-grid {
 			grid-template-columns: 1fr;
+			gap: 1.5rem;
 		}
 
 		.latest-posts,
@@ -417,8 +419,22 @@
 			padding-right: 1rem;
 		}
 
+		.latest-posts h2,
+		.popular-tags h2 {
+			font-size: 2rem;
+			margin-bottom: 1.5rem;
+		}
+
 		.hero {
 			min-height: 50vh;
+		}
+
+		.post-content {
+			padding: 1.25rem;
+		}
+
+		.post-content h3 {
+			font-size: 1.25rem;
 		}
 	}
 
@@ -429,6 +445,46 @@
 
 		.subtitle {
 			font-size: 1rem;
+		}
+
+		.hero-content {
+			padding: 1.5rem;
+		}
+
+		.btn {
+			padding: 0.65rem 1.25rem;
+			font-size: 0.85rem;
+		}
+
+		.latest-posts h2,
+		.popular-tags h2 {
+			font-size: 1.75rem;
+			margin-bottom: 1.25rem;
+		}
+
+		.posts-grid {
+			gap: 1.25rem;
+		}
+
+		.post-content {
+			padding: 1rem;
+		}
+
+		.post-content h3 {
+			font-size: 1.1rem;
+		}
+
+		.post-description {
+			font-size: 0.9rem;
+		}
+
+		.tag-link {
+			padding: 0.5rem 1rem;
+			font-size: 0.85rem;
+		}
+
+		.cta {
+			padding: 2rem 1rem;
 		}
 	}
 </style>

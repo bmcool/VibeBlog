@@ -166,11 +166,12 @@
 		}
 
 		.nav-links {
-			gap: 1.5rem;
+			gap: 1.25rem;
 		}
 
 		.nav-links a {
 			font-size: 0.9rem;
+			padding: 0.4rem 0;
 		}
 	}
 
@@ -179,12 +180,39 @@
 			padding: 0 1rem;
 		}
 
+		.logo {
+			font-size: 1.25rem;
+		}
+
+		.main-nav.scrolled .logo {
+			font-size: 1.1rem;
+		}
+
 		.nav-links {
-			gap: 1rem;
+			gap: 0.875rem;
 		}
 
 		.nav-links a {
 			font-size: 0.85rem;
+			padding: 0.35rem 0;
+		}
+	}
+
+	@media (max-width: 360px) {
+		.nav-container {
+			padding: 0 0.75rem;
+		}
+
+		.logo {
+			font-size: 1.1rem;
+		}
+
+		.nav-links {
+			gap: 0.75rem;
+		}
+
+		.nav-links a {
+			font-size: 0.8rem;
 		}
 	}
 </style>

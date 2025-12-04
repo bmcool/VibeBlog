@@ -247,5 +247,101 @@
 		color: #666;
 		font-style: italic;
 	}
+
+	/* Responsive Design */
+	@media (max-width: 768px) {
+		.post-container {
+			padding: 1.5rem;
+		}
+
+		.post {
+			padding: 1.5rem;
+		}
+
+		.post-header h1 {
+			font-size: 2rem;
+		}
+
+		.post-content :global(h1) {
+			font-size: 1.75rem;
+		}
+
+		.post-content :global(h2) {
+			font-size: 1.5rem;
+		}
+
+		.post-content :global(h3) {
+			font-size: 1.25rem;
+		}
+
+		.post-content :global(ul),
+		.post-content :global(ol) {
+			padding-left: 1.5rem;
+		}
+	}
+
+	@media (max-width: 480px) {
+		.post-container {
+			padding: 1rem;
+		}
+
+		.post {
+			padding: 1.25rem;
+			border-radius: 0;
+		}
+
+		.post-header {
+			margin-bottom: 1.5rem;
+		}
+
+		.post-header h1 {
+			font-size: 1.75rem;
+			line-height: 1.3;
+		}
+
+		.post-meta {
+			font-size: 0.85rem;
+		}
+
+		.tag-badge {
+			padding: 0.2rem 0.6rem;
+			font-size: 0.8rem;
+		}
+
+		.post-content {
+			font-size: 0.95rem;
+			line-height: 1.7;
+		}
+
+		.post-content :global(h1) {
+			font-size: 1.5rem;
+			margin-top: 1.5rem;
+		}
+
+		.post-content :global(h2) {
+			font-size: 1.25rem;
+			margin-top: 1.5rem;
+		}
+
+		.post-content :global(h3) {
+			font-size: 1.1rem;
+			margin-top: 1.25rem;
+		}
+
+		.post-content :global(ul),
+		.post-content :global(ol) {
+			padding-left: 1.25rem;
+		}
+
+		.post-content :global(pre) {
+			padding: 0.75rem;
+			font-size: 0.85rem;
+		}
+
+		.post-content :global(blockquote) {
+			padding-left: 0.75rem;
+			margin: 0.75rem 0;
+		}
+	}
 </style>
 
