@@ -1,0 +1,17 @@
+{
+  "request_id": "7d7f2cb6-3d5c-4b52-89f9-c02550ed5d77",
+  "prompt": "A professional financial chart showing TSMC's revenue growth, profit margins, and EPS performance. Modern business infographic style with blue and green color scheme, clean design, showing upward trend arrows and key financial metrics",
+  "model": "Flux1schnell",
+  "width": 768,
+  "height": 768,
+  "seed": -1,
+  "steps": 4,
+  "guidance": 7.5,
+  "loras": [],
+  "negative_prompt": null,
+  "result_url": "https://depinprod.s3.pl-waw.scw.cloud/depin-results/6924611/NN36uDKWy9nWGRm7hKxMHM9UUm3angsWdxRC6693.png?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=SCWP90DSGR7MRZSCCA30%2F20251204%2Fpl-waw%2Fs3%2Faws4_request&X-Amz-Date=20251204T035407Z&X-Amz-SignedHeaders=host&X-Amz-Expires=17975&X-Amz-Signature=2b384ceb6346910f37a55f7be8caf583193e4b089d60ecf8c659b67eba25b2ea",
+  "file_path": "static/images/ai-generated/tsmc-financial-performance.png",
+  "generated_at": "2025-12-04T11:54:11.427376",
+  "tags": [],
+  "description": ""
+}

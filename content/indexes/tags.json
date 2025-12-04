@@ -36,7 +36,8 @@
     "installing-mcp-servers"
   ],
   "AI": [
-    "building-deapi-txt2img-mcp-server"
+    "building-deapi-txt2img-mcp-server",
+    "tsmc-latest-research-report"
   ],
   "圖片生成": [
     "building-deapi-txt2img-mcp-server"
@@ -76,5 +77,17 @@
   ],
   "AI-Blogging": [
     "precomputed-tags-architecture"
+  ],
+  "台積電": [
+    "tsmc-latest-research-report"
+  ],
+  "半導體": [
+    "tsmc-latest-research-report"
+  ],
+  "投資分析": [
+    "tsmc-latest-research-report"
+  ],
+  "財務報告": [
+    "tsmc-latest-research-report"
   ]
 }

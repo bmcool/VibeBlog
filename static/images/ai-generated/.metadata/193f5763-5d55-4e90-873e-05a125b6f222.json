@@ -1,0 +1,17 @@
+{
+  "request_id": "193f5763-5d55-4e90-873e-05a125b6f222",
+  "prompt": "Investment outlook and market analysis chart showing TSMC stock performance, growth trajectory, and market opportunities. Professional financial dashboard style with graphs, trend lines, and investment indicators in blue and gold colors",
+  "model": "Flux1schnell",
+  "width": 768,
+  "height": 768,
+  "seed": -1,
+  "steps": 4,
+  "guidance": 7.5,
+  "loras": [],
+  "negative_prompt": null,
+  "result_url": "https://depinprod.s3.pl-waw.scw.cloud/depin-results/6924614/E5sHtYR5rwy1mjNvrY5QCsoc6NfUCPGC8RB5w1JT.png?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=SCWP90DSGR7MRZSCCA30%2F20251204%2Fpl-waw%2Fs3%2Faws4_request&X-Amz-Date=20251204T035422Z&X-Amz-SignedHeaders=host&X-Amz-Expires=17966&X-Amz-Signature=babb82b5be12b6446a46ba524ad7390fa51fbf26365e70a0e87d1dca71853216",
+  "file_path": "static/images/ai-generated/tsmc-investment-outlook.png",
+  "generated_at": "2025-12-04T11:54:25.314270",
+  "tags": [],
+  "description": ""
+}

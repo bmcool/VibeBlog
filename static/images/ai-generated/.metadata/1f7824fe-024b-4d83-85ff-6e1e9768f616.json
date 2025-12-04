@@ -1,0 +1,17 @@
+{
+  "request_id": "1f7824fe-024b-4d83-85ff-6e1e9768f616",
+  "prompt": "AI technology driving semiconductor growth, showing AI chips, neural networks, and growth charts. Modern tech illustration with vibrant colors, showing the connection between AI demand and semiconductor industry growth",
+  "model": "Flux1schnell",
+  "width": 768,
+  "height": 768,
+  "seed": -1,
+  "steps": 4,
+  "guidance": 7.5,
+  "loras": [],
+  "negative_prompt": null,
+  "result_url": "https://depinprod.s3.pl-waw.scw.cloud/depin-results/6924613/qXbZdfdooKVO8AJEEkMsXSJtrFK5ZHtdSstfYOXk.png?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=SCWP90DSGR7MRZSCCA30%2F20251204%2Fpl-waw%2Fs3%2Faws4_request&X-Amz-Date=20251204T035412Z&X-Amz-SignedHeaders=host&X-Amz-Expires=17975&X-Amz-Signature=659b5b086617eabbc3051e35ea90c3c643b5ed443ff487c6f20032d6e0ae6839",
+  "file_path": "static/images/ai-generated/tsmc-ai-growth.png",
+  "generated_at": "2025-12-04T11:54:15.952200",
+  "tags": [],
+  "description": ""
+}

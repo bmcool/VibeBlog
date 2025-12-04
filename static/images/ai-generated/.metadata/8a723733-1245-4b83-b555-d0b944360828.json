@@ -1,0 +1,17 @@
+{
+  "request_id": "8a723733-1245-4b83-b555-d0b944360828",
+  "prompt": "Advanced semiconductor packaging technology, showing CoWoS chip-on-wafer-on-substrate structure, 3D integrated circuits, and advanced packaging techniques. Technical illustration style with blue and silver colors, showing the complexity of modern chip packaging",
+  "model": "Flux1schnell",
+  "width": 768,
+  "height": 768,
+  "seed": -1,
+  "steps": 4,
+  "guidance": 7.5,
+  "loras": [],
+  "negative_prompt": null,
+  "result_url": "https://depinprod.s3.pl-waw.scw.cloud/depin-results/6924612/jTnEAS3jKq74ha0p6kcmZzDGuuKOBeXLsgVNxtOd.png?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=SCWP90DSGR7MRZSCCA30%2F20251204%2Fpl-waw%2Fs3%2Faws4_request&X-Amz-Date=20251204T035416Z&X-Amz-SignedHeaders=host&X-Amz-Expires=17969&X-Amz-Signature=8f0c2d119a23b41bc36363ee9d08986b815d7175d6081493032d41d72b2c3c6f",
+  "file_path": "static/images/ai-generated/tsmc-advanced-packaging.png",
+  "generated_at": "2025-12-04T11:54:21.112636",
+  "tags": [],
+  "description": ""
+}
