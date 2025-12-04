@@ -18,7 +18,8 @@ const config = {
 			strict: true
 		}),
 		prerender: {
-			handleUnseenRoutes: 'warn' // 对于未预渲染的路由只警告，不中断构建
+			handleUnseenRoutes: 'warn', // 对于未预渲染的路由只警告，不中断构建
+			handleHttpError: 'warn' // 允许 HTTP 错误，不中断构建
 		}
 	}
 };

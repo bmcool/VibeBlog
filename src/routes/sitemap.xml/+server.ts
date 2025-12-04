@@ -1,11 +1,11 @@
 import { getAllPostsMeta } from '$lib/content.server';
-import type { PageServerLoad } from './$types';
+import type { RequestHandler } from './$types';
 
 const SITE_URL = 'https://vibeblog.app';
 
 export const prerender = true;
 
-export const load: PageServerLoad = async () => {
+export const GET: RequestHandler = async () => {
 	const postsZh = getAllPostsMeta('zh');
 	const postsEn = getAllPostsMeta('en');
 	
@@ -62,8 +62,10 @@ ${allPosts.map(post => {
 }).join('\n')}
 </urlset>`;
 
-	return {
-		sitemap
-	};
+	return new Response(sitemap, {
+		headers: {
+			'Content-Type': 'application/xml; charset=utf-8'
+		}
+	});
 };
 
