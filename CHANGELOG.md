@@ -7,6 +7,16 @@
 
 ## [Unreleased]
 
+### Added
+- **新文章**：「用 Cursor Agent + Metabase MCP 解決行銷人員的「改來改去」問題」
+- **Cursor 規則系統**：
+  - 添加 `post-article.mdc` 規則：文章生成時自動透過 deapi-txt2img 生成適合的圖片
+  - 添加 `workflow.mdc` 規則：定義臨時文件和素材存放規範
+
+### Changed
+- 更新 `.gitignore`：移除 `.cursor/rules/` 的忽略規則，允許提交 Cursor 規則文件
+- 優化工作流程規則的文字表達，使說明更清晰
+
 ### 計劃中
 - 搜尋功能
 - RSS Feed
