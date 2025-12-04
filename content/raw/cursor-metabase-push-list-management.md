@@ -67,7 +67,9 @@ Metabase
 
 ## Metabase MCP Server 配置
 
-首先，我們需要在 Cursor 中配置 Metabase MCP Server。在 `mcp.json` 中加入以下配置：
+首先，我們需要在 Cursor 中配置 Metabase MCP Server。這個方案使用的是 [@easecloudio/mcp-metabase-server](https://github.com/easecloudio/mcp-metabase-server)，一個提供 70+ 工具的 Metabase MCP Server。
+
+在 `mcp.json` 中加入以下配置：
 
 ```json
 {
@@ -162,7 +164,7 @@ Metabase
 
 ### Metabase MCP Server 的主要功能
 
-Metabase MCP Server 提供了豐富的功能，包括：
+Metabase MCP Server（[GitHub 倉庫](https://github.com/easecloudio/mcp-metabase-server)）提供了豐富的功能，包括：
 
 1. **查詢執行**：執行 SQL 查詢或 MBQL 查詢
 2. **Card 管理**：建立、更新、刪除查詢卡片

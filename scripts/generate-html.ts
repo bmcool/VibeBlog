@@ -6,54 +6,56 @@ import { marked } from 'marked';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const content = `# 安裝 MCP Servers
+const RAW_DIR = path.join(__dirname, '../content/raw');
+const PROCESSED_DIR = path.join(__dirname, '../content/processed');
 
-在開始建立 VibeBlog 之前，我先設置了開發環境，安裝了幾個有用的 MCP (Model Context Protocol) servers 來提升開發效率。
+// 确保 processed 目录存在
+if (!fs.existsSync(PROCESSED_DIR)) {
+	fs.mkdirSync(PROCESSED_DIR, { recursive: true });
+}
 
-## 已安裝的 MCP Servers
+// 获取所有 markdown 文件
+const files = fs.readdirSync(RAW_DIR).filter(file => file.endsWith('.md'));
 
-### 1. sequential-thinking
-- **工具數量**: 1 個工具已啟用
-- **狀態**: ✅ 啟用中
-- **用途**: 提供順序思考功能，幫助進行複雜的問題分析和解決
+console.log(`📝 找到 ${files.length} 个 markdown 文件\n`);
 
-### 2. chrome-devtools
-- **工具數量**: 26 個工具已啟用
-- **狀態**: ✅ 啟用中
-- **用途**: 強大的 Chrome 開發工具整合，可以進行瀏覽器調試、網路監控等功能
+for (const file of files) {
+	const inputPath = path.join(RAW_DIR, file);
+	const content = fs.readFileSync(inputPath, 'utf-8');
+	
+	// 生成 HTML
+	let html = marked.parse(content);
+	
+	// 移除文章开头的第一个图片（避免与 top image 重复）
+	// 匹配在第一个或第二个标题（h1/h2）之后的第一个图片
+	// 支持多种格式：<p><img></p> 或 <img> 或换行后的图片
+	html = html.replace(
+		/(<h[12]>[^<]*<\/h[12]>[\s\n]*)+<p>\s*<img[^>]*>[\s\n]*<\/p>/i,
+		(match) => {
+			// 只保留标题部分，移除图片段落
+			return match.replace(/<p>\s*<img[^>]*>[\s\n]*<\/p>/i, '');
+		}
+	);
+	
+	// 如果图片在第一个段落中（没有标题的情况），也移除
+	html = html.replace(
+		/^(<p>)\s*<img[^>]*>[\s\n]*(<\/p>)/i,
+		''
+	);
+	
+	// 为所有外部链接添加 target="_blank" rel="noopener noreferrer"
+	// 匹配 <a href="http..." 或 <a href="https..." 的链接
+	html = html.replace(
+		/<a href="(https?:\/\/[^"]+)"/g,
+		'<a href="$1" target="_blank" rel="noopener noreferrer"'
+	);
+	
+	// 输出文件名：将 .md 替换为 .html
+	const outputFileName = file.replace(/\.md$/, '.html');
+	const outputPath = path.join(PROCESSED_DIR, outputFileName);
+	
+	fs.writeFileSync(outputPath, html, 'utf-8');
+	console.log(`✅ 已生成: ${outputFileName}`);
+}
 
-### 3. context7
-- **工具數量**: 2 個工具已啟用
-- **狀態**: ✅ 啟用中
-- **用途**: 提供最新的程式庫文檔和代碼範例，非常適合快速查找 API 文檔
-
-### 4. gitmcp
-- **工具數量**: 4 個工具已啟用
-- **狀態**: ✅ 啟用中
-- **用途**: Git 和 GitHub 整合，可以搜尋代碼、獲取文檔等
-
-### 5. awslabs.openapi-mcp-server
-- **狀態**: ❌ 錯誤
-- **備註**: 此 server 目前有錯誤，需要進一步檢查配置
-
-## 設置截圖
-
-![已安裝的 MCP Servers](/images/mcp-servers.png)
-
-## 下一步
-
-有了這些 MCP servers，我可以更高效地：
-- 快速查找和學習新的程式庫
-- 進行複雜的問題分析
-- 調試和測試應用程式
-- 管理 Git 倉庫和代碼
-
-接下來，我將使用這些工具來建立 VibeBlog 的基礎架構。
-`;
-
-const html = marked.parse(content);
-const outputPath = path.join(__dirname, '../content/processed/installing-mcp-servers.html');
-fs.writeFileSync(outputPath, html, 'utf-8');
-console.log(`✅ 已生成 HTML: ${outputPath}`);
-
-
+console.log(`\n✨ 完成！已处理 ${files.length} 个文件`);

@@ -1,6 +1,6 @@
 <h1>Automating Official Website Discovery for 1000+ Software Products: Design Logic of an Intelligent Search Script</h1>
 <h2>Background: The Challenge of Moving from Manual to Automated Maintenance</h2>
-<p><img src="/images/ai-generated/automated-official-website-finder.png" alt="Automation Workflow"></p>
+
 <p>A software distributor was originally maintaining all products on their website manually. Facing over 1000 software products, each with different website structures, if crawlers had been written from the start, it would have been straightforward. But starting from scratch with no crawlers, achieving this overnight is not a simple task.</p>
 <p>Initially, using agents like Cursor with Playwright MCP, we found that while it was possible, the efficiency was extremely poor, costs were high, and accuracy couldn&#39;t be trusted for large-scale runs. After trying several approaches, with various edge cases across 1000+ software products (disconnected official websites, products becoming sub-products, changed URLs, etc.), we realized we needed to proceed step by step.</p>
 <p><strong>The first step was to recover the official websites for these software products.</strong> This is the mission of the <code>openai_web_search.py</code> script.</p>

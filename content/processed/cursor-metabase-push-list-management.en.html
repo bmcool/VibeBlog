@@ -1,6 +1,6 @@
 <h1>Solving Marketing Team&#39;s Constant Changes with Cursor Agent + Metabase MCP</h1>
 <h2>Background: The Pain Point of Data Analysts</h2>
-<p><img src="/images/ai-generated/cursor-metabase-push-list-management.png" alt="Cursor Agent + Metabase MCP Solution"></p>
+
 <p>In many companies, the push notification system workflow is as follows:</p>
 <ol>
 <li><strong>Marketing team</strong> decides the logic for push notification lists (e.g., &quot;users who made purchases in the last 30 days&quot;)</li>
@@ -53,7 +53,8 @@ Metabase
 Push Notification System
 </code></pre>
 <h2>Metabase MCP Server Configuration</h2>
-<p>First, we need to configure Metabase MCP Server in Cursor. Add the following configuration to <code>mcp.json</code>:</p>
+<p>First, we need to configure Metabase MCP Server in Cursor. This solution uses <a href="https://github.com/easecloudio/mcp-metabase-server" target="_blank" rel="noopener noreferrer">@easecloudio/mcp-metabase-server</a>, a comprehensive Metabase MCP Server with 70+ tools.</p>
+<p>Add the following configuration to <code>mcp.json</code>:</p>
 <pre><code class="language-json">{
   &quot;mcpServers&quot;: {
     &quot;metabase-server&quot;: {
@@ -146,7 +147,7 @@ Push Notification System
 </ul>
 <h2>Technical Implementation Details</h2>
 <h3>Main Features of Metabase MCP Server</h3>
-<p>Metabase MCP Server provides rich features, including:</p>
+<p>Metabase MCP Server (<a href="https://github.com/easecloudio/mcp-metabase-server" target="_blank" rel="noopener noreferrer">GitHub Repository</a>) provides rich features, including:</p>
 <ol>
 <li><strong>Query Execution</strong>: Execute SQL queries or MBQL queries</li>
 <li><strong>Card Management</strong>: Create, update, delete query cards</li>

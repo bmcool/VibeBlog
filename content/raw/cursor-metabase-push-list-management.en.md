@@ -67,7 +67,9 @@ Push Notification System
 
 ## Metabase MCP Server Configuration
 
-First, we need to configure Metabase MCP Server in Cursor. Add the following configuration to `mcp.json`:
+First, we need to configure Metabase MCP Server in Cursor. This solution uses [@easecloudio/mcp-metabase-server](https://github.com/easecloudio/mcp-metabase-server), a comprehensive Metabase MCP Server with 70+ tools.
+
+Add the following configuration to `mcp.json`:
 
 ```json
 {
@@ -162,7 +164,7 @@ First, we need to configure Metabase MCP Server in Cursor. Add the following con
 
 ### Main Features of Metabase MCP Server
 
-Metabase MCP Server provides rich features, including:
+Metabase MCP Server ([GitHub Repository](https://github.com/easecloudio/mcp-metabase-server)) provides rich features, including:
 
 1. **Query Execution**: Execute SQL queries or MBQL queries
 2. **Card Management**: Create, update, delete query cards

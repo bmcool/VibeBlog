@@ -1,6 +1,40 @@
 {
   "images": [
     {
+      "request_id": "4384d374-6e46-4fe6-b553-671c0883ee82",
+      "prompt": "A modern, minimalist hero image for a tech blog homepage. Design: Abstract tech background with gradient colors (blue to purple), subtle geometric patterns, clean and professional, suitable for hero section, wide format 16:9, modern tech aesthetic, minimal text overlay area",
+      "model": "Flux1schnell",
+      "width": 1920,
+      "height": 1080,
+      "seed": -1,
+      "steps": 4,
+      "guidance": 7.5,
+      "loras": [],
+      "negative_prompt": null,
+      "result_url": "https://depinprod.s3.pl-waw.scw.cloud/depin-results/6924067/rhP1H8hlNQ5hOQqlOW3r0xqlsIVYWCGxaYrm3w5P.png?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=SCWP90DSGR7MRZSCCA30%2F20251204%2Fpl-waw%2Fs3%2Faws4_request&X-Amz-Date=20251204T020601Z&X-Amz-SignedHeaders=host&X-Amz-Expires=17959&X-Amz-Signature=c8a1bd4c691dcc9746b56ee71aad0b4f6fe917fe5078da10ae9a9ec735f95606",
+      "file_path": "static/images/homepage-hero.png",
+      "generated_at": "2025-12-04T10:06:04.401250",
+      "tags": [],
+      "description": ""
+    },
+    {
+      "request_id": "9d6126bd-c450-456b-ba46-4596a55efb3c",
+      "prompt": "A modern, minimalist icon for a tech blog called \"VibeBlog\". Design: A stylized letter \"V\" combined with a blog/document symbol, clean lines, tech aesthetic, gradient colors (blue to purple), square format, suitable for favicon and app icon, professional and modern, simple geometric shapes",
+      "model": "Flux1schnell",
+      "width": 512,
+      "height": 512,
+      "seed": -1,
+      "steps": 4,
+      "guidance": 7.5,
+      "loras": [],
+      "negative_prompt": null,
+      "result_url": "https://depinprod.s3.pl-waw.scw.cloud/depin-results/6923869/YXmjq0xTjv1ft1j3LqSsQHqAkpeGm6NgbNKTwtAi.png?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=SCWP90DSGR7MRZSCCA30%2F20251204%2Fpl-waw%2Fs3%2Faws4_request&X-Amz-Date=20251204T012045Z&X-Amz-SignedHeaders=host&X-Amz-Expires=17980&X-Amz-Signature=ecf5640ed4bb04c5e6dfc8d9973b2b3cb5c8f56401f0f1e8652f71ff484a402e",
+      "file_path": "static/images/vibeblog-icon.png",
+      "generated_at": "2025-12-04T09:20:46.989729",
+      "tags": [],
+      "description": ""
+    },
+    {
       "request_id": "0ab6c229-f35d-4170-8de4-471e28d70d84",
       "prompt": "A modern diagram showing Cursor Agent connecting to Metabase MCP Server, with natural language input from marketing team on one side, and database queries and push notification lists on the other side. Clean, professional tech illustration style with blue and green color scheme.",
       "model": "Flux1schnell",

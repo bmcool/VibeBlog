@@ -10,7 +10,8 @@
 		"prepare": "svelte-kit sync || echo ''",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"generate:tags": "npx tsx scripts/generate-tags-index.ts"
+		"generate:tags": "npx tsx scripts/generate-tags-index.ts",
+		"generate:html": "npx tsx scripts/generate-html.ts"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^7.0.0",

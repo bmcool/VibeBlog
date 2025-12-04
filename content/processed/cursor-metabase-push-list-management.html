@@ -1,6 +1,6 @@
 <h1>用 Cursor Agent + Metabase MCP 解決行銷人員的「改來改去」問題</h1>
 <h2>背景：數據人員的痛點</h2>
-<p><img src="/images/ai-generated/cursor-metabase-push-list-management.png" alt="Cursor Agent + Metabase MCP 解決方案"></p>
+
 <p>在許多公司中，推播系統的運作流程是這樣的：</p>
 <ol>
 <li><strong>行銷人員</strong>決定推送名單的邏輯（例如：「最近 30 天有購買行為的用戶」）</li>
@@ -53,7 +53,8 @@ Metabase
 推送系統
 </code></pre>
 <h2>Metabase MCP Server 配置</h2>
-<p>首先，我們需要在 Cursor 中配置 Metabase MCP Server。在 <code>mcp.json</code> 中加入以下配置：</p>
+<p>首先，我們需要在 Cursor 中配置 Metabase MCP Server。這個方案使用的是 <a href="https://github.com/easecloudio/mcp-metabase-server" target="_blank" rel="noopener noreferrer">@easecloudio/mcp-metabase-server</a>，一個提供 70+ 工具的 Metabase MCP Server。</p>
+<p>在 <code>mcp.json</code> 中加入以下配置：</p>
 <pre><code class="language-json">{
   &quot;mcpServers&quot;: {
     &quot;metabase-server&quot;: {
@@ -146,7 +147,7 @@ Metabase
 </ul>
 <h2>技術實現細節</h2>
 <h3>Metabase MCP Server 的主要功能</h3>
-<p>Metabase MCP Server 提供了豐富的功能，包括：</p>
+<p>Metabase MCP Server（<a href="https://github.com/easecloudio/mcp-metabase-server" target="_blank" rel="noopener noreferrer">GitHub 倉庫</a>）提供了豐富的功能，包括：</p>
 <ol>
 <li><strong>查詢執行</strong>：執行 SQL 查詢或 MBQL 查詢</li>
 <li><strong>Card 管理</strong>：建立、更新、刪除查詢卡片</li>
