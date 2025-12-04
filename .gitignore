@@ -41,7 +41,4 @@ mcp_servers/.env
 # SvelteKit
 .svelte-kit/
 
-# Cursor
-.cursor/rules/
-
 temp/
