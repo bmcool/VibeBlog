@@ -1,30 +1,46 @@
 import type { Language } from '$lib/types/blog';
 
 /**
- * 解析語言參數（從 URL）
- * 客戶端安全版本，不依賴 Node.js 模組
- * 支持 prerender 模式
+ * 解析語言（從 URL 路徑）
+ * 支持路徑方式：/en/ 為英文，/ 為中文（默認）
  */
-export function parseLanguage(url: URL): Language {
-	try {
-		// 在 prerender 时，searchParams 可能不可用
-		if (url.searchParams) {
-			const langParam = url.searchParams.get('lang');
-			if (langParam === 'en' || langParam === 'zh') {
-				return langParam;
-			}
+export function parseLanguage(url: URL, params?: { lang?: string }): Language {
+	// 優先從路由參數解析（如果有的話）
+	if (params?.lang) {
+		if (params.lang === 'en' || params.lang === 'zh') {
+			return params.lang;
 		}
-		// 如果 searchParams 不可用，尝试从 search 字符串解析
-		if (url.search) {
-			const params = new URLSearchParams(url.search);
-			const langParam = params.get('lang');
-			if (langParam === 'en' || langParam === 'zh') {
-				return langParam;
-			}
-		}
-	} catch (e) {
-		// 如果访问 searchParams 失败，返回默认语言
 	}
-	return 'zh'; // 默認中文
+	
+	// 從路徑解析：/en/ 開頭為英文
+	const pathname = url.pathname;
+	if (pathname.startsWith('/en/') || pathname === '/en' || pathname.startsWith('/en/')) {
+		return 'en';
+	}
+	
+	// 默認返回中文
+	return 'zh';
+}
+
+/**
+ * 獲取語言路徑前綴
+ * @param lang 語言
+ * @returns 路徑前綴，中文返回空字符串，英文返回 '/en'
+ */
+export function getLangPath(lang: Language): string {
+	return lang === 'en' ? '/en' : '';
+}
+
+/**
+ * 構建帶語言的路徑
+ * @param path 原始路徑（不包含語言前綴）
+ * @param lang 語言
+ * @returns 完整的路徑
+ */
+export function buildLangPath(path: string, lang: Language): string {
+	const langPrefix = getLangPath(lang);
+	// 確保路徑以 / 開頭
+	const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+	return langPrefix + normalizedPath;
 }
 

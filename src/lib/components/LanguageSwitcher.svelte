@@ -2,21 +2,32 @@
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import type { Language } from '$lib/types/blog';
+	import { parseLanguage, buildLangPath } from '$lib/utils/language';
 	
-	// 使用 $derived 来响应式地获取当前语言
-	const currentLang = $derived((): Language => {
-		const langParam = $page.url.searchParams.get('lang');
-		return (langParam === 'en' || langParam === 'zh') ? langParam : 'zh';
-	});
+	// 使用 $derived 来响应式地获取当前语言（从路径解析）
+	const currentLang = $derived(parseLanguage($page.url));
 	
 	function switchLanguage(lang: Language) {
-		const url = new URL($page.url);
-		if (lang === 'zh') {
-			url.searchParams.delete('lang');
-		} else {
-			url.searchParams.set('lang', lang);
+		const currentPath = $page.url.pathname;
+		
+		// 移除当前语言前缀（如果有）
+		let pathWithoutLang = currentPath;
+		if (currentPath.startsWith('/en/')) {
+			pathWithoutLang = currentPath.slice(4); // 移除 '/en/'
+		} else if (currentPath === '/en') {
+			pathWithoutLang = '/';
+		} else if (currentPath.startsWith('/en')) {
+			pathWithoutLang = currentPath.slice(3); // 移除 '/en'
 		}
-		goto(url.toString(), { invalidateAll: true });
+		
+		// 确保路径以 / 开头
+		if (!pathWithoutLang.startsWith('/')) {
+			pathWithoutLang = '/' + pathWithoutLang;
+		}
+		
+		// 构建新路径
+		const newPath = buildLangPath(pathWithoutLang, lang);
+		goto(newPath, { invalidateAll: true });
 	}
 </script>
 

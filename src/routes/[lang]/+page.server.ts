@@ -1,10 +1,16 @@
 import { getAllPostsMeta, getAllTags } from '$lib/content.server';
 import { parseLanguage } from '$lib/utils/language';
-import type { PageServerLoad } from './$types';
+import type { PageServerLoad, EntryGenerator } from './$types';
 
-export const load: PageServerLoad = async ({ depends }) => {
-	// 根路由只处理中文版本
-	const lang = 'zh';
+// 只为英文版本生成条目（中文版本在根路由处理）
+export const entries: EntryGenerator = async () => {
+	return [{ lang: 'en' }];
+};
+
+export const load: PageServerLoad = async ({ params, url, depends }) => {
+	// 从路径参数解析语言
+	// params.lang 应该包含 'en' 或 'zh'
+	const lang = params?.lang === 'en' ? 'en' : 'zh';
 	depends(`lang:${lang}`);
 	
 	const posts = getAllPostsMeta(lang);

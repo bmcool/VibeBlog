@@ -4,16 +4,15 @@
 	
 	let { data }: { data: PageData } = $props();
 	
-	// 根路由只处理中文版本
-	const lang = 'zh';
-	
 	// SEO 数据
 	const seo = $derived(generateSEOTags({
-		title: 'VibeBlog - AI、開發工具與技術見解',
-		description: '分享 AI、開發工具與技術見解的技術部落格。探索關於 MCP servers、自動化和現代開發實踐的文章。',
-		url: '/',
+		title: data.lang === 'en' ? 'VibeBlog - AI, Development Tools & Technology Insights' : 'VibeBlog - AI、開發工具與技術見解',
+		description: data.lang === 'en' 
+			? 'A tech blog sharing insights on AI, development tools, and technology. Explore articles about MCP servers, automation, and modern development practices.'
+			: '分享 AI、開發工具與技術見解的技術部落格。探索關於 MCP servers、自動化和現代開發實踐的文章。',
+		url: buildLangPath('/', data.lang),
 		type: 'website',
-		lang
+		lang: data.lang
 	}));
 	
 	const structuredData = $derived(generateStructuredData({
@@ -21,14 +20,14 @@
 		description: seo.description,
 		url: seo.url,
 		type: 'website',
-		lang
+		lang: data.lang
 	}));
 </script>
 
 <svelte:head>
 	<title>{seo.title}</title>
 	<meta name="description" content={seo.description} />
-	<meta name="keywords" content={lang === 'en' ? 'AI, development tools, technology, MCP servers, automation, blog' : 'AI, 開發工具, 技術, MCP servers, 自動化, 部落格'} />
+	<meta name="keywords" content={data.lang === 'en' ? 'AI, development tools, technology, MCP servers, automation, blog' : 'AI, 開發工具, 技術, MCP servers, 自動化, 部落格'} />
 	
 	<!-- Open Graph -->
 	<meta property="og:title" content={seo.title} />
@@ -37,8 +36,8 @@
 	<meta property="og:url" content={seo.url} />
 	<meta property="og:type" content={seo.type} />
 	<meta property="og:site_name" content="VibeBlog" />
-	<meta property="og:locale" content={lang === 'en' ? 'en_US' : 'zh_TW'} />
-	{#if lang === 'en'}
+	<meta property="og:locale" content={data.lang === 'en' ? 'en_US' : 'zh_TW'} />
+	{#if data.lang === 'en'}
 		<meta property="og:locale:alternate" content="zh_TW" />
 	{:else}
 		<meta property="og:locale:alternate" content="en_US" />
@@ -67,10 +66,10 @@
 	<header class="hero" style="background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('/images/homepage-hero.png');">
 		<div class="hero-content">
 			<h1>VibeBlog</h1>
-			<p class="subtitle">分享 AI、開發工具與技術見解</p>
+			<p class="subtitle">{data.lang === 'en' ? 'Sharing insights on AI, development tools, and technology' : '分享 AI、開發工具與技術見解'}</p>
 			<div class="hero-actions">
-				<a href="/blog" class="btn btn-primary">探索文章</a>
-				<a href="/tags" class="btn btn-secondary">瀏覽標籤</a>
+				<a href={buildLangPath('/blog', data.lang)} class="btn btn-primary">{data.lang === 'en' ? 'Explore Articles' : '探索文章'}</a>
+				<a href={buildLangPath('/tags', data.lang)} class="btn btn-secondary">{data.lang === 'en' ? 'Browse Tags' : '瀏覽標籤'}</a>
 			</div>
 		</div>
 	</header>
@@ -78,7 +77,7 @@
 	<!-- Latest Posts Section -->
 	{#if data.latestPosts && data.latestPosts.length > 0}
 		<section class="latest-posts">
-			<h2>最新文章</h2>
+			<h2>{data.lang === 'en' ? 'Latest Articles' : '最新文章'}</h2>
 			<div class="posts-grid">
 				{#each data.latestPosts as post (post.slug)}
 					<article class="post-card">
@@ -88,8 +87,8 @@
 							</div>
 						{/if}
 						<div class="post-content">
-							<h3><a href={`/blog/${post.slug}`}>{post.title}</a></h3>
-							<p class="post-date">{new Date(post.date).toLocaleDateString('zh-TW')}</p>
+							<h3><a href={buildLangPath(`/blog/${post.slug}`, data.lang)}>{post.title}</a></h3>
+							<p class="post-date">{new Date(post.date).toLocaleDateString(data.lang === 'en' ? 'en-US' : 'zh-TW')}</p>
 							{#if post.summary}
 								<p class="post-description">{post.summary}</p>
 							{:else if post.description}
@@ -102,7 +101,7 @@
 									{/each}
 								</div>
 							{/if}
-							<a href={`/blog/${post.slug}`} class="read-more">閱讀全文 →</a>
+							<a href={buildLangPath(`/blog/${post.slug}`, data.lang)} class="read-more">{data.lang === 'en' ? 'Read more →' : '閱讀全文 →'}</a>
 						</div>
 					</article>
 				{/each}
@@ -113,10 +112,10 @@
 	<!-- Popular Tags Section -->
 	{#if data.popularTags && data.popularTags.length > 0}
 		<section class="popular-tags">
-			<h2>熱門主題</h2>
+			<h2>{data.lang === 'en' ? 'Popular Topics' : '熱門主題'}</h2>
 			<div class="tags-cloud">
 				{#each data.popularTags as tag}
-					<a href={`/tags/${encodeURIComponent(tag)}`} class="tag-link">{tag}</a>
+					<a href={buildLangPath(`/tags/${encodeURIComponent(tag)}`, data.lang)} class="tag-link">{tag}</a>
 				{/each}
 			</div>
 		</section>
@@ -124,7 +123,7 @@
 
 	<!-- Call to Action -->
 	<nav class="cta">
-		<a href="/blog" class="btn btn-large">查看所有文章</a>
+		<a href={buildLangPath('/blog', data.lang)} class="btn btn-large">{data.lang === 'en' ? 'View All Posts' : '查看所有文章'}</a>
 	</nav>
 </div>
 

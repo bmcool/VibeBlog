@@ -1,4 +1,5 @@
 import type { PostMeta, Language } from '$lib/types/blog';
+import { getLangPath } from './language';
 
 const SITE_URL = 'https://vibeblog.app';
 const SITE_NAME = 'VibeBlog';
@@ -6,6 +7,19 @@ const DEFAULT_DESCRIPTION = {
 	zh: '分享 AI、開發工具與技術見解的技術部落格',
 	en: 'A tech blog sharing insights on AI, development tools, and technology'
 };
+
+/**
+ * 構建帶語言的路徑
+ * @param path 原始路徑（不包含語言前綴）
+ * @param lang 語言
+ * @returns 完整的路徑
+ */
+export function buildLangPath(path: string, lang: Language): string {
+	const langPrefix = getLangPath(lang);
+	// 確保路徑以 / 開頭
+	const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+	return langPrefix + normalizedPath;
+}
 
 export interface SEOData {
 	title: string;

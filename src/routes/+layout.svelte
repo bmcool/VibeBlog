@@ -6,11 +6,10 @@
 
 	let { children } = $props();
 	
+	import { buildLangPath } from '$lib/utils/language';
+	
 	// 使用 $derived 来响应式地获取语言
 	const lang = $derived(parseLanguage($page.url));
-	
-	// 计算语言参数
-	const langParam = $derived(lang === 'en' ? '?lang=en' : '');
 
 	// 滚动状态
 	let scrolled = $state(false);
@@ -37,11 +36,11 @@
 
 <nav class="main-nav" class:scrolled bind:this={navElement}>
 	<div class="nav-container">
-		<a href={langParam ? `/${langParam}` : '/'} class="logo">VibeBlog</a>
+		<a href={buildLangPath('/', lang)} class="logo">VibeBlog</a>
 		<div class="nav-links">
-			<a href={langParam ? `/${langParam}` : '/'} class:active={$page.url.pathname === '/'}>{lang === 'en' ? 'Home' : '首頁'}</a>
-			<a href={langParam ? `/blog${langParam}` : '/blog'} class:active={$page.url.pathname.startsWith('/blog')}>{lang === 'en' ? 'Posts' : '文章'}</a>
-			<a href={langParam ? `/tags${langParam}` : '/tags'} class:active={$page.url.pathname.startsWith('/tags')}>{lang === 'en' ? 'Tags' : '標籤'}</a>
+			<a href={buildLangPath('/', lang)} class:active={$page.url.pathname === '/' || $page.url.pathname === '/en' || $page.url.pathname === '/en/'}>{lang === 'en' ? 'Home' : '首頁'}</a>
+			<a href={buildLangPath('/blog', lang)} class:active={$page.url.pathname.startsWith('/blog') || $page.url.pathname.startsWith('/en/blog')}>{lang === 'en' ? 'Posts' : '文章'}</a>
+			<a href={buildLangPath('/tags', lang)} class:active={$page.url.pathname.startsWith('/tags') || $page.url.pathname.startsWith('/en/tags')}>{lang === 'en' ? 'Tags' : '標籤'}</a>
 			<LanguageSwitcher />
 		</div>
 	</div>
