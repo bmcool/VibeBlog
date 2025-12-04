@@ -26,8 +26,14 @@
 		window.addEventListener('scroll', handleScroll, { passive: true });
 		handleScroll(); // 初始检查
 
+		// 當路由改變時關閉手機選單
+		const unsubscribe = $page.subscribe(() => {
+			mobileMenuOpen = false;
+		});
+
 		return () => {
 			window.removeEventListener('scroll', handleScroll);
+			unsubscribe();
 		};
 	});
 	
@@ -59,10 +65,10 @@
 			<a href={buildLangPath('/tags', lang)} class:active={$page.url.pathname.startsWith('/tags') || $page.url.pathname.startsWith('/en/tags')} onclick={closeMobileMenu}>{lang === 'en' ? 'Tags' : '標籤'}</a>
 			<LanguageSwitcher />
 		</div>
-		{#if mobileMenuOpen}
-			<div class="mobile-menu-overlay" onclick={closeMobileMenu}></div>
-		{/if}
 	</div>
+	{#if mobileMenuOpen}
+		<div class="mobile-menu-overlay" onclick={closeMobileMenu}></div>
+	{/if}
 </nav>
 
 <main>
@@ -166,7 +172,7 @@
 		font-weight: 600;
 	}
 
-	/* 移动端菜单按钮 */
+	/* 移动端菜单按钮 - 桌面端隱藏 */
 	.mobile-menu-toggle {
 		display: none;
 		flex-direction: column;
@@ -205,6 +211,7 @@
 	@media (max-width: 768px) {
 		.nav-container {
 			padding: 0 1.5rem;
+			position: relative;
 		}
 
 		.logo {
@@ -232,7 +239,8 @@
 			gap: 0;
 			box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
 			transition: right 0.3s ease;
-			z-index: 1000;
+			z-index: 1001;
+			overflow-y: auto;
 		}
 
 		.nav-links.mobile-open {
@@ -255,6 +263,13 @@
 			padding-left: 1rem;
 		}
 
+		.nav-links :global(.language-switcher) {
+			width: 100%;
+			padding: 1rem 0;
+			border-top: 1px solid #f0f0f0;
+			margin-top: 0.5rem;
+		}
+
 		.mobile-menu-overlay {
 			display: block;
 			position: fixed;
@@ -263,7 +278,9 @@
 			width: 100%;
 			height: 100%;
 			background: rgba(0, 0, 0, 0.5);
-			z-index: 999;
+			z-index: 1000;
+			opacity: 1;
+			transition: opacity 0.3s ease;
 		}
 
 		/* 漢堡選單動畫 */
