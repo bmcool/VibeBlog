@@ -389,46 +389,164 @@
 
 	/* Responsive Design */
 	@media (max-width: 768px) {
+		.hero {
+			min-height: 50vh;
+			margin-bottom: 3rem;
+		}
+
+		.hero-content {
+			padding: 1.5rem;
+		}
+
 		.hero h1 {
 			font-size: 2.5rem;
+			margin-bottom: 1rem;
 		}
 
 		.subtitle {
 			font-size: 1.2rem;
+			margin: 0 0 2rem 0;
 		}
 
 		.hero-actions {
 			flex-direction: column;
 			align-items: center;
+			gap: 0.75rem;
 		}
 
 		.btn {
 			width: 100%;
 			max-width: 300px;
+			padding: 0.75rem 1.5rem;
+		}
+
+		.latest-posts {
+			padding: 0 1rem 3rem;
+		}
+
+		.latest-posts h2 {
+			font-size: 2rem;
+			margin-bottom: 2rem;
 		}
 
 		.posts-grid {
 			grid-template-columns: 1fr;
+			gap: 1.5rem;
 		}
 
-		.latest-posts,
+		.post-content {
+			padding: 1.25rem;
+		}
+
+		.post-content h3 {
+			font-size: 1.25rem;
+		}
+
 		.popular-tags {
-			padding-left: 1rem;
-			padding-right: 1rem;
+			padding: 2rem 1rem;
+			margin: 3rem 0;
 		}
 
-		.hero {
-			min-height: 50vh;
+		.popular-tags h2 {
+			font-size: 2rem;
+			margin-bottom: 1.5rem;
+		}
+
+		.tags-cloud {
+			gap: 0.75rem;
+		}
+
+		.tag-link {
+			padding: 0.625rem 1.25rem;
+			font-size: 0.9rem;
+		}
+
+		.cta {
+			padding: 2rem 1rem;
+		}
+
+		.btn-large {
+			padding: 0.875rem 2rem;
+			font-size: 1rem;
 		}
 	}
 
 	@media (max-width: 480px) {
+		.hero {
+			min-height: 40vh;
+			margin-bottom: 2rem;
+		}
+
+		.hero-content {
+			padding: 1rem;
+		}
+
 		.hero h1 {
 			font-size: 2rem;
+			margin-bottom: 0.75rem;
 		}
 
 		.subtitle {
 			font-size: 1rem;
+			margin: 0 0 1.5rem 0;
+		}
+
+		.btn {
+			padding: 0.625rem 1.25rem;
+			font-size: 0.95rem;
+		}
+
+		.latest-posts {
+			padding: 0 0.75rem 2rem;
+		}
+
+		.latest-posts h2 {
+			font-size: 1.75rem;
+			margin-bottom: 1.5rem;
+		}
+
+		.posts-grid {
+			gap: 1.25rem;
+		}
+
+		.post-content {
+			padding: 1rem;
+		}
+
+		.post-content h3 {
+			font-size: 1.1rem;
+		}
+
+		.post-description {
+			font-size: 0.9rem;
+		}
+
+		.popular-tags {
+			padding: 1.5rem 0.75rem;
+			margin: 2rem 0;
+		}
+
+		.popular-tags h2 {
+			font-size: 1.75rem;
+			margin-bottom: 1.25rem;
+		}
+
+		.tags-cloud {
+			gap: 0.5rem;
+		}
+
+		.tag-link {
+			padding: 0.5rem 1rem;
+			font-size: 0.85rem;
+		}
+
+		.cta {
+			padding: 1.5rem 0.75rem;
+		}
+
+		.btn-large {
+			padding: 0.75rem 1.5rem;
+			font-size: 0.95rem;
 		}
 	}
 </style>
