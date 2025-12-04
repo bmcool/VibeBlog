@@ -1,4 +1,4 @@
-import { getAllPostsMeta } from '$lib/content';
+import { getAllPostsMeta } from '$lib/content.server';
 import { parseLanguage } from '$lib/utils/language';
 import type { PageServerLoad } from './$types';
 

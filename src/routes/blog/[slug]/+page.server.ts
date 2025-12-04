@@ -1,5 +1,4 @@
-import { getPostMeta, getPostContent } from '$lib/content';
-import { getAllPostsMeta } from '$lib/content.server';
+import { getPostMeta, getPostContent, getAllPostsMeta } from '$lib/content.server';
 import { parseLanguage } from '$lib/utils/language';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad, EntryGenerator } from './$types';

@@ -1,5 +1,4 @@
-import { getPostsByTag } from '$lib/content';
-import { getAllTags } from '$lib/content.server';
+import { getPostsByTag, getAllTags } from '$lib/content.server';
 import { parseLanguage } from '$lib/utils/language';
 import type { PageServerLoad, EntryGenerator } from './$types';
 
