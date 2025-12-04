@@ -80,11 +80,16 @@ npm run generate:html
 # 生成標籤索引
 npm run generate:tags
 
-# 構建
+# 構建（輸出到 docs/ 目錄）
 npm run build
 
-# 將 build/ 目錄的內容推送到 gh-pages 分支
+# 將 docs/ 目錄的內容提交並推送
+git add docs/
+git commit -m "Deploy to GitHub Pages"
+git push
 ```
+
+**注意**：如果使用 GitHub Pages 的傳統方式（從 docs 文件夾），需要在 Settings → Pages 中選擇 "Deploy from a branch"，然後選擇 `master` 分支和 `/docs` 文件夾。
 
 ## 內容管理
 

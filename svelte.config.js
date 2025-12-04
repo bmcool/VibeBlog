@@ -10,10 +10,9 @@ const config = {
 	kit: {
 		// 使用自定义域名，不需要 base path
 		adapter: adapter({
-			// 输出目录：build
-			// 这是 SvelteKit 的标准静态输出目录
-			pages: 'build',
-			assets: 'build',
+			// 输出目录：docs（GitHub Pages 支持从 docs 文件夹部署）
+			pages: 'docs',
+			assets: 'docs',
 			fallback: undefined,
 			precompress: false,
 			strict: true

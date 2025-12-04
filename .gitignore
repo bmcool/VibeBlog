@@ -17,6 +17,7 @@ coverage
 
 # Production
 build
+docs
 .svelte-kit
 .output
 
