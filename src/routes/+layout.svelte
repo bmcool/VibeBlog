@@ -32,6 +32,7 @@
 
 <svelte:head>
 	<link rel="icon" type="image/png" href="/images/vibeblog-icon.png" />
+	<link rel="sitemap" type="application/xml" href="/sitemap.xml" />
 </svelte:head>
 
 <nav class="main-nav" class:scrolled bind:this={navElement}>

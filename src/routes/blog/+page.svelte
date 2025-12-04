@@ -1,14 +1,41 @@
 <script lang="ts">
 	import type { PageData } from './$types';
+	import { generateSEOTags } from '$lib/utils/seo';
 
 	let { data }: { data: PageData } = $props();
 	
 	// 计算语言参数
 	const langParam = $derived(data.lang === 'en' ? '?lang=en' : '');
+	
+	// SEO 数据
+	const seo = $derived(generateSEOTags({
+		title: data.lang === 'en' ? 'All Posts - VibeBlog' : '所有文章 - VibeBlog',
+		description: data.lang === 'en' 
+			? 'Browse all articles about AI, development tools, and technology on VibeBlog.'
+			: '瀏覽 VibeBlog 上所有關於 AI、開發工具與技術的文章。',
+		url: `/blog${langParam}`,
+		type: 'website',
+		lang: data.lang
+	}));
 </script>
 
 <svelte:head>
-	<title>{data.lang === 'en' ? 'VibeBlog - All Posts' : 'VibeBlog - 所有文章'}</title>
+	<title>{seo.title}</title>
+	<meta name="description" content={seo.description} />
+	
+	<!-- Open Graph -->
+	<meta property="og:title" content={seo.title} />
+	<meta property="og:description" content={seo.description} />
+	<meta property="og:image" content={seo.image} />
+	<meta property="og:url" content={seo.url} />
+	<meta property="og:type" content="website" />
+	
+	<!-- Canonical URL -->
+	<link rel="canonical" href={seo.url} />
+	
+	<!-- Alternate Languages -->
+	<link rel="alternate" hreflang="zh-TW" href="https://vibeblog.app/blog" />
+	<link rel="alternate" hreflang="en-US" href="https://vibeblog.app/blog?lang=en" />
 </svelte:head>
 
 <div class="blog-container">

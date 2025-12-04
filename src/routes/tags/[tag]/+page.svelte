@@ -1,14 +1,41 @@
 <script lang="ts">
 	import type { PageData } from './$types';
+	import { generateSEOTags } from '$lib/utils/seo';
 
 	let { data }: { data: PageData } = $props();
 	
 	// 计算语言参数
 	const langParam = $derived(data.lang === 'en' ? '?lang=en' : '');
+	
+	// SEO 数据
+	const seo = $derived(generateSEOTags({
+		title: data.lang === 'en' ? `Tag: ${data.tag} - VibeBlog` : `標籤：${data.tag} - VibeBlog`,
+		description: data.lang === 'en' 
+			? `Browse all articles tagged with "${data.tag}" on VibeBlog. Find ${data.posts.length} article${data.posts.length !== 1 ? 's' : ''} about ${data.tag}.`
+			: `瀏覽 VibeBlog 上標籤為「${data.tag}」的所有文章。找到 ${data.posts.length} 篇關於 ${data.tag} 的文章。`,
+		url: `/tags/${encodeURIComponent(data.tag)}${langParam}`,
+		type: 'website',
+		lang: data.lang
+	}));
 </script>
 
 <svelte:head>
-	<title>{data.lang === 'en' ? `Tag: ${data.tag} - VibeBlog` : `標籤：${data.tag} - VibeBlog`}</title>
+	<title>{seo.title}</title>
+	<meta name="description" content={seo.description} />
+	<meta name="keywords" content={data.tag} />
+	
+	<!-- Open Graph -->
+	<meta property="og:title" content={seo.title} />
+	<meta property="og:description" content={seo.description} />
+	<meta property="og:url" content={seo.url} />
+	<meta property="og:type" content="website" />
+	
+	<!-- Canonical URL -->
+	<link rel="canonical" href={seo.url} />
+	
+	<!-- Alternate Languages -->
+	<link rel="alternate" hreflang="zh-TW" href={`https://vibeblog.app/tags/${encodeURIComponent(data.tag)}`} />
+	<link rel="alternate" hreflang="en-US" href={`https://vibeblog.app/tags/${encodeURIComponent(data.tag)}?lang=en`} />
 </svelte:head>
 
 <div class="tag-posts-container">

@@ -2,15 +2,41 @@
 	import type { PageData } from './$types';
 	import { page } from '$app/stores';
 	import { parseLanguage } from '$lib/utils/language';
+	import { generateSEOTags } from '$lib/utils/seo';
 
 	let { data }: { data: PageData } = $props();
 	
 	// 计算语言参数
 	const langParam = $derived(data.lang === 'en' ? '?lang=en' : '');
+	
+	// SEO 数据
+	const seo = $derived(generateSEOTags({
+		title: data.lang === 'en' ? 'All Tags - VibeBlog' : '所有標籤 - VibeBlog',
+		description: data.lang === 'en' 
+			? 'Browse all tags and topics on VibeBlog. Find articles by category, technology, or topic.'
+			: '瀏覽 VibeBlog 上的所有標籤和主題。按類別、技術或主題查找文章。',
+		url: `/tags${langParam}`,
+		type: 'website',
+		lang: data.lang
+	}));
 </script>
 
 <svelte:head>
-	<title>{data.lang === 'en' ? 'All Tags - VibeBlog' : '所有標籤 - VibeBlog'}</title>
+	<title>{seo.title}</title>
+	<meta name="description" content={seo.description} />
+	
+	<!-- Open Graph -->
+	<meta property="og:title" content={seo.title} />
+	<meta property="og:description" content={seo.description} />
+	<meta property="og:url" content={seo.url} />
+	<meta property="og:type" content="website" />
+	
+	<!-- Canonical URL -->
+	<link rel="canonical" href={seo.url} />
+	
+	<!-- Alternate Languages -->
+	<link rel="alternate" hreflang="zh-TW" href="https://vibeblog.app/tags" />
+	<link rel="alternate" hreflang="en-US" href="https://vibeblog.app/tags?lang=en" />
 </svelte:head>
 
 <div class="tags-container">

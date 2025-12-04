@@ -1,15 +1,80 @@
 <script lang="ts">
 	import type { PageData } from './$types';
+	import { page } from '$app/stores';
+	import { generateSEOTags, generateStructuredData } from '$lib/utils/seo';
 
 	let { data }: { data: PageData } = $props();
 	
 	// 计算语言参数
 	const langParam = $derived(data.lang === 'en' ? '?lang=en' : '');
+	
+	// SEO 数据
+	const seo = $derived(generateSEOTags({
+		title: data.post.title,
+		description: data.post.summary || data.post.description || '',
+		image: data.post.heroImage,
+		url: `/blog/${data.post.slug}${langParam}`,
+		type: 'article',
+		publishedTime: data.post.date,
+		tags: data.post.tags || [],
+		lang: data.lang
+	}));
+	
+	const structuredData = $derived(generateStructuredData({
+		title: data.post.title,
+		description: seo.description,
+		image: seo.image,
+		url: seo.url,
+		type: 'article',
+		publishedTime: data.post.date,
+		tags: data.post.tags || [],
+		lang: data.lang
+	}));
 </script>
 
 <svelte:head>
-	<title>{data.post.title} - VibeBlog</title>
-	<meta name="description" content={data.post.summary || data.post.description || ''} />
+	<title>{seo.title}</title>
+	<meta name="description" content={seo.description} />
+	<meta name="keywords" content={data.post.tags?.join(', ') || ''} />
+	<meta name="author" content="VibeBlog" />
+	<meta name="article:published_time" content={data.post.date} />
+	{#if data.post.tags && data.post.tags.length > 0}
+		{#each data.post.tags as tag}
+			<meta name="article:tag" content={tag} />
+		{/each}
+	{/if}
+	
+	<!-- Open Graph -->
+	<meta property="og:title" content={seo.title} />
+	<meta property="og:description" content={seo.description} />
+	<meta property="og:image" content={seo.image} />
+	<meta property="og:url" content={seo.url} />
+	<meta property="og:type" content="article" />
+	<meta property="og:site_name" content="VibeBlog" />
+	<meta property="og:locale" content={data.lang === 'en' ? 'en_US' : 'zh_TW'} />
+	{#if data.lang === 'en'}
+		<meta property="og:locale:alternate" content="zh_TW" />
+	{:else}
+		<meta property="og:locale:alternate" content="en_US" />
+	{/if}
+	<meta property="article:published_time" content={data.post.date} />
+	
+	<!-- Twitter Card -->
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content={seo.title} />
+	<meta name="twitter:description" content={seo.description} />
+	<meta name="twitter:image" content={seo.image} />
+	
+	<!-- Canonical URL -->
+	<link rel="canonical" href={seo.url} />
+	
+	<!-- Alternate Languages -->
+	<link rel="alternate" hreflang="zh-TW" href={`https://vibeblog.app/blog/${data.post.slug}`} />
+	<link rel="alternate" hreflang="en-US" href={`https://vibeblog.app/blog/${data.post.slug}?lang=en`} />
+	<link rel="alternate" hreflang="x-default" href={`https://vibeblog.app/blog/${data.post.slug}`} />
+	
+	<!-- Structured Data -->
+	{@html `<script type="application/ld+json">${JSON.stringify(structuredData)}</script>`}
 </svelte:head>
 
 <div class="post-container">

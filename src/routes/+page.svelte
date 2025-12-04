@@ -2,13 +2,70 @@
 	import type { PageData } from './$types';
 	import { parseLanguage } from '$lib/utils/language';
 	import { page } from '$app/stores';
+	import { generateSEOTags, generateStructuredData } from '$lib/utils/seo';
 	
 	let { data }: { data: PageData } = $props();
 	
 	// 计算语言和语言参数
 	const lang = $derived(parseLanguage($page.url));
 	const langParam = $derived(lang === 'en' ? '?lang=en' : '');
+	
+	// SEO 数据
+	const seo = $derived(generateSEOTags({
+		title: lang === 'en' ? 'VibeBlog - AI, Development Tools & Technology Insights' : 'VibeBlog - AI、開發工具與技術見解',
+		description: lang === 'en' 
+			? 'A tech blog sharing insights on AI, development tools, and technology. Explore articles about MCP servers, automation, and modern development practices.'
+			: '分享 AI、開發工具與技術見解的技術部落格。探索關於 MCP servers、自動化和現代開發實踐的文章。',
+		url: langParam || '/',
+		type: 'website',
+		lang
+	}));
+	
+	const structuredData = $derived(generateStructuredData({
+		title: seo.title,
+		description: seo.description,
+		url: seo.url,
+		type: 'website',
+		lang
+	}));
 </script>
+
+<svelte:head>
+	<title>{seo.title}</title>
+	<meta name="description" content={seo.description} />
+	<meta name="keywords" content={lang === 'en' ? 'AI, development tools, technology, MCP servers, automation, blog' : 'AI, 開發工具, 技術, MCP servers, 自動化, 部落格'} />
+	
+	<!-- Open Graph -->
+	<meta property="og:title" content={seo.title} />
+	<meta property="og:description" content={seo.description} />
+	<meta property="og:image" content={seo.image} />
+	<meta property="og:url" content={seo.url} />
+	<meta property="og:type" content={seo.type} />
+	<meta property="og:site_name" content="VibeBlog" />
+	<meta property="og:locale" content={lang === 'en' ? 'en_US' : 'zh_TW'} />
+	{#if lang === 'en'}
+		<meta property="og:locale:alternate" content="zh_TW" />
+	{:else}
+		<meta property="og:locale:alternate" content="en_US" />
+	{/if}
+	
+	<!-- Twitter Card -->
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content={seo.title} />
+	<meta name="twitter:description" content={seo.description} />
+	<meta name="twitter:image" content={seo.image} />
+	
+	<!-- Canonical URL -->
+	<link rel="canonical" href={seo.url} />
+	
+	<!-- Alternate Languages -->
+	<link rel="alternate" hreflang="zh-TW" href="https://vibeblog.app/" />
+	<link rel="alternate" hreflang="en-US" href="https://vibeblog.app/?lang=en" />
+	<link rel="alternate" hreflang="x-default" href="https://vibeblog.app/" />
+	
+	<!-- Structured Data -->
+	{@html `<script type="application/ld+json">${JSON.stringify(structuredData)}</script>`}
+</svelte:head>
 
 <div class="home-container">
 	<!-- Hero Section with Background Image -->

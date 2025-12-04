@@ -1,3 +1,8 @@
-# allow crawling everything by default
+# Robots.txt for VibeBlog
 User-agent: *
-Disallow:
+Allow: /
+Disallow: /_app/
+Disallow: /temp/
+
+# Sitemap
+Sitemap: https://vibeblog.app/sitemap.xml
