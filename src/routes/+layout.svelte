@@ -227,9 +227,9 @@
 		}
 
 		.nav-links {
-			position: fixed;
+			position: fixed !important;
 			top: 0;
-			right: -100%;
+			right: -100% !important;
 			width: 280px;
 			height: 100vh;
 			background: white;
@@ -241,10 +241,13 @@
 			transition: right 0.3s ease;
 			z-index: 1001;
 			overflow-y: auto;
+			pointer-events: none;
+			transform: translateX(0);
 		}
 
 		.nav-links.mobile-open {
-			right: 0;
+			right: 0 !important;
+			pointer-events: auto;
 		}
 
 		.nav-links a {
