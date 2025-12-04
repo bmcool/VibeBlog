@@ -16,8 +16,6 @@ export const GET: RequestHandler = async () => {
 		...postsEn.map(post => ({ ...post, lang: 'en' as const }))
 	];
 	
-	const allTags = new Set([...tagsZh, ...tagsEn]);
-	
 	const sitemap = `<?xml version="1.0" encoding="utf-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 	<!-- Homepage -->
@@ -74,17 +72,21 @@ ${allPosts.map(post => {
 }).join('\n')}
 	
 	<!-- Tag Pages -->
-${Array.from(allTags).map(tag => {
+${tagsZh.map(tag => {
 	const encodedTag = encodeURIComponent(tag);
 	const zhUrl = `${SITE_URL}/tags/${encodedTag}`;
-	const enUrl = `${SITE_URL}/en/tags/${encodedTag}`;
 	
 	return `	<url>
 		<loc>${zhUrl}</loc>
 		<changefreq>weekly</changefreq>
 		<priority>0.6</priority>
-	</url>
-	<url>
+	</url>`;
+}).join('\n')}
+${tagsEn.map(tag => {
+	const encodedTag = encodeURIComponent(tag);
+	const enUrl = `${SITE_URL}/en/tags/${encodedTag}`;
+	
+	return `	<url>
 		<loc>${enUrl}</loc>
 		<changefreq>weekly</changefreq>
 		<priority>0.6</priority>
