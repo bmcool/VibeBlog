@@ -166,58 +166,6 @@
 	.read-more:hover {
 		text-decoration: underline;
 	}
-
-	/* 移動端響應式 */
-	@media (max-width: 768px) {
-		.tag-posts-container {
-			padding: 1.5rem 1rem;
-		}
-
-		h1 {
-			font-size: 2rem;
-			margin-bottom: 1.5rem;
-		}
-
-		.posts-grid {
-			grid-template-columns: 1fr;
-			gap: 1.5rem;
-		}
-
-		.post-content {
-			padding: 1.25rem;
-		}
-
-		.post-content h2 {
-			font-size: 1.25rem;
-		}
-	}
-
-	@media (max-width: 480px) {
-		.tag-posts-container {
-			padding: 1rem 0.75rem;
-		}
-
-		h1 {
-			font-size: 1.75rem;
-			margin-bottom: 1.25rem;
-		}
-
-		.posts-grid {
-			gap: 1.25rem;
-		}
-
-		.post-content {
-			padding: 1rem;
-		}
-
-		.post-content h2 {
-			font-size: 1.1rem;
-		}
-
-		.post-summary {
-			font-size: 0.9rem;
-		}
-	}
 </style>
 
 

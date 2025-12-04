@@ -91,47 +91,6 @@
 		transform: translateY(-2px);
 		box-shadow: 0 2px 8px rgba(0, 102, 204, 0.3);
 	}
-
-	/* 移動端響應式 */
-	@media (max-width: 768px) {
-		.tags-container {
-			padding: 1.5rem 1rem;
-		}
-
-		h1 {
-			font-size: 2rem;
-			margin-bottom: 1.5rem;
-		}
-
-		.tags-list {
-			gap: 0.75rem;
-		}
-
-		.tag-link {
-			padding: 0.5rem 1.25rem;
-			font-size: 0.95rem;
-		}
-	}
-
-	@media (max-width: 480px) {
-		.tags-container {
-			padding: 1rem 0.75rem;
-		}
-
-		h1 {
-			font-size: 1.75rem;
-			margin-bottom: 1.25rem;
-		}
-
-		.tags-list {
-			gap: 0.5rem;
-		}
-
-		.tag-link {
-			padding: 0.5rem 1rem;
-			font-size: 0.9rem;
-		}
-	}
 </style>
 
 

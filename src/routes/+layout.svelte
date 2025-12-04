@@ -1,5 +1,5 @@
 <script lang="ts">
-	import LanguageSwitcher from '$lib/components/LanguageSwitcher.svelte';
+	import Footer from '$lib/components/Footer.svelte';
 	import { page } from '$app/stores';
 	import { parseLanguage } from '$lib/utils/language';
 	import { onMount } from 'svelte';
@@ -14,9 +14,6 @@
 	// 滚动状态
 	let scrolled = $state(false);
 	let navElement: HTMLElement;
-	
-	// 移动端菜单状态
-	let mobileMenuOpen = $state(false);
 
 	onMount(() => {
 		const handleScroll = () => {
@@ -26,24 +23,10 @@
 		window.addEventListener('scroll', handleScroll, { passive: true });
 		handleScroll(); // 初始检查
 
-		// 當路由改變時關閉手機選單
-		const unsubscribe = $page.subscribe(() => {
-			mobileMenuOpen = false;
-		});
-
 		return () => {
 			window.removeEventListener('scroll', handleScroll);
-			unsubscribe();
 		};
 	});
-	
-	function toggleMobileMenu() {
-		mobileMenuOpen = !mobileMenuOpen;
-	}
-	
-	function closeMobileMenu() {
-		mobileMenuOpen = false;
-	}
 </script>
 
 <svelte:head>
@@ -54,26 +37,18 @@
 <nav class="main-nav" class:scrolled bind:this={navElement}>
 	<div class="nav-container">
 		<a href={buildLangPath('/', lang)} class="logo">VibeBlog</a>
-		<button class="mobile-menu-toggle" class:active={mobileMenuOpen} onclick={toggleMobileMenu} aria-label={lang === 'en' ? 'Toggle menu' : '切換選單'}>
-			<span class="hamburger-line"></span>
-			<span class="hamburger-line"></span>
-			<span class="hamburger-line"></span>
-		</button>
-		<div class="nav-links" class:mobile-open={mobileMenuOpen}>
-			<a href={buildLangPath('/', lang)} class:active={$page.url.pathname === '/' || $page.url.pathname === '/en' || $page.url.pathname === '/en/'} onclick={closeMobileMenu}>{lang === 'en' ? 'Home' : '首頁'}</a>
-			<a href={buildLangPath('/blog', lang)} class:active={$page.url.pathname.startsWith('/blog') || $page.url.pathname.startsWith('/en/blog')} onclick={closeMobileMenu}>{lang === 'en' ? 'Posts' : '文章'}</a>
-			<a href={buildLangPath('/tags', lang)} class:active={$page.url.pathname.startsWith('/tags') || $page.url.pathname.startsWith('/en/tags')} onclick={closeMobileMenu}>{lang === 'en' ? 'Tags' : '標籤'}</a>
-			<LanguageSwitcher />
+		<div class="nav-links">
+			<a href={buildLangPath('/blog', lang)} class:active={$page.url.pathname.startsWith('/blog') || $page.url.pathname.startsWith('/en/blog')}>{lang === 'en' ? 'Posts' : '文章'}</a>
+			<a href={buildLangPath('/tags', lang)} class:active={$page.url.pathname.startsWith('/tags') || $page.url.pathname.startsWith('/en/tags')}>{lang === 'en' ? 'Tags' : '標籤'}</a>
 		</div>
 	</div>
-	{#if mobileMenuOpen}
-		<div class="mobile-menu-overlay" onclick={closeMobileMenu}></div>
-	{/if}
 </nav>
 
 <main>
 	{@render children()}
 </main>
+
+<Footer />
 
 <style>
 	.main-nav {
@@ -172,37 +147,6 @@
 		font-weight: 600;
 	}
 
-	/* 移动端菜单按钮 - 桌面端隱藏 */
-	.mobile-menu-toggle {
-		display: none;
-		flex-direction: column;
-		justify-content: space-around;
-		width: 2rem;
-		height: 2rem;
-		background: transparent;
-		border: none;
-		cursor: pointer;
-		padding: 0;
-		z-index: 1001;
-	}
-
-	.hamburger-line {
-		width: 2rem;
-		height: 0.25rem;
-		background: #1a1a1a;
-		border-radius: 10px;
-		transition: all 0.3s ease;
-		transform-origin: center;
-	}
-
-	.mobile-menu-toggle:hover .hamburger-line {
-		background: #0066cc;
-	}
-
-	.mobile-menu-overlay {
-		display: none;
-	}
-
 	main {
 		min-height: calc(100vh - 200px);
 	}
@@ -211,7 +155,6 @@
 	@media (max-width: 768px) {
 		.nav-container {
 			padding: 0 1.5rem;
-			position: relative;
 		}
 
 		.logo {
@@ -222,81 +165,12 @@
 			font-size: 1.25rem;
 		}
 
-		.mobile-menu-toggle {
-			display: flex;
-		}
-
 		.nav-links {
-			position: fixed !important;
-			top: 0;
-			right: -100% !important;
-			width: 280px;
-			height: 100vh;
-			background: white;
-			flex-direction: column;
-			align-items: flex-start;
-			padding: 5rem 2rem 2rem;
-			gap: 0;
-			box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
-			transition: right 0.3s ease;
-			z-index: 1001;
-			overflow-y: auto;
-			pointer-events: none;
-			transform: translateX(0);
-		}
-
-		.nav-links.mobile-open {
-			right: 0 !important;
-			pointer-events: auto;
+			gap: 1.5rem;
 		}
 
 		.nav-links a {
-			width: 100%;
-			padding: 1rem 0;
-			font-size: 1.1rem;
-			border-bottom: 1px solid #f0f0f0;
-		}
-
-		.nav-links a::after {
-			display: none;
-		}
-
-		.nav-links a.active {
-			border-left: 4px solid #0066cc;
-			padding-left: 1rem;
-		}
-
-		.nav-links :global(.language-switcher) {
-			width: 100%;
-			padding: 1rem 0;
-			border-top: 1px solid #f0f0f0;
-			margin-top: 0.5rem;
-		}
-
-		.mobile-menu-overlay {
-			display: block;
-			position: fixed;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			background: rgba(0, 0, 0, 0.5);
-			z-index: 1000;
-			opacity: 1;
-			transition: opacity 0.3s ease;
-		}
-
-		/* 漢堡選單動畫 */
-		.mobile-menu-toggle.active .hamburger-line:nth-child(1) {
-			transform: rotate(45deg) translate(0.5rem, 0.5rem);
-		}
-
-		.mobile-menu-toggle.active .hamburger-line:nth-child(2) {
-			opacity: 0;
-		}
-
-		.mobile-menu-toggle.active .hamburger-line:nth-child(3) {
-			transform: rotate(-45deg) translate(0.5rem, -0.5rem);
+			font-size: 0.9rem;
 		}
 	}
 
@@ -306,12 +180,11 @@
 		}
 
 		.nav-links {
-			width: 100%;
-			right: -100%;
+			gap: 1rem;
 		}
 
-		.nav-links.mobile-open {
-			right: 0;
+		.nav-links a {
+			font-size: 0.85rem;
 		}
 	}
 </style>
