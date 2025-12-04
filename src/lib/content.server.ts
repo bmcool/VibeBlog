@@ -3,11 +3,26 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import type { PostMeta, TagsIndex, Language } from '$lib/types/blog';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const META_DIR = path.join(__dirname, '../../content/meta');
-const INDEXES_DIR = path.join(__dirname, '../../content/indexes');
-const PROCESSED_DIR = path.join(__dirname, '../../content/processed');
+// 使用更可靠的路径解析方法
+// 在构建时，__dirname 可能指向 .svelte-kit 目录，所以使用 process.cwd() 作为基准
+const getContentDir = () => {
+	// 尝试从当前文件位置解析
+	const __filename = fileURLToPath(import.meta.url);
+	const __dirname = path.dirname(__filename);
+	const relativePath = path.join(__dirname, '../../content');
+	
+	// 如果相对路径存在，使用它；否则使用 process.cwd()
+	if (fs.existsSync(relativePath)) {
+		return relativePath;
+	}
+	// 回退到项目根目录
+	return path.join(process.cwd(), 'content');
+};
+
+const CONTENT_DIR = getContentDir();
+const META_DIR = path.join(CONTENT_DIR, 'meta');
+const INDEXES_DIR = path.join(CONTENT_DIR, 'indexes');
+const PROCESSED_DIR = path.join(CONTENT_DIR, 'processed');
 
 /**
  * 讀取單篇文章的 metadata
