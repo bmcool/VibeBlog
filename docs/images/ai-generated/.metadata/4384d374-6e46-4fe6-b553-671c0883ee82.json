@@ -1,0 +1,17 @@
+{
+  "request_id": "4384d374-6e46-4fe6-b553-671c0883ee82",
+  "prompt": "A modern, minimalist hero image for a tech blog homepage. Design: Abstract tech background with gradient colors (blue to purple), subtle geometric patterns, clean and professional, suitable for hero section, wide format 16:9, modern tech aesthetic, minimal text overlay area",
+  "model": "Flux1schnell",
+  "width": 1920,
+  "height": 1080,
+  "seed": -1,
+  "steps": 4,
+  "guidance": 7.5,
+  "loras": [],
+  "negative_prompt": null,
+  "result_url": "https://depinprod.s3.pl-waw.scw.cloud/depin-results/6924067/rhP1H8hlNQ5hOQqlOW3r0xqlsIVYWCGxaYrm3w5P.png?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=SCWP90DSGR7MRZSCCA30%2F20251204%2Fpl-waw%2Fs3%2Faws4_request&X-Amz-Date=20251204T020601Z&X-Amz-SignedHeaders=host&X-Amz-Expires=17959&X-Amz-Signature=c8a1bd4c691dcc9746b56ee71aad0b4f6fe917fe5078da10ae9a9ec735f95606",
+  "file_path": "static/images/homepage-hero.png",
+  "generated_at": "2025-12-04T10:06:04.401250",
+  "tags": [],
+  "description": ""
+}

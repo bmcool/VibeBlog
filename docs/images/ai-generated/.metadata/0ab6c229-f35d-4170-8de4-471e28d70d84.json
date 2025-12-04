@@ -1,0 +1,17 @@
+{
+  "request_id": "0ab6c229-f35d-4170-8de4-471e28d70d84",
+  "prompt": "A modern diagram showing Cursor Agent connecting to Metabase MCP Server, with natural language input from marketing team on one side, and database queries and push notification lists on the other side. Clean, professional tech illustration style with blue and green color scheme.",
+  "model": "Flux1schnell",
+  "width": 768,
+  "height": 768,
+  "seed": -1,
+  "steps": 4,
+  "guidance": 7.5,
+  "loras": [],
+  "negative_prompt": null,
+  "result_url": "https://depinprod.s3.pl-waw.scw.cloud/depin-results/6915193/tXTzmYA2IITOu12sbH1dD2ZlqwqfWap3ddcEPa8e.png?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=SCWP90DSGR7MRZSCCA30%2F20251203%2Fpl-waw%2Fs3%2Faws4_request&X-Amz-Date=20251203T113433Z&X-Amz-SignedHeaders=host&X-Amz-Expires=17995&X-Amz-Signature=64294cc5f7ef726e1e30db364a98ad1408ca3304a73b7e78bccaf6e55d06c2b1",
+  "file_path": "static/images/ai-generated/cursor-metabase-push-list-management.png",
+  "generated_at": "2025-12-03T19:34:35.384729",
+  "tags": [],
+  "description": ""
+}

@@ -1,0 +1,143 @@
+{
+  "images": [
+    {
+      "request_id": "4384d374-6e46-4fe6-b553-671c0883ee82",
+      "prompt": "A modern, minimalist hero image for a tech blog homepage. Design: Abstract tech background with gradient colors (blue to purple), subtle geometric patterns, clean and professional, suitable for hero section, wide format 16:9, modern tech aesthetic, minimal text overlay area",
+      "model": "Flux1schnell",
+      "width": 1920,
+      "height": 1080,
+      "seed": -1,
+      "steps": 4,
+      "guidance": 7.5,
+      "loras": [],
+      "negative_prompt": null,
+      "result_url": "https://depinprod.s3.pl-waw.scw.cloud/depin-results/6924067/rhP1H8hlNQ5hOQqlOW3r0xqlsIVYWCGxaYrm3w5P.png?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=SCWP90DSGR7MRZSCCA30%2F20251204%2Fpl-waw%2Fs3%2Faws4_request&X-Amz-Date=20251204T020601Z&X-Amz-SignedHeaders=host&X-Amz-Expires=17959&X-Amz-Signature=c8a1bd4c691dcc9746b56ee71aad0b4f6fe917fe5078da10ae9a9ec735f95606",
+      "file_path": "static/images/homepage-hero.png",
+      "generated_at": "2025-12-04T10:06:04.401250",
+      "tags": [],
+      "description": ""
+    },
+    {
+      "request_id": "9d6126bd-c450-456b-ba46-4596a55efb3c",
+      "prompt": "A modern, minimalist icon for a tech blog called \"VibeBlog\". Design: A stylized letter \"V\" combined with a blog/document symbol, clean lines, tech aesthetic, gradient colors (blue to purple), square format, suitable for favicon and app icon, professional and modern, simple geometric shapes",
+      "model": "Flux1schnell",
+      "width": 512,
+      "height": 512,
+      "seed": -1,
+      "steps": 4,
+      "guidance": 7.5,
+      "loras": [],
+      "negative_prompt": null,
+      "result_url": "https://depinprod.s3.pl-waw.scw.cloud/depin-results/6923869/YXmjq0xTjv1ft1j3LqSsQHqAkpeGm6NgbNKTwtAi.png?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=SCWP90DSGR7MRZSCCA30%2F20251204%2Fpl-waw%2Fs3%2Faws4_request&X-Amz-Date=20251204T012045Z&X-Amz-SignedHeaders=host&X-Amz-Expires=17980&X-Amz-Signature=ecf5640ed4bb04c5e6dfc8d9973b2b3cb5c8f56401f0f1e8652f71ff484a402e",
+      "file_path": "static/images/vibeblog-icon.png",
+      "generated_at": "2025-12-04T09:20:46.989729",
+      "tags": [],
+      "description": ""
+    },
+    {
+      "request_id": "0ab6c229-f35d-4170-8de4-471e28d70d84",
+      "prompt": "A modern diagram showing Cursor Agent connecting to Metabase MCP Server, with natural language input from marketing team on one side, and database queries and push notification lists on the other side. Clean, professional tech illustration style with blue and green color scheme.",
+      "model": "Flux1schnell",
+      "width": 768,
+      "height": 768,
+      "seed": -1,
+      "steps": 4,
+      "guidance": 7.5,
+      "loras": [],
+      "negative_prompt": null,
+      "result_url": "https://depinprod.s3.pl-waw.scw.cloud/depin-results/6915193/tXTzmYA2IITOu12sbH1dD2ZlqwqfWap3ddcEPa8e.png?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=SCWP90DSGR7MRZSCCA30%2F20251203%2Fpl-waw%2Fs3%2Faws4_request&X-Amz-Date=20251203T113433Z&X-Amz-SignedHeaders=host&X-Amz-Expires=17995&X-Amz-Signature=64294cc5f7ef726e1e30db364a98ad1408ca3304a73b7e78bccaf6e55d06c2b1",
+      "file_path": "static/images/ai-generated/cursor-metabase-push-list-management.png",
+      "generated_at": "2025-12-03T19:34:35.384729",
+      "tags": [],
+      "description": ""
+    },
+    {
+      "request_id": "dcf0c526-b42c-40ea-9cbe-2de97d5fa44f",
+      "prompt": "Success celebration with checkmark, AI generated images floating around, modern tech aesthetic, vibrant colors, minimalist design",
+      "model": "Flux1schnell",
+      "width": 512,
+      "height": 512,
+      "seed": -1,
+      "steps": 4,
+      "guidance": 7.5,
+      "loras": [],
+      "negative_prompt": null,
+      "result_url": "https://depinprod.s3.pl-waw.scw.cloud/depin-results/6840629/IupTcJ62bEhVk9meCRTFmQzzbpd7vnX1FuNZrBO7.png",
+      "file_path": "/Users/zephyrlin/Desktop/VibeBlog/static/images/ai-generated/dcf0c526-b42c-40ea-9cbe-2de97d5fa44f.png",
+      "generated_at": "2025-12-02T16:48:00",
+      "tags": [
+        "success",
+        "celebration",
+        "achievement",
+        "AI images"
+      ],
+      "description": "慶祝成功的圖片，展示 AI 生成的圖片成果"
+    },
+    {
+      "request_id": "685eea24-041f-41d9-a877-d302276a5d00",
+      "prompt": "AI image generation workflow diagram showing API request, processing, and download stages, tech illustration style, clean and modern",
+      "model": "Flux1schnell",
+      "width": 768,
+      "height": 512,
+      "seed": -1,
+      "steps": 4,
+      "guidance": 7.5,
+      "loras": [],
+      "negative_prompt": null,
+      "result_url": "https://depinprod.s3.pl-waw.scw.cloud/depin-results/6840627/nQ2ubUHXk3qosndU7fq2JJFBaMbjzu1GMlKONnPA.png",
+      "file_path": "/Users/zephyrlin/Desktop/VibeBlog/static/images/ai-generated/685eea24-041f-41d9-a877-d302276a5d00.png",
+      "generated_at": "2025-12-02T16:48:00",
+      "tags": [
+        "workflow",
+        "API",
+        "diagram",
+        "tech illustration"
+      ],
+      "description": "展示 AI 圖片生成工作流程的示意圖"
+    },
+    {
+      "request_id": "6681b111-32c0-46c5-a5bd-c9e3d668e3cc",
+      "prompt": "A developer working on a computer with code editor open, showing MCP server architecture diagram, modern tech workspace, clean minimalist style",
+      "model": "Flux1schnell",
+      "width": 768,
+      "height": 512,
+      "seed": -1,
+      "steps": 4,
+      "guidance": 7.5,
+      "loras": [],
+      "negative_prompt": null,
+      "result_url": "https://depinprod.s3.pl-waw.scw.cloud/depin-results/6840628/6h5lYOK3Nu0TnkT3Jb6I7C9UBxojQiyXxzlpKp1Z.png",
+      "file_path": "/Users/zephyrlin/Desktop/VibeBlog/static/images/ai-generated/6681b111-32c0-46c5-a5bd-c9e3d668e3cc.png",
+      "generated_at": "2025-12-02T16:48:00",
+      "tags": [
+        "developer",
+        "MCP server",
+        "architecture",
+        "tech workspace"
+      ],
+      "description": "展示開發者工作環境和 MCP server 架構圖的圖片"
+    },
+    {
+      "request_id": "97a2036b-79f5-4a29-8d92-bde0217f6c5b",
+      "prompt": "a cup of coffee, simple, minimalist, clean background",
+      "model": "Flux1schnell",
+      "width": 512,
+      "height": 512,
+      "seed": -1,
+      "steps": 4,
+      "guidance": 7.5,
+      "loras": [],
+      "negative_prompt": null,
+      "result_url": "https://depinprod.s3.pl-waw.scw.cloud/depin-results/6837405/ZhTf4andnOCXVYDYEmcYnkaBljeVh86cHlGq14fY.png",
+      "file_path": "/Users/zephyrlin/Desktop/VibeBlog/static/images/ai-generated/97a2036b-79f5-4a29-8d92-bde0217f6c5b.png",
+      "generated_at": "2025-12-02T15:42:00",
+      "tags": [
+        "coffee",
+        "minimalist",
+        "simple",
+        "clean"
+      ],
+      "description": "簡約風格的咖啡圖片，使用最便宜的參數配置生成"
+    }
+  ]
+}
