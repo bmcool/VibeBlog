@@ -17,8 +17,10 @@
 	<div class="posts-grid">
 		{#each data.posts as post (post.slug)}
 			<article class="post-card">
-				{#if post.image}
-					<img src={post.image} alt={post.title} class="post-image" />
+				{#if post.heroImage}
+					<div class="post-image-wrapper">
+						<img src={post.heroImage} alt={post.title} class="post-image" />
+					</div>
 				{/if}
 				<div class="post-content">
 					<h2><a href={langParam ? `/blog/${post.slug}${langParam}` : `/blog/${post.slug}`}>{post.title}</a></h2>
@@ -74,9 +76,16 @@
 		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 	}
 
-	.post-image {
+	.post-image-wrapper {
 		width: 100%;
 		height: 200px;
+		overflow: hidden;
+		background: #f0f0f0;
+	}
+
+	.post-image {
+		width: 100%;
+		height: 100%;
 		object-fit: cover;
 	}
 
