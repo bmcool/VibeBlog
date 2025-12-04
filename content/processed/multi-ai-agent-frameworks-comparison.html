@@ -1,0 +1,437 @@
+<h1>Multi AI Agent 框架全面比較：選擇最適合你的多智能體系統</h1>
+<h2>前言</h2>
+<p>隨著人工智慧技術的快速發展，多智能體（Multi-Agent）系統已成為解決複雜任務的重要工具。從對話式協作到自動化任務處理，不同的應用場景需要不同的框架架構。本文將深入比較七種主流的多智能體框架（AutoGen、LangGraph、CrewAI、AgentMesh、AutoAgent、InfiAgent、MAS²），從技術架構、協作模式、開發方式等多個維度進行全面分析，幫助 AI 開發者、系統架構師和技術決策者根據實際需求選擇最適合的多代理系統框架。</p>
+<h2>框架概覽</h2>
+<p>本文將比較以下七種框架：</p>
+<ol>
+<li><strong>AutoGen</strong>（Microsoft）</li>
+<li><strong>LangGraph</strong>（基於 LangChain）</li>
+<li><strong>CrewAI</strong></li>
+<li><strong>AgentMesh</strong></li>
+<li><strong>AutoAgent / AutoAgents</strong></li>
+<li><strong>InfiAgent</strong></li>
+<li><strong>MAS²</strong></li>
+</ol>
+<h2>一、AutoGen（Microsoft）</h2>
+<h3>框架簡介</h3>
+<p>AutoGen 是由微軟研究院開發的開源框架，專門針對多智能體構建複雜代理系統而設計。該框架強調模組化和可擴展性，適用於對話式和任務導向型 AI 應用。</p>
+<h3>核心特點</h3>
+<ul>
+<li><strong>多代理協同</strong>：支持多個自主代理協同完成複雜任務</li>
+<li><strong>靈活的代理定義</strong>：可定義不同類型的代理，包括專家、助手、策略制定者等角色</li>
+<li><strong>對話式協作</strong>：代理通過對話空間進行溝通，支持多方對話和協作</li>
+<li><strong>模組化設計</strong>：提供模組化、可擴展的工具集，便於開發者快速構建複雜的 AI 系統</li>
+</ul>
+<h3>技術架構</h3>
+<p>AutoGen 採用對話式協作模式，代理之間通過虛擬對話空間進行溝通。這種設計使得代理可以：<br />
+- 進行多方對話（文本、音訊或視訊形式）<br />
+- 動態調整協作策略<br />
+- 根據任務需求靈活組合不同類型的代理</p>
+<h3>適用場景</h3>
+<ul>
+<li>需要多方對話和協作的場景</li>
+<li>構建複雜的對話系統</li>
+<li>任務自動化應用</li>
+<li>需要靈活定義代理角色和職責的系統</li>
+</ul>
+<h3>參考資料</h3>
+<ul>
+<li><a href="https://cloud.baidu.com/article/2740027" target="_blank" rel="noopener noreferrer">多代理對話框架 AutoGen 介紹</a></li>
+<li><a href="https://www.youtube.com/watch?v=buuPOpHNOX0" target="_blank" rel="noopener noreferrer">AutoGen：微軟推出專門針對多 agent 構建複雜代理的 llm 開發框架</a></li>
+<li><a href="https://www.53ai.com/news/OpenSourceLLM/2025040175268.html" target="_blank" rel="noopener noreferrer">Agent 框架大比拼：誰將引領智能應用的未來？</a></li>
+</ul>
+<h2>二、LangGraph（基於 LangChain）</h2>
+<h3>框架簡介</h3>
+<p>LangGraph 是由 LangChain 團隊開發的開源框架，專為構建狀態化、多代理系統而設計。該框架使用有向循環圖（DAG）概念，通過圖結構實現複雜的動態工作流。</p>
+<h3>核心特點</h3>
+<ul>
+<li><strong>圖形架構</strong>：使用有向循環圖（DAG）管理代理流程</li>
+<li><strong>狀態管理</strong>：原生支持短期和長期記憶，保持上下文一致性</li>
+<li><strong>循環與分支</strong>：支持循環和條件分支，適應動態變化的場景</li>
+<li><strong>人工干預</strong>：支持人類在環（Human-in-the-loop）功能，允許在工作流的任何階段進行人工干預</li>
+<li><strong>持久化</strong>：提供持久化狀態管理，便於實現有狀態行為</li>
+</ul>
+<h3>技術架構</h3>
+<p>LangGraph 採用圖形架構模式，通過節點和邊的定義來管理代理流程。這種設計使得：<br />
+- 可以構建複雜的動態工作流<br />
+- 支持循環和條件分支邏輯<br />
+- 與 LangChain 和 LangSmith 無縫集成<br />
+- 享有活躍的社區支持</p>
+<h3>適用場景</h3>
+<ul>
+<li>需要高度定制化的多智能體編排應用</li>
+<li>構建複雜的動態工作流</li>
+<li>需要狀態管理的多代理系統</li>
+<li>需要人類在環控制的應用</li>
+</ul>
+<h3>參考資料</h3>
+<ul>
+<li><a href="https://www.53ai.com/news/langchain/2025051436094.html" target="_blank" rel="noopener noreferrer">一文了解 LangGraph 是什麼？——構建智能體的新一代框架</a></li>
+<li><a href="https://langgraphcn.org/agents/overview/" target="_blank" rel="noopener noreferrer">使用 LangGraph 進行代理開發</a></li>
+<li><a href="https://blog.csdn.net/youmaob/article/details/153329031" target="_blank" rel="noopener noreferrer">LangGraph：靈活強大的智能體框架</a></li>
+<li><a href="https://www.53ai.com/news/OpenSourceLLM/2025040175268.html" target="_blank" rel="noopener noreferrer">Agent 框架大比拼：誰將引領智能應用的未來？</a></li>
+</ul>
+<h2>三、CrewAI</h2>
+<h3>框架簡介</h3>
+<p>CrewAI 是一個多智能體協作框架，支持任務分配和角色管理。該框架特別注重高效能的團隊協作，並具備獨特的「角色休眠」機制來優化資源使用。</p>
+<h3>核心特點</h3>
+<ul>
+<li><strong>任務分配</strong>：支持高效的任務分配和協作機制</li>
+<li><strong>角色管理</strong>：提供靈活的角色管理功能</li>
+<li><strong>角色休眠機制</strong>：具備「角色休眠」機制，可節省約 37% 的記憶體</li>
+<li><strong>易用性</strong>：直觀且易於設置，主要依賴提示工程</li>
+<li><strong>快速原型</strong>：非技術用戶也能快速上手，適合快速原型開發</li>
+</ul>
+<h3>技術架構</h3>
+<p>CrewAI 採用任務分配式協作模式，通過明確的任務分配和角色定義來組織多代理協作。這種設計使得：<br />
+- 代理可以根據任務需求進行高效協作<br />
+- 系統可以自動管理代理的生命週期<br />
+- 資源使用得到優化，提高系統性能</p>
+<h3>適用場景</h3>
+<ul>
+<li>需要高效能協作的團隊任務</li>
+<li>快速原型開發和演示</li>
+<li>多代理協同完成複雜任務的應用</li>
+<li>需要明確任務分配和角色管理的場景</li>
+</ul>
+<h3>參考資料</h3>
+<ul>
+<li><a href="https://www.53ai.com/news/OpenSourceLLM/2025040175268.html" target="_blank" rel="noopener noreferrer">Agent 框架大比拼：誰將引領智能應用的未來？</a></li>
+<li><a href="https://www.sohu.com/a/829547387_693397" target="_blank" rel="noopener noreferrer">選擇最適合你的多 AI 代理框架——AutoGen、LangGraph、CrewAI、Swarm、Magentic-One 全面對比</a></li>
+<li><a href="https://www.drpang.ai/content/files/2025/05/open_source_ai_agent_market_research_2025_zh.pdf" target="_blank" rel="noopener noreferrer">開源 AI 代理框架市場研究 2025</a></li>
+</ul>
+<h2>四、AgentMesh</h2>
+<h3>框架簡介</h3>
+<p>AgentMesh 是一個開源的多智能體協作框架，採用分層架構設計。該框架具有強大的可擴展性，支持多種運行方式，便於集成到現有應用中。</p>
+<h3>核心特點</h3>
+<ul>
+<li><strong>分層架構</strong>：採用分層架構設計，將系統分為模型層、框架層、應用層</li>
+<li><strong>多種運行方式</strong>：支持 CLI、Web、SDK、API 等多種運行方式</li>
+<li><strong>可擴展性</strong>：具有強大的可擴展性，每一層都具備可擴展性</li>
+<li><strong>易於集成</strong>：易於集成到現有應用中，提供多種接口</li>
+<li><strong>靈活部署</strong>：支持靈活的部署選項，滿足不同需求</li>
+</ul>
+<h3>技術架構</h3>
+<p>AgentMesh 採用分層架構模式：<br />
+- <strong>模型層</strong>：支持主流商用模型的接入<br />
+- <strong>框架層</strong>：提供多智能體核心能力，包括代理所需的工具、記憶、知識、模型，以及負責多代理交互的團隊模組<br />
+- <strong>應用層</strong>：支持命令行運行、Web 界面運行、通過 SDK 或 API 集成到自研應用中，並提供常用通訊和辦公軟體的集成</p>
+<h3>適用場景</h3>
+<ul>
+<li>需要整合到現有應用的場景</li>
+<li>構建可擴展的多智能體系統</li>
+<li>需要多種運行方式支持的場景</li>
+<li>需要靈活部署選項的企業應用</li>
+</ul>
+<h3>參考資料</h3>
+<ul>
+<li><a href="https://www.53ai.com/news/OpenSourceLLM/2025040175268.html" target="_blank" rel="noopener noreferrer">Agent 框架大比拼：誰將引領智能應用的未來？</a></li>
+<li><a href="https://www.drpang.ai/content/files/2025/05/open_source_ai_agent_market_research_2025_zh.pdf" target="_blank" rel="noopener noreferrer">開源 AI 代理框架市場研究 2025</a></li>
+<li><a href="https://6wolf.com/ai/agentmesh-%E5%BC%80%E6%BA%90%E7%9A%84%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93-multi-agent-%E5%8D%8F%E4%BD%9C%E6%A1%86%E6%9E%B6" target="_blank" rel="noopener noreferrer">AgentMesh 開源的多智能體 Multi-Agent 協作框架</a></li>
+</ul>
+<h2>五、AutoAgent / AutoAgents</h2>
+<h3>框架簡介</h3>
+<p>AutoAgent 是一個完全自動化且零代碼的框架，使用戶能夠僅通過自然語言創建和部署大型語言模型代理。該框架作為自主代理操作系統，包含四個關鍵組件。</p>
+<h3>核心特點</h3>
+<ul>
+<li><strong>零代碼框架</strong>：可自動生成代理，僅需自然語言即可創建和部署</li>
+<li><strong>完全自動化</strong>：支持高效且動態地創建和修改工具、代理和工作流，無需編碼或人工干預</li>
+<li><strong>降低技術門檻</strong>：適合非技術人員使用，快速原型開發</li>
+<li><strong>自主代理操作系統</strong>：包含代理系統實用程序、LLM 驅動的可操作引擎、自我管理的文件系統和自我演練的代理定制模組</li>
+</ul>
+<h3>技術架構</h3>
+<p>AutoAgent 採用零代碼架構，通過自然語言理解來生成和配置代理系統。核心組件包括：<br />
+- <strong>代理系統實用程序</strong>：提供代理管理的基本功能<br />
+- <strong>LLM 驅動的可操作引擎</strong>：負責理解和執行自然語言指令<br />
+- <strong>自我管理的文件系統</strong>：自動管理代理相關的文件和配置<br />
+- <strong>自我演練的代理定制模組</strong>：自動優化和調整代理配置</p>
+<h3>適用場景</h3>
+<ul>
+<li>快速原型開發</li>
+<li>非技術人員需要創建和部署代理的場景</li>
+<li>需要快速部署代理的場景</li>
+<li>降低開發門檻的應用</li>
+</ul>
+<h3>參考資料</h3>
+<ul>
+<li><a href="https://arxiv.org/abs/2502.05957" target="_blank" rel="noopener noreferrer">AutoAgent: A Fully-Automated and Zero-Code Framework for LLM Agents</a></li>
+<li><a href="https://www.53ai.com/news/OpenSourceLLM/2025040175268.html" target="_blank" rel="noopener noreferrer">Agent 框架大比拼：誰將引領智能應用的未來？</a></li>
+<li><a href="https://www.51cto.com/aigc/7249.html" target="_blank" rel="noopener noreferrer">一文讀懂 LangGraph、AutoGen、Dify、AutoGPT、Agentforce 等多種 AI Agents 工具框架平台</a></li>
+</ul>
+<h2>六、InfiAgent</h2>
+<h3>框架簡介</h3>
+<p>InfiAgent 是一種自我進化的金字塔代理框架，旨在應對無限場景。該框架引入了「代理即工具」的機制，能夠自動將複雜代理分解為分層的多代理系統。</p>
+<h3>核心特點</h3>
+<ul>
+<li><strong>自我進化</strong>：支持代理自我進化機制，根據新任務、性能不佳或優化機會自動重構代理 DAG</li>
+<li><strong>金字塔架構</strong>：採用分層代理系統，自動將複雜代理分解為分層的多代理系統</li>
+<li><strong>自動分解任務</strong>：能夠自動分解複雜任務</li>
+<li><strong>雙重審核機制</strong>：確保任務完成的質量和穩定性</li>
+<li><strong>代理路由</strong>：實現高效的任務與代理匹配</li>
+</ul>
+<h3>技術架構</h3>
+<p>InfiAgent 採用金字塔架構模式，通過分層代理系統來處理複雜任務：<br />
+- <strong>代理即工具</strong>：自動將複雜代理分解為分層的多代理系統<br />
+- <strong>雙重審核</strong>：確保任務完成的質量和穩定性<br />
+- <strong>代理路由</strong>：實現高效的任務與代理匹配<br />
+- <strong>自我進化</strong>：根據新任務、性能不佳或優化機會自動重構代理 DAG</p>
+<h3>適用場景</h3>
+<ul>
+<li>需要應對無限場景的複雜任務</li>
+<li>需要處理複雜任務和多變場景的應用</li>
+<li>構建自我進化的智能代理系統</li>
+<li>需要高自主性和適應性的代理系統</li>
+</ul>
+<h3>參考資料</h3>
+<ul>
+<li><a href="https://www.53ai.com/news/OpenSourceLLM/2025040175268.html" target="_blank" rel="noopener noreferrer">Agent 框架大比拼：誰將引領智能應用的未來？</a></li>
+<li><a href="https://www.drpang.ai/content/files/2025/05/open_source_ai_agent_market_research_2025_zh.pdf" target="_blank" rel="noopener noreferrer">開源 AI 代理框架市場研究 2025</a></li>
+<li><a href="https://www2.deloitte.com/content/dam/Deloitte/cn/Documents/technology-media-telecommunications/deloitte-cn-tmt-predictions-2025-4-autonomous-generative-ai-zh-250217.pdf" target="_blank" rel="noopener noreferrer">處於研發階段的自主生成式智能體</a></li>
+</ul>
+<h2>七、MAS²</h2>
+<h3>框架簡介</h3>
+<p>MAS² 是一種自生成、自配置、自糾正的多代理系統。該框架採用「生成器-執行器-修正器」三代理團隊，能夠根據實時任務需求動態組合並自適應地修正目標代理系統。</p>
+<h3>核心特點</h3>
+<ul>
+<li><strong>自生成</strong>：能夠根據任務需求自動生成代理系統</li>
+<li><strong>自配置</strong>：自動配置代理系統以適應任務需求</li>
+<li><strong>自糾正</strong>：支持自適應修正，能夠動態調整代理組合</li>
+<li><strong>動態組合</strong>：支持動態組合代理，根據實時任務需求調整</li>
+<li><strong>高度自動化</strong>：減少人工干預，提供高度自動化的代理管理和配置能力</li>
+</ul>
+<h3>技術架構</h3>
+<p>MAS² 採用「生成器-執行器-修正器」三代理團隊架構：<br />
+- <strong>生成器</strong>：負責根據任務需求生成代理系統<br />
+- <strong>執行器</strong>：負責執行任務<br />
+- <strong>修正器</strong>：負責根據執行結果進行修正和優化</p>
+<p>通過協作樹優化訓練和專門化這些元代理，MAS² 在複雜場景中表現出色，如深度研究和代碼生成。</p>
+<h3>適用場景</h3>
+<ul>
+<li>深度研究和代碼生成等複雜場景</li>
+<li>需要高度自動化和自適應的多代理系統</li>
+<li>需要自適應和自糾正能力的系統</li>
+<li>需要動態調整代理組合的應用</li>
+</ul>
+<h3>參考資料</h3>
+<ul>
+<li><a href="https://www.53ai.com/news/OpenSourceLLM/2025040175268.html" target="_blank" rel="noopener noreferrer">Agent 框架大比拼：誰將引領智能應用的未來？</a></li>
+<li><a href="https://www.drpang.ai/content/files/2025/05/open_source_ai_agent_market_research_2025_zh.pdf" target="_blank" rel="noopener noreferrer">開源 AI 代理框架市場研究 2025</a></li>
+<li><a href="https://www2.deloitte.com/content/dam/Deloitte/cn/Documents/technology-media-telecommunications/deloitte-cn-tmt-predictions-2025-4-autonomous-generative-ai-zh-250217.pdf" target="_blank" rel="noopener noreferrer">處於研發階段的自主生成式智能體</a></li>
+</ul>
+<h2>框架分類與比較</h2>
+<h3>按架構模式分類</h3>
+<h4>1. 分層架構</h4>
+<ul>
+<li><strong>AgentMesh</strong>：將系統分為模型層、框架層、應用層</li>
+</ul>
+<h4>2. 圖形架構</h4>
+<ul>
+<li><strong>LangGraph</strong>：使用圖結構管理代理流程</li>
+</ul>
+<h4>3. 金字塔架構</h4>
+<ul>
+<li><strong>InfiAgent</strong>：採用分層代理系統</li>
+</ul>
+<h4>4. 對話式架構</h4>
+<ul>
+<li><strong>AutoGen</strong>：代理通過對話空間溝通</li>
+</ul>
+<h4>5. 任務分配架構</h4>
+<ul>
+<li><strong>CrewAI</strong>：通過任務分配協作</li>
+</ul>
+<h4>6. 零代碼架構</h4>
+<ul>
+<li><strong>AutoAgent</strong>：僅需自然語言</li>
+</ul>
+<h4>7. 自適應架構</h4>
+<ul>
+<li><strong>MAS²</strong>：自生成、自配置、自糾正</li>
+</ul>
+<h3>按協作模式分類</h3>
+<h4>1. 對話式協作</h4>
+<ul>
+<li><strong>AutoGen</strong>：代理通過對話空間溝通</li>
+</ul>
+<h4>2. 任務分配式</h4>
+<ul>
+<li><strong>CrewAI</strong>：通過任務分配協作</li>
+</ul>
+<h4>3. 工具化協作</h4>
+<ul>
+<li><strong>InfiAgent</strong>：代理作為工具被其他代理調用</li>
+</ul>
+<h4>4. 動態組合式</h4>
+<ul>
+<li><strong>MAS²</strong>：動態組合代理</li>
+</ul>
+<h3>按開發方式分類</h3>
+<h4>1. 代碼框架</h4>
+<p>需要編寫代碼配置：<br />
+- <strong>AutoGen</strong><br />
+- <strong>LangGraph</strong><br />
+- <strong>CrewAI</strong><br />
+- <strong>AgentMesh</strong><br />
+- <strong>InfiAgent</strong><br />
+- <strong>MAS²</strong></p>
+<h4>2. 零代碼框架</h4>
+<p>僅需自然語言：<br />
+- <strong>AutoAgent</strong></p>
+<h2>綜合比較表</h2>
+<table>
+<thead>
+<tr>
+<th>框架</th>
+<th>開發方式</th>
+<th>架構模式</th>
+<th>協作模式</th>
+<th>學習曲線</th>
+<th>適用場景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AutoGen</td>
+<td>代碼</td>
+<td>對話式</td>
+<td>對話式協作</td>
+<td>中等</td>
+<td>多方對話、協作任務</td>
+</tr>
+<tr>
+<td>LangGraph</td>
+<td>代碼</td>
+<td>圖形</td>
+<td>圖形流程</td>
+<td>較高</td>
+<td>高度定制化、複雜工作流</td>
+</tr>
+<tr>
+<td>CrewAI</td>
+<td>代碼</td>
+<td>任務分配</td>
+<td>任務分配</td>
+<td>較低</td>
+<td>團隊協作、快速原型</td>
+</tr>
+<tr>
+<td>AgentMesh</td>
+<td>代碼</td>
+<td>分層</td>
+<td>分層協作</td>
+<td>中等</td>
+<td>整合現有系統</td>
+</tr>
+<tr>
+<td>AutoAgent</td>
+<td>零代碼</td>
+<td>零代碼</td>
+<td>自動生成</td>
+<td>極低</td>
+<td>快速原型、非技術人員</td>
+</tr>
+<tr>
+<td>InfiAgent</td>
+<td>代碼</td>
+<td>金字塔</td>
+<td>工具化</td>
+<td>較高</td>
+<td>複雜任務、自我進化</td>
+</tr>
+<tr>
+<td>MAS²</td>
+<td>代碼</td>
+<td>自適應</td>
+<td>動態組合</td>
+<td>較高</td>
+<td>深度研究、代碼生成</td>
+</tr>
+</tbody>
+</table>
+<h2>選擇建議</h2>
+<h3>根據需求選擇</h3>
+<h4>需要高度定制化</h4>
+<p><strong>推薦：LangGraph</strong><br />
+- 提供最大的靈活性和定制化能力<br />
+- 支持複雜的動態工作流<br />
+- 適合有豐富開發經驗的團隊</p>
+<h4>需要快速原型開發</h4>
+<p><strong>推薦：AutoAgent 或 CrewAI</strong><br />
+- AutoAgent：零代碼，非技術人員也能使用<br />
+- CrewAI：直觀易用，主要依賴提示工程</p>
+<h4>需要整合現有系統</h4>
+<p><strong>推薦：AgentMesh</strong><br />
+- 支持多種運行方式（CLI、Web、SDK、API）<br />
+- 易於集成到現有應用中<br />
+- 分層架構便於擴展</p>
+<h4>需要處理複雜任務</h4>
+<p><strong>推薦：InfiAgent 或 MAS²</strong><br />
+- InfiAgent：自我進化能力強，適合應對無限場景<br />
+- MAS²：自適應能力強，適合深度研究和代碼生成</p>
+<h4>需要多方對話</h4>
+<p><strong>推薦：AutoGen</strong><br />
+- 專門針對對話式協作設計<br />
+- 支持多方對話和協作<br />
+- 靈活的代理定義</p>
+<h3>根據技術背景選擇</h3>
+<h4>非技術人員</h4>
+<p><strong>推薦：AutoAgent</strong><br />
+- 零代碼框架<br />
+- 僅需自然語言<br />
+- 快速上手</p>
+<h4>初級開發者</h4>
+<p><strong>推薦：CrewAI</strong><br />
+- 直觀易用<br />
+- 主要依賴提示工程<br />
+- 學習曲線平緩</p>
+<h4>中級開發者</h4>
+<p><strong>推薦：AutoGen 或 AgentMesh</strong><br />
+- 提供良好的文檔和社區支持<br />
+- 平衡了功能性和易用性</p>
+<h4>高級開發者</h4>
+<p><strong>推薦：LangGraph、InfiAgent 或 MAS²</strong><br />
+- 提供最大的靈活性和定制化能力<br />
+- 適合構建複雜的企業級應用</p>
+<h2>結論</h2>
+<p>選擇合適的多智能體框架需要綜合考慮多個因素，包括：<br />
+- <strong>應用場景</strong>：不同的場景需要不同的架構模式<br />
+- <strong>技術背景</strong>：團隊的技術水平影響框架的選擇<br />
+- <strong>開發資源</strong>：時間和人力資源的投入<br />
+- <strong>擴展需求</strong>：未來是否需要擴展和維護</p>
+<p>沒有一個框架能夠適用於所有場景，關鍵是要根據實際需求做出最佳選擇。建議在選擇框架時：<br />
+1. 明確應用場景和需求<br />
+2. 評估團隊的技術背景<br />
+3. 參考官方文檔和社區資源<br />
+4. 進行小規模的 POC（概念驗證）<br />
+5. 根據實際使用情況進行調整</p>
+<p>希望本文能夠幫助開發者更好地理解各種多智能體框架的特點和適用場景，做出明智的選擇。</p>
+<h2>參考資料總覽</h2>
+<h3>官方文檔與資源</h3>
+<ul>
+<li><a href="https://langgraphcn.org/agents/overview/" target="_blank" rel="noopener noreferrer">LangGraph 官方文檔</a></li>
+<li><a href="https://github.com/microsoft/autogen" target="_blank" rel="noopener noreferrer">AutoGen GitHub 倉庫</a></li>
+<li><a href="https://github.com/crewai/crewai" target="_blank" rel="noopener noreferrer">CrewAI GitHub 倉庫</a></li>
+</ul>
+<h3>學術論文</h3>
+<ul>
+<li><a href="https://arxiv.org/abs/2502.05957" target="_blank" rel="noopener noreferrer">AutoAgent: A Fully-Automated and Zero-Code Framework for LLM Agents</a></li>
+</ul>
+<h3>技術文章與比較</h3>
+<ul>
+<li><a href="https://cloud.baidu.com/article/2740027" target="_blank" rel="noopener noreferrer">多代理對話框架 AutoGen 介紹</a></li>
+<li><a href="https://www.53ai.com/news/langchain/2025051436094.html" target="_blank" rel="noopener noreferrer">一文了解 LangGraph 是什麼？——構建智能體的新一代框架</a></li>
+<li><a href="https://www.53ai.com/news/OpenSourceLLM/2025040175268.html" target="_blank" rel="noopener noreferrer">Agent 框架大比拼：誰將引領智能應用的未來？</a></li>
+<li><a href="https://www.sohu.com/a/829547387_693397" target="_blank" rel="noopener noreferrer">選擇最適合你的多 AI 代理框架——AutoGen、LangGraph、CrewAI、Swarm、Magentic-One 全面對比</a></li>
+<li><a href="https://www.51cto.com/aigc/7249.html" target="_blank" rel="noopener noreferrer">一文讀懂 LangGraph、AutoGen、Dify、AutoGPT、Agentforce 等多種 AI Agents 工具框架平台</a></li>
+</ul>
+<h3>市場研究報告</h3>
+<ul>
+<li><a href="https://www.drpang.ai/content/files/2025/05/open_source_ai_agent_market_research_2025_zh.pdf" target="_blank" rel="noopener noreferrer">開源 AI 代理框架市場研究 2025</a></li>
+<li><a href="https://www2.deloitte.com/content/dam/Deloitte/cn/Documents/technology-media-telecommunications/deloitte-cn-tmt-predictions-2025-4-autonomous-generative-ai-zh-250217.pdf" target="_blank" rel="noopener noreferrer">處於研發階段的自主生成式智能體</a></li>
+</ul>
+<h3>其他資源</h3>
+<ul>
+<li><a href="https://blog.csdn.net/youmaob/article/details/153329031" target="_blank" rel="noopener noreferrer">LangGraph：靈活強大的智能體框架</a></li>
+<li><a href="https://blog.csdn.net/qq_36603091/article/details/147561089" target="_blank" rel="noopener noreferrer">開源 AI 代理框架大比拼：技術細節與開發者體驗全解析</a></li>
+<li><a href="https://6wolf.com/ai/agentmesh-%E5%BC%80%E6%BA%90%E7%9A%84%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93-multi-agent-%E5%8D%8F%E4%BD%9C%E6%A1%86%E6%9E%B6" target="_blank" rel="noopener noreferrer">AgentMesh 開源的多智能體 Multi-Agent 協作框架</a></li>
+</ul>

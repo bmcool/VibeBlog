@@ -1,24 +1,22 @@
-<h1>Solving Marketing Team&#39;s Constant Changes with Cursor Agent + Metabase MCP</h1>
+<h1>Solving Marketing Team's Constant Changes with Cursor Agent + Metabase MCP</h1>
 <h2>Background: The Pain Point of Data Analysts</h2>
 
 <p>In many companies, the push notification system workflow is as follows:</p>
 <ol>
-<li><strong>Marketing team</strong> decides the logic for push notification lists (e.g., &quot;users who made purchases in the last 30 days&quot;)</li>
+<li><strong>Marketing team</strong> decides the logic for push notification lists (e.g., "users who made purchases in the last 30 days")</li>
 <li><strong>Data analysts</strong> aggregate these logics into forms through Metabase</li>
 <li>The system sends push notifications based on the Metabase form data</li>
 </ol>
-<p>This workflow seems reasonable, but in practice, there&#39;s a common problem: <strong>Marketing team requirements change frequently</strong>.</p>
-<p>Today it&#39;s &quot;users who made purchases in the last 30 days&quot;, tomorrow it changes to &quot;users who made purchases in the last 14 days with amounts over 1000&quot;, and the day after it becomes &quot;users who made purchases in the last 7 days but haven&#39;t returned items&quot;.</p>
-<p>Data analysts have to:</p>
-<ul>
-<li>Understand marketing team requirements</li>
-<li>Create or modify queries in Metabase</li>
-<li>Verify if results are correct</li>
-<li>Handle various edge cases</li>
-</ul>
-<p><strong>The result: Data analysts are overwhelmed by marketing team&#39;s constant changes.</strong></p>
+<p>This workflow seems reasonable, but in practice, there's a common problem: <strong>Marketing team requirements change frequently</strong>.</p>
+<p>Today it's "users who made purchases in the last 30 days", tomorrow it changes to "users who made purchases in the last 14 days with amounts over 1000", and the day after it becomes "users who made purchases in the last 7 days but haven't returned items".</p>
+<p>Data analysts have to:<br />
+- Understand marketing team requirements<br />
+- Create or modify queries in Metabase<br />
+- Verify if results are correct<br />
+- Handle various edge cases</p>
+<p><strong>The result: Data analysts are overwhelmed by marketing team's constant changes.</strong></p>
 <h2>The Dilemma of Traditional Solutions</h2>
-<p>When data analysts propose &quot;can we build an interface for marketing to adjust themselves?&quot;, the technical team faces a classic dilemma:</p>
+<p>When data analysts propose "can we build an interface for marketing to adjust themselves?", the technical team faces a classic dilemma:</p>
 <h3>Solution A: Simple Interface, Limited Functionality</h3>
 <ul>
 <li>✅ Marketing team can learn easily</li>
@@ -42,7 +40,7 @@
 <li><strong>Full Permission Control</strong>: API KEY managed by technical team, marketing team cannot access directly</li>
 </ol>
 <h3>Technical Architecture</h3>
-<pre><code>Marketing Team
+<div class="codehilite"><pre><span></span><code>Marketing Team
   ↓ (Natural Language)
 Cursor Agent
   ↓ (Understand requirements, generate queries)
@@ -51,79 +49,71 @@ Metabase MCP Server
 Metabase
   ↓ (Execute queries, generate lists)
 Push Notification System
-</code></pre>
+</code></pre></div>
+
 <h2>Metabase MCP Server Configuration</h2>
 <p>First, we need to configure Metabase MCP Server in Cursor. This solution uses <a href="https://github.com/easecloudio/mcp-metabase-server" target="_blank" rel="noopener noreferrer">@easecloudio/mcp-metabase-server</a>, a comprehensive Metabase MCP Server with 70+ tools.</p>
 <p>Add the following configuration to <code>mcp.json</code>:</p>
-<pre><code class="language-json">{
-  &quot;mcpServers&quot;: {
-    &quot;metabase-server&quot;: {
-      &quot;command&quot;: &quot;npx&quot;,
-      &quot;args&quot;: [&quot;@easecloudio/mcp-metabase-server&quot;],
-      &quot;env&quot;: {
-        &quot;METABASE_URL&quot;: &quot;http://your-metabase-url:3000/&quot;,
-        &quot;METABASE_API_KEY&quot;: &quot;your-api-key-here&quot;
-      }
-    }
-  }
-}
-</code></pre>
-<p><strong>Key Points</strong>:</p>
-<ul>
-<li><code>METABASE_URL</code>: Your Metabase instance address</li>
-<li><code>METABASE_API_KEY</code>: API KEY managed by technical team</li>
-<li>Marketing team cannot directly see or modify these configurations</li>
-</ul>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;mcpServers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;metabase-server&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;npx&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;@easecloudio/mcp-metabase-server&quot;</span><span class="p">],</span>
+<span class="w">      </span><span class="nt">&quot;env&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;METABASE_URL&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;http://your-metabase-url:3000/&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;METABASE_API_KEY&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;your-api-key-here&quot;</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>Key Points</strong>:<br />
+- <code>METABASE_URL</code>: Your Metabase instance address<br />
+- <code>METABASE_API_KEY</code>: API KEY managed by technical team<br />
+- Marketing team cannot directly see or modify these configurations</p>
 <h2>Real-World Usage Scenarios</h2>
 <h3>Scenario 1: Creating a New Push List</h3>
 <p><strong>Marketing Team Input</strong>:</p>
 <blockquote>
-<p>&quot;Create a list containing users who made purchases in the last 30 days with purchase amounts over 1000, maximum 5000 users&quot;</p>
+<p>"Create a list containing users who made purchases in the last 30 days with purchase amounts over 1000, maximum 5000 users"</p>
 </blockquote>
-<p><strong>Cursor Agent Execution</strong>:</p>
-<ol>
-<li>Understand requirements: time range (30 days), conditions (purchase amount &gt; 1000), limit (max 5000 users)</li>
-<li>Query related table structures through Metabase MCP</li>
-<li>Create Metabase query (Card)</li>
-<li>Execute query and generate list</li>
-<li>Save list to specified table in Metabase</li>
-</ol>
-<p><strong>Result</strong>:</p>
-<ul>
-<li>Marketing team completed complex query creation using natural language</li>
-<li>Data analysts don&#39;t need to intervene</li>
-<li>API KEY permissions fully controlled by technical team</li>
-</ul>
+<p><strong>Cursor Agent Execution</strong>:<br />
+1. Understand requirements: time range (30 days), conditions (purchase amount &gt; 1000), limit (max 5000 users)<br />
+2. Query related table structures through Metabase MCP<br />
+3. Create Metabase query (Card)<br />
+4. Execute query and generate list<br />
+5. Save list to specified table in Metabase</p>
+<p><strong>Result</strong>:<br />
+- Marketing team completed complex query creation using natural language<br />
+- Data analysts don't need to intervene<br />
+- API KEY permissions fully controlled by technical team</p>
 <h3>Scenario 2: Modifying Existing List</h3>
 <p><strong>Marketing Team Input</strong>:</p>
 <blockquote>
-<p>&quot;Change yesterday&#39;s push list to the last 14 days, keep other conditions unchanged&quot;</p>
+<p>"Change yesterday's push list to the last 14 days, keep other conditions unchanged"</p>
 </blockquote>
-<p><strong>Cursor Agent Execution</strong>:</p>
-<ol>
-<li>Find yesterday&#39;s push list (query through Metabase MCP)</li>
-<li>Understand the semantics of &quot;keep other conditions unchanged&quot;</li>
-<li>Modify time range in query</li>
-<li>Update query in Metabase</li>
-<li>Re-execute and generate new list</li>
-</ol>
+<p><strong>Cursor Agent Execution</strong>:<br />
+1. Find yesterday's push list (query through Metabase MCP)<br />
+2. Understand the semantics of "keep other conditions unchanged"<br />
+3. Modify time range in query<br />
+4. Update query in Metabase<br />
+5. Re-execute and generate new list</p>
 <h3>Scenario 3: Complex Multi-Condition Query</h3>
 <p><strong>Marketing Team Input</strong>:</p>
 <blockquote>
-<p>&quot;I want users who made purchases in the last 7 days, but have no return records, and are not in the blacklist, sorted by purchase amount in descending order, top 3000&quot;</p>
+<p>"I want users who made purchases in the last 7 days, but have no return records, and are not in the blacklist, sorted by purchase amount in descending order, top 3000"</p>
 </blockquote>
-<p><strong>Cursor Agent Execution</strong>:</p>
-<ol>
-<li>Parse multiple conditions: time, purchase behavior, return exclusion, blacklist exclusion, sorting, limit</li>
-<li>Query related table relationships through Metabase MCP</li>
-<li>Create complex JOIN query</li>
-<li>Execute and verify results</li>
-<li>Generate and save list</li>
-</ol>
+<p><strong>Cursor Agent Execution</strong>:<br />
+1. Parse multiple conditions: time, purchase behavior, return exclusion, blacklist exclusion, sorting, limit<br />
+2. Query related table relationships through Metabase MCP<br />
+3. Create complex JOIN query<br />
+4. Execute and verify results<br />
+5. Generate and save list</p>
 <h2>Advantages Analysis</h2>
 <h3>1. Solving the Flexibility vs. Usability Contradiction</h3>
 <ul>
-<li><strong>Natural Language</strong>: Marketing team doesn&#39;t need to learn complex query syntax</li>
+<li><strong>Natural Language</strong>: Marketing team doesn't need to learn complex query syntax</li>
 <li><strong>High Flexibility</strong>: AI can understand various complex requirement descriptions</li>
 <li><strong>Real-time Feedback</strong>: Can immediately see query results and adjust quickly</li>
 </ul>
@@ -143,7 +133,7 @@ Push Notification System
 <ul>
 <li><strong>Focus on High-Value Work</strong>: Data analysts can focus on data analysis, modeling, and other high-value work</li>
 <li><strong>Reduce Repetitive Labor</strong>: No need to repeatedly create and modify simple queries</li>
-<li><strong>Improve Overall Efficiency</strong>: The entire team&#39;s efficiency is improved</li>
+<li><strong>Improve Overall Efficiency</strong>: The entire team's efficiency is improved</li>
 </ul>
 <h2>Technical Implementation Details</h2>
 <h3>Main Features of Metabase MCP Server</h3>
@@ -157,7 +147,7 @@ Push Notification System
 </ol>
 <h3>Cursor Agent Workflow</h3>
 <ol>
-<li><strong>Requirement Understanding</strong>: Use LLM to understand marketing team&#39;s natural language requirements</li>
+<li><strong>Requirement Understanding</strong>: Use LLM to understand marketing team's natural language requirements</li>
 <li><strong>Query Generation</strong>: Generate Metabase queries based on requirements</li>
 <li><strong>Structure Query</strong>: First query related table structures to ensure query correctness</li>
 <li><strong>Execution Verification</strong>: Execute query and verify results</li>
@@ -217,7 +207,7 @@ Push Notification System
 <li><strong>Result Analysis</strong>: Automatically analyze query results and provide insights</li>
 </ol>
 <h2>Conclusion</h2>
-<p>Using <strong>Cursor Agent + Metabase MCP</strong> successfully solves the problem of marketing team&#39;s constant changes:</p>
+<p>Using <strong>Cursor Agent + Metabase MCP</strong> successfully solves the problem of marketing team's constant changes:</p>
 <ul>
 <li>✅ <strong>Flexibility and Usability Coexist</strong>: Natural language input with highly flexible query capabilities</li>
 <li>✅ <strong>Full Permission Control</strong>: API KEY managed by technical team, secure and controllable</li>
@@ -225,5 +215,5 @@ Push Notification System
 <li>✅ <strong>Free Up Data Analyst Time</strong>: Focus on high-value work</li>
 </ul>
 <p>This solution not only solves current pain points but more importantly demonstrates <strong>the application value of AI Agent in real business scenarios</strong>. Through reasonable architectural design, we can significantly improve business efficiency while maintaining security.</p>
-<hr>
+<hr />
 <p><em>This article documents the experience of using Cursor Agent with Metabase MCP to solve real business problems, hoping to help teams facing similar challenges.</em></p>

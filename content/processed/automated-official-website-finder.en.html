@@ -2,7 +2,7 @@
 <h2>Background: The Challenge of Moving from Manual to Automated Maintenance</h2>
 
 <p>A software distributor was originally maintaining all products on their website manually. Facing over 1000 software products, each with different website structures, if crawlers had been written from the start, it would have been straightforward. But starting from scratch with no crawlers, achieving this overnight is not a simple task.</p>
-<p>Initially, using agents like Cursor with Playwright MCP, we found that while it was possible, the efficiency was extremely poor, costs were high, and accuracy couldn&#39;t be trusted for large-scale runs. After trying several approaches, with various edge cases across 1000+ software products (disconnected official websites, products becoming sub-products, changed URLs, etc.), we realized we needed to proceed step by step.</p>
+<p>Initially, using agents like Cursor with Playwright MCP, we found that while it was possible, the efficiency was extremely poor, costs were high, and accuracy couldn't be trusted for large-scale runs. After trying several approaches, with various edge cases across 1000+ software products (disconnected official websites, products becoming sub-products, changed URLs, etc.), we realized we needed to proceed step by step.</p>
 <p><strong>The first step was to recover the official websites for these software products.</strong> This is the mission of the <code>openai_web_search.py</code> script.</p>
 <h2>Overall Script Architecture</h2>
 <p>The core goal of this script is: <strong>automatically find the corresponding official website domain from a product name</strong>. The entire system is divided into three main layers:</p>
@@ -14,138 +14,139 @@
 <h2>Core Component One: WebSearchTool Class</h2>
 <h3>Search Infrastructure</h3>
 <p><code>WebSearchTool</code> uses <code>crawl4ai</code> as the underlying crawler engine, configured as follows:</p>
-<pre><code class="language-python">self.browser_config = BrowserConfig(
-    headless=True,
-    verbose=False
-)
-self.run_config = CrawlerRunConfig(
-    cache_mode=CacheMode.BYPASS,
-    delay_before_return_html=2.0,  # Wait 2 seconds for page to load
-    wait_for_images=False,
-    screenshot=False
-)
-</code></pre>
-<p>We chose <code>crawl4ai</code> over traditional <code>requests</code> because:</p>
-<ul>
-<li>Can handle JavaScript-rendered pages</li>
-<li>Better anti-crawler resistance</li>
-<li>Supports asynchronous operations for improved efficiency</li>
-</ul>
+<div class="codehilite"><pre><span></span><code><span class="bp">self</span><span class="o">.</span><span class="n">browser_config</span> <span class="o">=</span> <span class="n">BrowserConfig</span><span class="p">(</span>
+    <span class="n">headless</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">run_config</span> <span class="o">=</span> <span class="n">CrawlerRunConfig</span><span class="p">(</span>
+    <span class="n">cache_mode</span><span class="o">=</span><span class="n">CacheMode</span><span class="o">.</span><span class="n">BYPASS</span><span class="p">,</span>
+    <span class="n">delay_before_return_html</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>  <span class="c1"># Wait 2 seconds for page to load</span>
+    <span class="n">wait_for_images</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">screenshot</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p>We chose <code>crawl4ai</code> over traditional <code>requests</code> because:<br />
+- Can handle JavaScript-rendered pages<br />
+- Better anti-crawler resistance<br />
+- Supports asynchronous operations for improved efficiency</p>
 <h3>Search Execution Logic</h3>
 <p>The core flow of the <code>_search_with_language</code> method:</p>
 <ol>
-<li><p><strong>Build Search URL</strong>: Use DuckDuckGo&#39;s HTML search interface</p>
-<pre><code class="language-python">search_url = f&quot;https://html.duckduckgo.com/html/?q={urllib.parse.quote(query)}&quot;
-</code></pre>
+<li>
+<p><strong>Build Search URL</strong>: Use DuckDuckGo's HTML search interface<br />
+<code>python
+   search_url = f"https://html.duckduckgo.com/html/?q={urllib.parse.quote(query)}"</code></p>
 </li>
-<li><p><strong>Retry Mechanism</strong>: Retry up to 3 times, with increasing wait times between retries (10s, 20s, 30s)</p>
-<ul>
+<li>
+<p><strong>Retry Mechanism</strong>: Retry up to 3 times, with increasing wait times between retries (10s, 20s, 30s)</p>
+</li>
 <li>Special handling for 403 errors (rate limiting)</li>
-<li>Other errors are also retried but logged and continued</li>
-</ul>
+<li>
+<p>Other errors are also retried but logged and continued</p>
 </li>
-<li><p><strong>Parse Search Results</strong>: Extract title, URL, and snippet from HTML</p>
-<ul>
+<li>
+<p><strong>Parse Search Results</strong>: Extract title, URL, and snippet from HTML</p>
+</li>
 <li>Handle DuckDuckGo redirect URLs (<code>/l/?uddg=...</code> format)</li>
 <li>Extract real target URLs</li>
-</ul>
-</li>
 </ol>
 <h3>Simple Official Domain Finding</h3>
 <p>The <code>find_official_domain</code> method uses a score-based matching algorithm:</p>
-<pre><code class="language-python"># Calculate matching score
-score = 0
+<div class="codehilite"><pre><span></span><code><span class="c1"># Calculate matching score</span>
+<span class="n">score</span> <span class="o">=</span> <span class="mi">0</span>
 
-# Domain contains product name (case-insensitive) - highest priority
-if product_name_clean in domain_lower:
-    score += 10  # Domain matching is the most important indicator
+<span class="c1"># Domain contains product name (case-insensitive) - highest priority</span>
+<span class="k">if</span> <span class="n">product_name_clean</span> <span class="ow">in</span> <span class="n">domain_lower</span><span class="p">:</span>
+    <span class="n">score</span> <span class="o">+=</span> <span class="mi">10</span>  <span class="c1"># Domain matching is the most important indicator</span>
 
-# Title contains product name
-if product_name.lower() in title:
-    score += 5
+<span class="c1"># Title contains product name</span>
+<span class="k">if</span> <span class="n">product_name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">title</span><span class="p">:</span>
+    <span class="n">score</span> <span class="o">+=</span> <span class="mi">5</span>
 
-# Title contains &quot;official&quot;
-if &#39;official&#39; in title:
-    score += 3
+<span class="c1"># Title contains &quot;official&quot;</span>
+<span class="k">if</span> <span class="s1">&#39;official&#39;</span> <span class="ow">in</span> <span class="n">title</span><span class="p">:</span>
+    <span class="n">score</span> <span class="o">+=</span> <span class="mi">3</span>
 
-# Snippet contains product name
-if product_name.lower() in snippet:
-    score += 2
+<span class="c1"># Snippet contains product name</span>
+<span class="k">if</span> <span class="n">product_name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">snippet</span><span class="p">:</span>
+    <span class="n">score</span> <span class="o">+=</span> <span class="mi">2</span>
 
-# Common official domain patterns (.com prioritized)
-if &#39;.com&#39; in domain:
-    score += 2
-</code></pre>
-<p>This method is simple and direct, but has limited accuracy because:</p>
-<ul>
-<li>Cannot distinguish between official and third-party websites</li>
-<li>Cannot handle ambiguous product names</li>
-<li>Cannot understand product descriptions to assist judgment</li>
-</ul>
+<span class="c1"># Common official domain patterns (.com prioritized)</span>
+<span class="k">if</span> <span class="s1">&#39;.com&#39;</span> <span class="ow">in</span> <span class="n">domain</span><span class="p">:</span>
+    <span class="n">score</span> <span class="o">+=</span> <span class="mi">2</span>
+</code></pre></div>
+
+<p>This method is simple and direct, but has limited accuracy because:<br />
+- Cannot distinguish between official and third-party websites<br />
+- Cannot handle ambiguous product names<br />
+- Cannot understand product descriptions to assist judgment</p>
 <h2>Core Component Two: Optimized Official Domain Finding</h2>
 <h3>Why Optimization is Needed?</h3>
-<p>Simple score-based matching encounters many problems in practical applications:</p>
-<ul>
-<li>Product names may have multiple expressions (e.g., &quot;Adobe Photoshop&quot; vs &quot;Photoshop&quot;)</li>
-<li>Third-party websites may contain product names but are not official websites</li>
-<li>Products may have been renamed or merged into other product lines</li>
-</ul>
+<p>Simple score-based matching encounters many problems in practical applications:<br />
+- Product names may have multiple expressions (e.g., "Adobe Photoshop" vs "Photoshop")<br />
+- Third-party websites may contain product names but are not official websites<br />
+- Products may have been renamed or merged into other product lines</p>
 <p>Therefore, we need to introduce <strong>LLM for intelligent judgment</strong>.</p>
 <h3>Three Stages of the Optimization Process</h3>
 <h4>Stage One: Extract Search Keywords</h4>
 <p>The <code>extract_product_search_keywords</code> method uses LLM to convert product names into 1-3 most effective search keywords:</p>
-<pre><code class="language-python">extraction_prompt = f&quot;&quot;&quot;Please extract 1-3 English search keywords for the following product name. These keywords should be the ones most likely to find the official website.
+<div class="codehilite"><pre><span></span><code><span class="n">extraction_prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;Please extract 1-3 English search keywords for the following product name. These keywords should be the ones most likely to find the official website.</span>
 
-Requirements:
-1. If it&#39;s a Chinese product name, first translate to the official English name
-2. Extract 1-3 keyword combinations, prioritized from high to low:
-   - Company name + Product name (e.g., &quot;adobe photoshop&quot;)
-   - Company name (e.g., &quot;adobe&quot;)
-   - Product name (e.g., &quot;photoshop&quot;)
-3. Only use official English names, avoid common words
-</code></pre>
+<span class="s2">Requirements:</span>
+<span class="s2">1. If it&#39;s a Chinese product name, first translate to the official English name</span>
+<span class="s2">2. Extract 1-3 keyword combinations, prioritized from high to low:</span>
+<span class="s2">   - Company name + Product name (e.g., &quot;adobe photoshop&quot;)</span>
+<span class="s2">   - Company name (e.g., &quot;adobe&quot;)</span>
+<span class="s2">   - Product name (e.g., &quot;photoshop&quot;)</span>
+<span class="s2">3. Only use official English names, avoid common words</span>
+</code></pre></div>
+
 <p>The key to this stage is: <strong>finding keyword combinations that are most likely to find the official website</strong>, not the most complete product name.</p>
 <h4>Stage Two: Sequential Search and Batch Judgment</h4>
 <p>The core logic of the <code>find_official_domain_optimized</code> method:</p>
 <ol>
-<li><p><strong>Sequential Keyword Search</strong>: Search each keyword in priority order</p>
-<pre><code class="language-python">for keyword_idx, keyword in enumerate(search_keywords, 1):
-    results = await self.search(keyword, num_results=num_results_per_keyword)
-</code></pre>
+<li>
+<p><strong>Sequential Keyword Search</strong>: Search each keyword in priority order<br />
+<code>python
+   for keyword_idx, keyword in enumerate(search_keywords, 1):
+       results = await self.search(keyword, num_results=num_results_per_keyword)</code></p>
 </li>
-<li><p><strong>Extract Candidate Domains</strong>: Extract all possible domains from search results</p>
-<ul>
+<li>
+<p><strong>Extract Candidate Domains</strong>: Extract all possible domains from search results</p>
+</li>
 <li>Handle DuckDuckGo redirect URLs</li>
-<li>Deduplicate across keywords (keep each domain only once)</li>
-</ul>
+<li>
+<p>Deduplicate across keywords (keep each domain only once)</p>
 </li>
-<li><p><strong>Batch LLM Judgment</strong>: Submit all candidate domains to LLM for judgment at once</p>
-<pre><code class="language-python">async def judge_candidates(candidates: List[Dict[str, str]]) -&gt; List[Dict[str, Any]]:
-    judgment_prompt = f&quot;&quot;&quot;Please judge whether the following websites are the official website of product &quot;{product_name}&quot;.
-    
-    Please carefully analyze each website to determine if it&#39;s the official website of this product. Consider:
-    1. Whether the domain is related to the product name
-    2. Whether the title and snippet match the product name and description
-    3. Whether it looks like an official website (not third-party, news, dictionary sites, etc.)
-    
-    Please return a JSON array, each element corresponding to a website&#39;s judgment result:
-    [
-        {{
-            &quot;domain&quot;: &quot;domain1&quot;,
-            &quot;is_official&quot;: true/false,
-            &quot;confidence&quot;: 0.0-1.0,
-            &quot;reason&quot;: &quot;judgment reason&quot;
-        }},
-        ...
-    ]
-    &quot;&quot;&quot;
-</code></pre>
+<li>
+<p><strong>Batch LLM Judgment</strong>: Submit all candidate domains to LLM for judgment at once<br />
+   ```python<br />
+   async def judge_candidates(candidates: List[Dict[str, str]]) -&gt; List[Dict[str, Any]]:<br />
+       judgment_prompt = f"""Please judge whether the following websites are the official website of product "{product_name}".</p>
+<p>Please carefully analyze each website to determine if it's the official website of this product. Consider:<br />
+   1. Whether the domain is related to the product name<br />
+   2. Whether the title and snippet match the product name and description<br />
+   3. Whether it looks like an official website (not third-party, news, dictionary sites, etc.)</p>
+<p>Please return a JSON array, each element corresponding to a website's judgment result:<br />
+   [<br />
+       {{<br />
+           "domain": "domain1",<br />
+           "is_official": true/false,<br />
+           "confidence": 0.0-1.0,<br />
+           "reason": "judgment reason"<br />
+       }},<br />
+       ...<br />
+   ]<br />
+   """<br />
+   ```</p>
 </li>
-<li><p><strong>Early Termination Strategy</strong>: If an official domain with confidence &gt; 0.9 is found, return immediately, skipping remaining keywords</p>
-<pre><code class="language-python">if best_domain and best_confidence &gt; 0.9:
-    print(f&quot;✅ Found high-confidence official domain: {best_domain}&quot;)
-    return best_domain
-</code></pre>
+<li>
+<p><strong>Early Termination Strategy</strong>: If an official domain with confidence &gt; 0.9 is found, return immediately, skipping remaining keywords<br />
+<code>python
+   if best_domain and best_confidence &gt; 0.9:
+       print(f"✅ Found high-confidence official domain: {best_domain}")
+       return best_domain</code></p>
 </li>
 </ol>
 <h3>Advantages of Batch Judgment</h3>
@@ -157,139 +158,138 @@ Requirements:
 </ol>
 <h3>Error Handling and Rate Limiting</h3>
 <p>The script implements comprehensive error handling:</p>
-<pre><code class="language-python"># If encountering 403 error, wait longer (30-60 seconds)
-if &quot;403&quot; in error_msg or &quot;Forbidden&quot; in error_msg:
-    delay = 30 + random.uniform(0, 30)  # 30-60 second random delay
-    await asyncio.sleep(delay)
-elif keyword != search_keywords[-1]:
-    # Other errors also add delay (15-20 seconds)
-    delay = 15 + random.uniform(0, 5)
-    await asyncio.sleep(delay)
-</code></pre>
-<p>Key design points:</p>
-<ul>
-<li><strong>Random Delays</strong>: Avoid being identified as bot behavior</li>
-<li><strong>Tiered Delays</strong>: 403 errors wait longer</li>
-<li><strong>Continue Execution</strong>: Even if one keyword fails, continue processing the next</li>
-</ul>
+<div class="codehilite"><pre><span></span><code><span class="c1"># If encountering 403 error, wait longer (30-60 seconds)</span>
+<span class="k">if</span> <span class="s2">&quot;403&quot;</span> <span class="ow">in</span> <span class="n">error_msg</span> <span class="ow">or</span> <span class="s2">&quot;Forbidden&quot;</span> <span class="ow">in</span> <span class="n">error_msg</span><span class="p">:</span>
+    <span class="n">delay</span> <span class="o">=</span> <span class="mi">30</span> <span class="o">+</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>  <span class="c1"># 30-60 second random delay</span>
+    <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">delay</span><span class="p">)</span>
+<span class="k">elif</span> <span class="n">keyword</span> <span class="o">!=</span> <span class="n">search_keywords</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+    <span class="c1"># Other errors also add delay (15-20 seconds)</span>
+    <span class="n">delay</span> <span class="o">=</span> <span class="mi">15</span> <span class="o">+</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">delay</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Key design points:<br />
+- <strong>Random Delays</strong>: Avoid being identified as bot behavior<br />
+- <strong>Tiered Delays</strong>: 403 errors wait longer<br />
+- <strong>Continue Execution</strong>: Even if one keyword fails, continue processing the next</p>
 <h2>Core Component Three: Main Function Batch Processing Flow</h2>
 <h3>Product Filtering Strategy</h3>
 <p>The <code>main_async</code> function implements intelligent product filtering logic:</p>
-<pre><code class="language-python"># Default behavior: Skip products with existing URLs, and products processed within 1 day
-# But prioritize: products without URLs but with timestamps (representing failed fetches)
-failed_products = []  # Products without URLs but with timestamps (prioritize)
-new_products = []     # Products with no records at all
+<div class="codehilite"><pre><span></span><code><span class="c1"># Default behavior: Skip products with existing URLs, and products processed within 1 day</span>
+<span class="c1"># But prioritize: products without URLs but with timestamps (representing failed fetches)</span>
+<span class="n">failed_products</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Products without URLs but with timestamps (prioritize)</span>
+<span class="n">new_products</span> <span class="o">=</span> <span class="p">[]</span>     <span class="c1"># Products with no records at all</span>
 
-for product_id in all_product_ids[:args.limit * 3]:
-    url_info = get_product_url_with_timestamp(conn, product_id)
-    
-    # If URL exists, skip
-    if url_info and url_info.get(&#39;url&#39;):
-        skip_count += 1
-        continue
-    
-    # If processed within 1 day, skip (unless failed)
-    if url_info and url_info.get(&#39;last_fetched_at&#39;):
-        last_fetched = datetime.fromisoformat(...)
-        if last_fetched.isoformat() &gt; one_day_ago:
-            if not url_info.get(&#39;url&#39;):
-                failed_products.append(product_id)  # Prioritize failed ones
-            else:
-                skip_count += 1
-            continue
-    
-    # Categorize
-    if url_info and url_info.get(&#39;last_fetched_at&#39;) and not url_info.get(&#39;url&#39;):
-        failed_products.append(product_id)
-    elif not url_info:
-        new_products.append(product_id)
+<span class="k">for</span> <span class="n">product_id</span> <span class="ow">in</span> <span class="n">all_product_ids</span><span class="p">[:</span><span class="n">args</span><span class="o">.</span><span class="n">limit</span> <span class="o">*</span> <span class="mi">3</span><span class="p">]:</span>
+    <span class="n">url_info</span> <span class="o">=</span> <span class="n">get_product_url_with_timestamp</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">product_id</span><span class="p">)</span>
 
-# Prioritize failed products, then process new products
-product_ids_to_process = (failed_products + new_products)[:args.limit]
-</code></pre>
-<p>Advantages of this strategy:</p>
-<ol>
-<li><strong>Avoid Duplicate Processing</strong>: Products with existing URLs are skipped directly</li>
-<li><strong>Prioritize Retrying Failures</strong>: Previously failed products are prioritized</li>
-<li><strong>Time Window Control</strong>: Products processed within 1 day are skipped (unless failed)</li>
-</ol>
+    <span class="c1"># If URL exists, skip</span>
+    <span class="k">if</span> <span class="n">url_info</span> <span class="ow">and</span> <span class="n">url_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;url&#39;</span><span class="p">):</span>
+        <span class="n">skip_count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">continue</span>
+
+    <span class="c1"># If processed within 1 day, skip (unless failed)</span>
+    <span class="k">if</span> <span class="n">url_info</span> <span class="ow">and</span> <span class="n">url_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;last_fetched_at&#39;</span><span class="p">):</span>
+        <span class="n">last_fetched</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromisoformat</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">last_fetched</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">one_day_ago</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">url_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;url&#39;</span><span class="p">):</span>
+                <span class="n">failed_products</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">product_id</span><span class="p">)</span>  <span class="c1"># Prioritize failed ones</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">skip_count</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">continue</span>
+
+    <span class="c1"># Categorize</span>
+    <span class="k">if</span> <span class="n">url_info</span> <span class="ow">and</span> <span class="n">url_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;last_fetched_at&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">url_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;url&#39;</span><span class="p">):</span>
+        <span class="n">failed_products</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">product_id</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="n">url_info</span><span class="p">:</span>
+        <span class="n">new_products</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">product_id</span><span class="p">)</span>
+
+<span class="c1"># Prioritize failed products, then process new products</span>
+<span class="n">product_ids_to_process</span> <span class="o">=</span> <span class="p">(</span><span class="n">failed_products</span> <span class="o">+</span> <span class="n">new_products</span><span class="p">)[:</span><span class="n">args</span><span class="o">.</span><span class="n">limit</span><span class="p">]</span>
+</code></pre></div>
+
+<p>Advantages of this strategy:<br />
+1. <strong>Avoid Duplicate Processing</strong>: Products with existing URLs are skipped directly<br />
+2. <strong>Prioritize Retrying Failures</strong>: Previously failed products are prioritized<br />
+3. <strong>Time Window Control</strong>: Products processed within 1 day are skipped (unless failed)</p>
 <h3>Processing Flow</h3>
 <p>The processing flow for each product:</p>
-<pre><code class="language-python"># 1. Get product information
-product_data = get_latest_version(conn, product_id)
-product_name = product_data.get(&#39;name&#39;, &#39;&#39;)
-product_desc1 = product_data.get(&#39;desc1&#39;, &#39;&#39;) or &#39;&#39;
+<div class="codehilite"><pre><span></span><code><span class="c1"># 1. Get product information</span>
+<span class="n">product_data</span> <span class="o">=</span> <span class="n">get_latest_version</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">product_id</span><span class="p">)</span>
+<span class="n">product_name</span> <span class="o">=</span> <span class="n">product_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="n">product_desc1</span> <span class="o">=</span> <span class="n">product_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;desc1&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span>
 
-# 2. Find official domain
-official_domain = await find_official_domain_optimized(
-    product_name=product_name,
-    product_desc1=product_desc1,
-    api_key=args.api_key
-)
+<span class="c1"># 2. Find official domain</span>
+<span class="n">official_domain</span> <span class="o">=</span> <span class="k">await</span> <span class="n">find_official_domain_optimized</span><span class="p">(</span>
+    <span class="n">product_name</span><span class="o">=</span><span class="n">product_name</span><span class="p">,</span>
+    <span class="n">product_desc1</span><span class="o">=</span><span class="n">product_desc1</span><span class="p">,</span>
+    <span class="n">api_key</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">api_key</span>
+<span class="p">)</span>
 
-# 3. Save results
-if official_domain:
-    official_url = f&quot;https://{official_domain}&quot;
-    set_product_url(conn, product_id, official_url)
-    success_count += 1
-else:
-    # Official domain not found, clear existing URL but update fetch time
-    delete_product_url(conn, product_id)
-    update_product_url_fetched_time(conn, product_id)
-    cleared_count += 1
-</code></pre>
-<p>Key design points:</p>
-<ul>
-<li><strong>Update timestamp even on failure</strong>: Avoid infinite retries of the same product</li>
-<li><strong>Clear invalid URLs</strong>: If official domain not found, clear existing incorrect URLs</li>
-<li><strong>Statistics</strong>: Record counts of success, failure, and skipped</li>
-</ul>
+<span class="c1"># 3. Save results</span>
+<span class="k">if</span> <span class="n">official_domain</span><span class="p">:</span>
+    <span class="n">official_url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://</span><span class="si">{</span><span class="n">official_domain</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">set_product_url</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">product_id</span><span class="p">,</span> <span class="n">official_url</span><span class="p">)</span>
+    <span class="n">success_count</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="c1"># Official domain not found, clear existing URL but update fetch time</span>
+    <span class="n">delete_product_url</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">product_id</span><span class="p">)</span>
+    <span class="n">update_product_url_fetched_time</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">product_id</span><span class="p">)</span>
+    <span class="n">cleared_count</span> <span class="o">+=</span> <span class="mi">1</span>
+</code></pre></div>
+
+<p>Key design points:<br />
+- <strong>Update timestamp even on failure</strong>: Avoid infinite retries of the same product<br />
+- <strong>Clear invalid URLs</strong>: If official domain not found, clear existing incorrect URLs<br />
+- <strong>Statistics</strong>: Record counts of success, failure, and skipped</p>
 <h2>Technical Details: URL Processing and Domain Extraction</h2>
 <h3>DuckDuckGo Redirect Handling</h3>
 <p>DuckDuckGo uses redirect URLs to protect user privacy, in the format <code>/l/?uddg=...</code>. The script needs to extract the real target URL:</p>
-<pre><code class="language-python"># Handle DuckDuckGo redirect URLs
-if url.startswith(&#39;//duckduckgo.com/l/&#39;) or url.startswith(&#39;/l/?&#39;):
-    try:
-        parsed = urllib.parse.urlparse(url if url.startswith(&#39;//&#39;) else f&quot;https:{url}&quot;)
-        params = urllib.parse.parse_qs(parsed.query)
-        if &#39;uddg&#39; in params:
-            real_url = urllib.parse.unquote(params[&#39;uddg&#39;][0])
-    except Exception as e:
-        print(f&quot;⚠️  URL parsing failed: {url}, error: {e}&quot;)
-        continue
-</code></pre>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Handle DuckDuckGo redirect URLs</span>
+<span class="k">if</span> <span class="n">url</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;//duckduckgo.com/l/&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">url</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;/l/?&#39;</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">parsed</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlparse</span><span class="p">(</span><span class="n">url</span> <span class="k">if</span> <span class="n">url</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;//&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;https:</span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">parse_qs</span><span class="p">(</span><span class="n">parsed</span><span class="o">.</span><span class="n">query</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s1">&#39;uddg&#39;</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
+            <span class="n">real_url</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">unquote</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;uddg&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;⚠️  URL parsing failed: </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2">, error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">continue</span>
+</code></pre></div>
+
 <h3>Domain Extraction Logic</h3>
 <p>The <code>_extract_domain_from_url</code> method handles various URL formats:</p>
-<pre><code class="language-python">def _extract_domain_from_url(self, url: str) -&gt; Optional[str]:
-    # 1. Handle DuckDuckGo redirects
-    if url.startswith(&#39;//duckduckgo.com/l/&#39;) or url.startswith(&#39;/l/?&#39;):
-        # Extract real URL from uddg parameter
-        ...
-    
-    # 2. Skip DuckDuckGo domains
-    if &#39;duckduckgo.com&#39; in url.lower():
-        return None
-    
-    # 3. If URL has no protocol, add https://
-    if not url.startswith((&#39;http://&#39;, &#39;https://&#39;)):
-        url = f&quot;https://{url}&quot;
-    
-    # 4. Parse domain
-    parsed = urlparse(url)
-    domain = parsed.netloc
-    
-    # 5. Remove www. prefix and port number
-    if domain.startswith(&#39;www.&#39;):
-        domain = domain[4:]
-    if &#39;:&#39; in domain:
-        domain = domain.split(&#39;:&#39;)[0]
-    
-    # 6. Validate domain format
-    if &#39;.&#39; not in domain or len(domain.split(&#39;.&#39;)) &lt; 2:
-        return None
-    
-    return domain
-</code></pre>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">_extract_domain_from_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="c1"># 1. Handle DuckDuckGo redirects</span>
+    <span class="k">if</span> <span class="n">url</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;//duckduckgo.com/l/&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">url</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;/l/?&#39;</span><span class="p">):</span>
+        <span class="c1"># Extract real URL from uddg parameter</span>
+        <span class="o">...</span>
+
+    <span class="c1"># 2. Skip DuckDuckGo domains</span>
+    <span class="k">if</span> <span class="s1">&#39;duckduckgo.com&#39;</span> <span class="ow">in</span> <span class="n">url</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="c1"># 3. If URL has no protocol, add https://</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">url</span><span class="o">.</span><span class="n">startswith</span><span class="p">((</span><span class="s1">&#39;http://&#39;</span><span class="p">,</span> <span class="s1">&#39;https://&#39;</span><span class="p">)):</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://</span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2">&quot;</span>
+
+    <span class="c1"># 4. Parse domain</span>
+    <span class="n">parsed</span> <span class="o">=</span> <span class="n">urlparse</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="n">domain</span> <span class="o">=</span> <span class="n">parsed</span><span class="o">.</span><span class="n">netloc</span>
+
+    <span class="c1"># 5. Remove www. prefix and port number</span>
+    <span class="k">if</span> <span class="n">domain</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;www.&#39;</span><span class="p">):</span>
+        <span class="n">domain</span> <span class="o">=</span> <span class="n">domain</span><span class="p">[</span><span class="mi">4</span><span class="p">:]</span>
+    <span class="k">if</span> <span class="s1">&#39;:&#39;</span> <span class="ow">in</span> <span class="n">domain</span><span class="p">:</span>
+        <span class="n">domain</span> <span class="o">=</span> <span class="n">domain</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># 6. Validate domain format</span>
+    <span class="k">if</span> <span class="s1">&#39;.&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">domain</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">domain</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">return</span> <span class="n">domain</span>
+</code></pre></div>
+
 <h2>Practical Application Results</h2>
 <p>How does this script perform in practical applications?</p>
 <h3>Advantages</h3>
@@ -320,6 +320,6 @@ if url.startswith(&#39;//duckduckgo.com/l/&#39;) or url.startswith(&#39;/l/?&#39
 <li><strong>Error Handling</strong>: Comprehensive retry mechanisms and error recovery strategies</li>
 <li><strong>Practical Usability</strong>: Designed for real-world scenarios with 1000+ software products, handling various edge cases</li>
 </ol>
-<p>This script not only solves the specific problem of &quot;recovering official websites&quot; but more importantly demonstrates how to balance automation level, accuracy, and cost in complex real-world scenarios.</p>
-<hr>
+<p>This script not only solves the specific problem of "recovering official websites" but more importantly demonstrates how to balance automation level, accuracy, and cost in complex real-world scenarios.</p>
+<hr />
 <p><em>This article details the design logic of a script for automating the recovery of software official websites, hoping to help developers building similar automation systems.</em></p>
