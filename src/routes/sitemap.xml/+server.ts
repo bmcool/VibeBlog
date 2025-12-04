@@ -25,15 +25,11 @@ export const GET: RequestHandler = async () => {
 		<loc>${SITE_URL}/</loc>
 		<changefreq>daily</changefreq>
 		<priority>1.0</priority>
-		<xhtml:link rel="alternate" hreflang="zh-TW" href="${SITE_URL}/" />
-		<xhtml:link rel="alternate" hreflang="en-US" href="${SITE_URL}/en/" />
 	</url>
 	<url>
 		<loc>${SITE_URL}/en/</loc>
 		<changefreq>daily</changefreq>
 		<priority>1.0</priority>
-		<xhtml:link rel="alternate" hreflang="zh-TW" href="${SITE_URL}/" />
-		<xhtml:link rel="alternate" hreflang="en-US" href="${SITE_URL}/en/" />
 	</url>
 	
 	<!-- Blog List -->
@@ -41,15 +37,11 @@ export const GET: RequestHandler = async () => {
 		<loc>${SITE_URL}/blog</loc>
 		<changefreq>daily</changefreq>
 		<priority>0.9</priority>
-		<xhtml:link rel="alternate" hreflang="zh-TW" href="${SITE_URL}/blog" />
-		<xhtml:link rel="alternate" hreflang="en-US" href="${SITE_URL}/en/blog" />
 	</url>
 	<url>
 		<loc>${SITE_URL}/en/blog</loc>
 		<changefreq>daily</changefreq>
 		<priority>0.9</priority>
-		<xhtml:link rel="alternate" hreflang="zh-TW" href="${SITE_URL}/blog" />
-		<xhtml:link rel="alternate" hreflang="en-US" href="${SITE_URL}/en/blog" />
 	</url>
 	
 	<!-- Tags List -->
@@ -57,15 +49,11 @@ export const GET: RequestHandler = async () => {
 		<loc>${SITE_URL}/tags</loc>
 		<changefreq>weekly</changefreq>
 		<priority>0.8</priority>
-		<xhtml:link rel="alternate" hreflang="zh-TW" href="${SITE_URL}/tags" />
-		<xhtml:link rel="alternate" hreflang="en-US" href="${SITE_URL}/en/tags" />
 	</url>
 	<url>
 		<loc>${SITE_URL}/en/tags</loc>
 		<changefreq>weekly</changefreq>
 		<priority>0.8</priority>
-		<xhtml:link rel="alternate" hreflang="zh-TW" href="${SITE_URL}/tags" />
-		<xhtml:link rel="alternate" hreflang="en-US" href="${SITE_URL}/en/tags" />
 	</url>
 	
 	<!-- Blog Posts -->
@@ -82,8 +70,6 @@ ${allPosts.map(post => {
 		<lastmod>${lastmod}</lastmod>
 		<changefreq>monthly</changefreq>
 		<priority>0.7</priority>
-		<xhtml:link rel="alternate" hreflang="zh-TW" href="${zhUrl}" />
-		<xhtml:link rel="alternate" hreflang="en-US" href="${enUrl}" />
 	</url>`;
 }).join('\n')}
 	
@@ -97,15 +83,11 @@ ${Array.from(allTags).map(tag => {
 		<loc>${zhUrl}</loc>
 		<changefreq>weekly</changefreq>
 		<priority>0.6</priority>
-		<xhtml:link rel="alternate" hreflang="zh-TW" href="${zhUrl}" />
-		<xhtml:link rel="alternate" hreflang="en-US" href="${enUrl}" />
 	</url>
 	<url>
 		<loc>${enUrl}</loc>
 		<changefreq>weekly</changefreq>
 		<priority>0.6</priority>
-		<xhtml:link rel="alternate" hreflang="zh-TW" href="${zhUrl}" />
-		<xhtml:link rel="alternate" hreflang="en-US" href="${enUrl}" />
 	</url>`;
 }).join('\n')}
 </urlset>`;
