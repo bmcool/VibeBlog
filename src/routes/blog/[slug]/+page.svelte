@@ -16,6 +16,7 @@
 		url: `/blog/${data.post.slug}${langParam}`,
 		type: 'article',
 		publishedTime: data.post.date,
+		modifiedTime: data.post.modifiedTime || data.post.date,
 		tags: data.post.tags || [],
 		lang: data.lang
 	}));
@@ -27,6 +28,7 @@
 		url: seo.url,
 		type: 'article',
 		publishedTime: data.post.date,
+		modifiedTime: data.post.modifiedTime || data.post.date,
 		tags: data.post.tags || [],
 		lang: data.lang
 	}));
@@ -38,6 +40,7 @@
 	<meta name="keywords" content={data.post.tags?.join(', ') || ''} />
 	<meta name="author" content="VibeBlog" />
 	<meta name="article:published_time" content={data.post.date} />
+	<meta name="article:modified_time" content={data.post.modifiedTime || data.post.date} />
 	{#if data.post.tags && data.post.tags.length > 0}
 		{#each data.post.tags as tag}
 			<meta name="article:tag" content={tag} />
@@ -58,6 +61,7 @@
 		<meta property="og:locale:alternate" content="en_US" />
 	{/if}
 	<meta property="article:published_time" content={data.post.date} />
+	<meta property="article:modified_time" content={data.post.modifiedTime || data.post.date} />
 	
 	<!-- Twitter Card -->
 	<meta name="twitter:card" content="summary_large_image" />

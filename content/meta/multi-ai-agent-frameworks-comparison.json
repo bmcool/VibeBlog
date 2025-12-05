@@ -2,7 +2,7 @@
   "slug": "multi-ai-agent-frameworks-comparison",
   "title": "Multi AI Agent 框架全面比較：選擇最適合你的多智能體系統",
   "titleEn": "Comprehensive Comparison of Multi AI Agent Frameworks: Choosing the Right Multi-Agent System",
-  "date": "2025-01-20",
+  "date": "2025-12-05",
   "tags": ["AI Agent", "Multi-Agent", "多智能體系統", "框架比較", "AutoGen", "LangGraph", "CrewAI", "AgentMesh", "AutoAgent", "InfiAgent", "MAS²", "智能體開發", "AI 框架", "多代理系統", "LangChain"],
   "tagsEn": ["AI Agent", "Multi-Agent", "Multi-Agent System", "Framework Comparison", "AutoGen", "LangGraph", "CrewAI", "AgentMesh", "AutoAgent", "InfiAgent", "MAS²", "Agent Development", "AI Framework", "Multi-Agent Framework", "LangChain"],
   "summary": "深入比較七種主流的多智能體框架（AutoGen、LangGraph、CrewAI、AgentMesh、AutoAgent、InfiAgent、MAS²），從架構模式、協作方式、開發方式等多個維度進行分析，幫助開發者根據實際需求選擇最適合的框架。",

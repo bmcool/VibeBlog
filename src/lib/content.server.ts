@@ -25,6 +25,23 @@ const INDEXES_DIR = path.join(CONTENT_DIR, 'indexes');
 const PROCESSED_DIR = path.join(CONTENT_DIR, 'processed');
 
 /**
+ * 獲取文章文件的修改時間
+ */
+export function getPostModifiedTime(slug: string): string | null {
+	try {
+		const filePath = path.join(META_DIR, `${slug}.json`);
+		if (!fs.existsSync(filePath)) {
+			return null;
+		}
+		const stats = fs.statSync(filePath);
+		return stats.mtime.toISOString();
+	} catch (error) {
+		console.error(`Error getting post modified time for ${slug}:`, error);
+		return null;
+	}
+}
+
+/**
  * 讀取單篇文章的 metadata
  */
 export function getPostMeta(slug: string, lang: Language = 'zh'): PostMeta | null {
@@ -63,14 +80,44 @@ export function getAllPostsMeta(lang: Language = 'zh'): PostMeta[] {
 			return [];
 		}
 		const files = fs.readdirSync(META_DIR);
-		return files
+		const postsWithStats = files
 			.filter((f) => f.endsWith('.json'))
 			.map((file) => {
 				const slug = file.replace('.json', '');
-				return getPostMeta(slug, lang);
+				const meta = getPostMeta(slug, lang);
+				if (!meta) return null;
+				
+				// 獲取文件修改時間作為次要排序鍵
+				const filePath = path.join(META_DIR, file);
+				const stats = fs.statSync(filePath);
+				
+				return {
+					meta,
+					mtime: stats.mtime.getTime() // 文件修改時間（毫秒）
+				};
 			})
-			.filter((meta): meta is PostMeta => meta !== null)
-			.sort((a, b) => (a.date < b.date ? 1 : -1));
+			.filter((item): item is { meta: PostMeta; mtime: number } => item !== null);
+		
+		// 排序：先按日期降序，日期相同則按文件修改時間降序，最後按 slug 降序
+		return postsWithStats
+			.sort((a, b) => {
+				const dateA = new Date(a.meta.date).getTime();
+				const dateB = new Date(b.meta.date).getTime();
+				
+				// 首先按日期降序排序
+				if (dateA !== dateB) {
+					return dateB - dateA; // 降序：新的在前
+				}
+				
+				// 日期相同，按文件修改時間降序排序
+				if (a.mtime !== b.mtime) {
+					return b.mtime - a.mtime; // 降序：新的在前
+				}
+				
+				// 如果都相同，按 slug 降序排序（確保穩定排序）
+				return b.meta.slug.localeCompare(a.meta.slug);
+			})
+			.map((item) => item.meta);
 	} catch (error) {
 		console.error('Error reading all posts meta:', error);
 		return [];
@@ -108,10 +155,43 @@ export function getAllTags(lang: Language = 'zh'): string[] {
 export function getPostsByTag(tag: string, lang: Language = 'zh'): PostMeta[] {
 	const tagsIndex = getTagsIndex(lang);
 	const slugs = tagsIndex[tag] || [];
-	return slugs
-		.map((slug) => getPostMeta(slug, lang))
-		.filter((meta): meta is PostMeta => meta !== null)
-		.sort((a, b) => (a.date < b.date ? 1 : -1));
+	const postsWithStats = slugs
+		.map((slug) => {
+			const meta = getPostMeta(slug, lang);
+			if (!meta) return null;
+			
+			// 獲取文件修改時間作為次要排序鍵
+			const filePath = path.join(META_DIR, `${slug}.json`);
+			if (!fs.existsSync(filePath)) return null;
+			const stats = fs.statSync(filePath);
+			
+			return {
+				meta,
+				mtime: stats.mtime.getTime() // 文件修改時間（毫秒）
+			};
+		})
+		.filter((item): item is { meta: PostMeta; mtime: number } => item !== null);
+	
+	// 排序：先按日期降序，日期相同則按文件修改時間降序，最後按 slug 降序
+	return postsWithStats
+		.sort((a, b) => {
+			const dateA = new Date(a.meta.date).getTime();
+			const dateB = new Date(b.meta.date).getTime();
+			
+			// 首先按日期降序排序
+			if (dateA !== dateB) {
+				return dateB - dateA; // 降序：新的在前
+			}
+			
+			// 日期相同，按文件修改時間降序排序
+			if (a.mtime !== b.mtime) {
+				return b.mtime - a.mtime; // 降序：新的在前
+			}
+			
+			// 如果都相同，按 slug 降序排序（確保穩定排序）
+			return b.meta.slug.localeCompare(a.meta.slug);
+		})
+		.map((item) => item.meta);
 }
 
 /**

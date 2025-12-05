@@ -63,7 +63,7 @@ export function generateStructuredData(data: SEOData) {
 	const seo = generateSEOTags(data);
 	
 	if (data.type === 'article') {
-		return {
+		const structuredData: any = {
 			'@context': 'https://schema.org',
 			'@type': 'BlogPosting',
 			headline: data.title,
@@ -87,8 +87,16 @@ export function generateStructuredData(data: SEOData) {
 				'@type': 'WebPage',
 				'@id': seo.url
 			},
-			keywords: data.tags?.join(', ')
+			inLanguage: data.lang === 'zh' ? 'zh-TW' : 'en-US'
 		};
+		
+		// 如果有標籤，添加 articleSection
+		if (data.tags && data.tags.length > 0) {
+			structuredData.articleSection = data.tags[0]; // 使用第一個標籤作為主要分類
+			structuredData.keywords = data.tags.join(', ');
+		}
+		
+		return structuredData;
 	}
 	
 	return {

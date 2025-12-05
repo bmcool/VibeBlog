@@ -2,7 +2,7 @@
   "slug": "cursor-metabase-push-list-management",
   "title": "用 Cursor Agent + Metabase MCP 解決行銷人員的「改來改去」問題",
   "titleEn": "Solving Marketing Team's Constant Changes with Cursor Agent + Metabase MCP",
-  "date": "2025-01-15",
+  "date": "2025-12-03",
   "tags": ["MCP", "Metabase", "Cursor", "自動化", "行銷自動化"],
   "tagsEn": ["MCP", "Metabase", "Cursor", "Automation", "Marketing Automation"],
   "summary": "面對行銷人員頻繁修改推送名單的需求，數據人員不堪其擾。本文介紹如何使用 Cursor Agent 配合 Metabase MCP，讓行銷人員用自然語言直接操作，同時保持 API KEY 權限的完整控制。",

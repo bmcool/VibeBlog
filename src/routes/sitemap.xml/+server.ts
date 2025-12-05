@@ -1,4 +1,4 @@
-import { getAllPostsMeta, getAllTags } from '$lib/content.server';
+import { getAllPostsMeta, getAllTags, getPostModifiedTime } from '$lib/content.server';
 import type { RequestHandler } from './$types';
 
 const SITE_URL = 'https://vibeblog.app';
@@ -59,9 +59,12 @@ ${allPosts.map(post => {
 	const url = post.lang === 'en' 
 		? `${SITE_URL}/en/blog/${post.slug}`
 		: `${SITE_URL}/blog/${post.slug}`;
-	const lastmod = new Date(post.date).toISOString().split('T')[0];
-	const zhUrl = `${SITE_URL}/blog/${post.slug}`;
-	const enUrl = `${SITE_URL}/en/blog/${post.slug}`;
+	
+	// 使用文件修改時間作為 lastmod，如果沒有則使用發布日期
+	const modifiedTime = getPostModifiedTime(post.slug);
+	const lastmod = modifiedTime 
+		? new Date(modifiedTime).toISOString().split('T')[0]
+		: new Date(post.date).toISOString().split('T')[0];
 	
 	return `	<url>
 		<loc>${url}</loc>

@@ -1,4 +1,4 @@
-import { getPostMeta, getPostContent, getAllPostsMeta } from '$lib/content.server';
+import { getPostMeta, getPostContent, getAllPostsMeta, getPostModifiedTime } from '$lib/content.server';
 import { parseLanguage } from '$lib/utils/language';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad, EntryGenerator } from './$types';
@@ -26,6 +26,7 @@ export const load: PageServerLoad = async ({ params, url }) => {
 	const lang = params?.lang === 'en' ? 'en' : 'zh';
 	const meta = getPostMeta(params.slug, lang);
 	const htmlContent = getPostContent(params.slug, lang);
+	const modifiedTime = getPostModifiedTime(params.slug);
 
 	if (!meta || !htmlContent) {
 		throw error(404, '文章未找到');
@@ -34,7 +35,8 @@ export const load: PageServerLoad = async ({ params, url }) => {
 	return {
 		post: {
 			...meta,
-			htmlContent
+			htmlContent,
+			modifiedTime: modifiedTime || meta.date // 如果没有修改时间，使用发布日期
 		},
 		lang
 	};
