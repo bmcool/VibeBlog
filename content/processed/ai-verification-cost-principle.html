@@ -40,52 +40,56 @@
 <h2>在 VibeBlog 專案中的實踐</h2>
 <p>讓我以 VibeBlog 專案為例，分析哪些部分最符合「低驗證成本」原則：</p>
 <h3>1. TypeScript 類型系統</h3>
-<div class="codehilite"><pre><span></span><code><span class="k">export</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="nx">PostMeta</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="nx">slug</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">;</span>
-<span class="w">  </span><span class="nx">title</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">;</span>
-<span class="w">  </span><span class="nx">titleEn?</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">;</span>
-<span class="w">  </span><span class="nx">date</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">;</span>
-<span class="w">  </span><span class="nx">tags</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">[];</span>
-<span class="w">  </span><span class="nx">tagsEn?</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">[];</span>
-<span class="w">  </span><span class="nx">summary?</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">;</span>
-<span class="w">  </span><span class="nx">summaryEn?</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">;</span>
-<span class="w">  </span><span class="nx">heroImage?</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">;</span>
-<span class="w">  </span><span class="nx">description?</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">;</span>
-<span class="w">  </span><span class="nx">descriptionEn?</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div>
-
+<pre><code class="language-typescript">export interface PostMeta {
+  slug: string;
+  title: string;
+  titleEn?: string;
+  date: string;
+  tags: string[];
+  tagsEn?: string[];
+  summary?: string;
+  summaryEn?: string;
+  heroImage?: string;
+  description?: string;
+  descriptionEn?: string;
+}
+</code></pre>
 <ul>
 <li><strong>驗證成本</strong>：幾乎為零（編譯器自動檢查）</li>
 <li><strong>錯誤立即暴露</strong>，無需手動測試</li>
 </ul>
 <h3>2. JSON 元數據結構</h3>
-<p>每篇文章的 metadata 都是結構化的 JSON：<br />
-- <strong>驗證成本</strong>：極低（JSON 格式檢查 + 肉眼掃描）<br />
-- <strong>結構化數據</strong>，容易發現缺失字段或格式錯誤</p>
+<p>每篇文章的 metadata 都是結構化的 JSON：</p>
+<ul>
+<li><strong>驗證成本</strong>：極低（JSON 格式檢查 + 肉眼掃描）</li>
+<li><strong>結構化數據</strong>，容易發現缺失字段或格式錯誤</li>
+</ul>
 <h3>3. 視覺化輸出（Svelte 組件）</h3>
-<p>所有 UI 組件都可以直接在瀏覽器中查看：<br />
-- <strong>驗證成本</strong>：低（打開瀏覽器即可看到）<br />
-- <strong>符合實際操作驗證原則</strong>：用 chrome-devtools 打開瀏覽器實際操作看看</p>
+<p>所有 UI 組件都可以直接在瀏覽器中查看：</p>
+<ul>
+<li><strong>驗證成本</strong>：低（打開瀏覽器即可看到）</li>
+<li><strong>符合實際操作驗證原則</strong>：用 chrome-devtools 打開瀏覽器實際操作看看</li>
+</ul>
 <h3>4. 標籤索引生成腳本</h3>
-<div class="codehilite"><pre><span></span><code><span class="c1">// 寫入 tags.json (中文)</span>
-<span class="kd">const</span><span class="w"> </span><span class="nx">indexPathZh</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">path</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="nx">INDEXES_DIR</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;tags.json&#39;</span><span class="p">);</span>
-<span class="nx">fs</span><span class="p">.</span><span class="nx">writeFileSync</span><span class="p">(</span><span class="nx">indexPathZh</span><span class="p">,</span><span class="w"> </span><span class="nb">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">tagsIndexZh</span><span class="p">,</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w"> </span><span class="mf">2</span><span class="p">),</span><span class="w"> </span><span class="s1">&#39;utf-8&#39;</span><span class="p">);</span>
+<pre><code class="language-typescript">// 寫入 tags.json (中文)
+const indexPathZh = path.join(INDEXES_DIR, &#39;tags.json&#39;);
+fs.writeFileSync(indexPathZh, JSON.stringify(tagsIndexZh, null, 2), &#39;utf-8&#39;);
 
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`✅ 成功生成標籤索引`</span><span class="p">);</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`   - 中文標籤數量: </span><span class="si">${</span><span class="nx">tagCountZh</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`   - 英文標籤數量: </span><span class="si">${</span><span class="nx">tagCountEn</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
-<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`   - 文章數量: </span><span class="si">${</span><span class="nx">totalPosts</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
-</code></pre></div>
-
+console.log(`✅ 成功生成標籤索引`);
+console.log(`   - 中文標籤數量: ${tagCountZh}`);
+console.log(`   - 英文標籤數量: ${tagCountEn}`);
+console.log(`   - 文章數量: ${totalPosts}`);
+</code></pre>
 <ul>
 <li><strong>驗證成本</strong>：低（查看輸出 JSON + 控制台統計）</li>
 <li><strong>輸出是結構化數據</strong>，容易驗證</li>
 </ul>
 <h3>5. HTML 內容生成</h3>
-<p>Markdown 轉 HTML 的過程：<br />
-- <strong>驗證成本</strong>：低（打開 HTML 文件或瀏覽器查看）<br />
-- <strong>格式轉換結果</strong>可立即檢查</p>
+<p>Markdown 轉 HTML 的過程：</p>
+<ul>
+<li><strong>驗證成本</strong>：低（打開 HTML 文件或瀏覽器查看）</li>
+<li><strong>格式轉換結果</strong>可立即檢查</li>
+</ul>
 <h2>需要更高驗證成本的部分</h2>
 <p>當然，專案中也有一些需要更高驗證成本的部分：</p>
 <ol>
@@ -104,5 +108,5 @@
 <h2>結論</h2>
 <p><strong>AI 的價值在於放大你的判斷力，而不是替代它。</strong> 只有在你能快速驗證的範圍內，AI 才能成為可靠的工具。</p>
 <p>這個原則不僅適用於代碼開發，也適用於任何使用 AI 輔助的工作。記住：<strong>驗證成本決定了 AI 的適用範圍。</strong> 只有在低驗證成本的範圍內，你才能扎實地完成工作，避免累積偏差帶來的問題。</p>
-<hr />
+<hr>
 <p><em>這篇文章是基於實際開發經驗的總結，希望對正在探索 AI 輔助開發的開發者有所幫助。</em></p>

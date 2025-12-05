@@ -1,0 +1,286 @@
+<h1>Self-Evolving Agent: Architecture Design for AI That Grows Its Own &quot;Limbs&quot;</h1>
+<h2>Core Concept: From Fixed Foundation to Dynamic Evolution</h2>
+
+<p>Traditional AI Agent systems typically require pre-defining all tools and capabilities, but this approach hits bottlenecks when facing complex and varied tasks. <strong>Self-Evolving Agents</strong> take a different approach:</p>
+<ul>
+<li><strong>LLM + Fixed Foundation (executor / storage) Never Changes</strong>: The core brain and execution environment remain stable</li>
+<li><strong>Through Continuous Task Loops → Automatically Grow New &quot;Limbs&quot; (tools / mini agents)</strong>: Automatically generate new capabilities when encountering new requirements</li>
+<li><strong>These Limbs Are Stored for Reuse</strong>: Accumulate a knowledge base that gets stronger with use</li>
+<li><strong>&quot;Training Data&quot; Is: Task Description + 100% Confirmed Correct Results (Starting with ~20 Sets)</strong>: No need for massive datasets, just high-quality standard answers</li>
+</ul>
+<p>This concept essentially does:</p>
+<blockquote>
+<p>Program search using &quot;task failure → analyze failure reason → generate new capability → retry&quot; instead of modifying LLM weights.</p>
+</blockquote>
+<h2>Architecture Design: Six Core Components</h2>
+<p>The entire system consists of six core components, forming a complete self-evolution loop:</p>
+<h3>1. Planner Agent (Planner)</h3>
+<p><strong>Responsibility</strong>: Analyze tasks and produce solution plans</p>
+<ul>
+<li><strong>Input</strong>: Task description + Currently registered tool list</li>
+<li><strong>Output</strong>:<ul>
+<li>A &quot;solution plan&quot;: What steps are needed</li>
+<li>Which existing tools to use</li>
+<li>Which capabilities appear to be &quot;missing&quot;</li>
+</ul>
+</li>
+</ul>
+<p>For example, for the task &quot;Find all Adobe products&quot;, it might produce:</p>
+<pre><code class="language-text">Plan:
+1. I need &quot;web search&quot; capability → Check if tool library has it
+2. If search_web doesn&#39;t exist, create one first
+3. Then use search_web(&#39;Adobe all products&#39;) to find official product page
+4. After downloading page content, parse product list
+</code></pre>
+<h3>2. Capability Checker</h3>
+<p><strong>Responsibility</strong>: Check if required capabilities exist based on Planner&#39;s plan</p>
+<ul>
+<li>Check if needed tools already exist (Tool Registry)</li>
+<li>If a capability doesn&#39;t exist (e.g., <code>search_web</code>), mark it as needing to be built</li>
+</ul>
+<h3>3. Tool Builder Agent (Tool Builder)</h3>
+<p><strong>Responsibility</strong>: Generate Python tool files based on &quot;requirement description&quot; + allowed dependencies</p>
+<p>For example, requirement:</p>
+<pre><code class="language-text">Requirement: Create a search_web(query: str) -&gt; str function,
+using requests + BeautifulSoup to fetch HTML from the first few links of Google search results.
+Start with MVP, can fix later if wrong.
+</code></pre>
+<p>It outputs Python source code:</p>
+<pre><code class="language-python"># tools/search_web.py
+import requests
+from bs4 import BeautifulSoup
+
+def search_web(query: str) -&gt; str:
+    # Simple implementation using search API or directly hitting specific sites...
+    ...
+</code></pre>
+<p>Then Executor runs simple tests in sandbox (e.g., basic import, simple call test).</p>
+<h3>4. Executor</h3>
+<p><strong>Responsibility</strong>: Execute the entire pipeline following Planner&#39;s listed steps after tools are available</p>
+<ol>
+<li>Use <code>search_web</code> to find Adobe product page URL</li>
+<li>Fetch webpage HTML</li>
+<li>Use built-in/existing parser to extract product list</li>
+</ol>
+<p>Produces <strong>final output result</strong>.</p>
+<h3>5. Evaluator</h3>
+<p><strong>Responsibility</strong>: Compare <code>result</code> with provided <code>gold_output</code></p>
+<ul>
+<li>Complete match → Task successful, record &quot;this tool combination works&quot;</li>
+<li>No match → Task failed → Send to Diagnoser for problem analysis</li>
+</ul>
+<p>Supports multiple evaluation methods:</p>
+<ul>
+<li><code>exact_match</code>: Exact match</li>
+<li><code>partial_match</code>: Partial match (calculate keyword match rate)</li>
+<li><code>semantic_similarity</code>: Use LLM to evaluate semantic similarity</li>
+</ul>
+<h3>6. Diagnoser (Diagnostic Agent)</h3>
+<p><strong>Responsibility</strong>: Review logs, error messages, differences, summarize failure reasons and recommend next steps</p>
+<p>For example:</p>
+<ul>
+<li>&quot;search_web can only fetch static pages, but this page is a dynamic site → need render_dynamic_page capability&quot;</li>
+<li>&quot;HTML is messy with lots of irrelevant information → need a stronger clean_html / extract_products tool&quot;</li>
+</ul>
+<p>Then return to <strong>Tool Builder</strong> → generate new tool → run task again.</p>
+<p>This is the evolution cycle in the concept:</p>
+<ul>
+<li><strong>STEP1</strong>: Missing search → Generate <code>search_web</code></li>
+<li><strong>STEP2</strong>: Missing dynamic rendering → Generate <code>render_dynamic_page</code></li>
+<li><strong>STEP3</strong>: Missing cleaning → Generate <code>clean_product_list</code></li>
+</ul>
+<h2>Fixed Foundation</h2>
+<p>These are the &quot;foundation&quot;, built first and never changed:</p>
+<h3>1. LLM API Itself</h3>
+<p>The GPT-class models currently in use, serving as the &quot;brain&quot;.</p>
+<h3>2. Python Execution Environment (Sandbox)</h3>
+<ul>
+<li>Can dynamically create files, import new tools</li>
+<li>Can restrict permissions (prevent random file deletion, random API calls)</li>
+</ul>
+<h3>3. Tool Registry</h3>
+<p>A simple structure, for example:</p>
+<pre><code class="language-json">{
+  &quot;search_web&quot;: {
+    &quot;type&quot;: &quot;python_function&quot;,
+    &quot;path&quot;: &quot;tools/search_web.py&quot;,
+    &quot;signature&quot;: &quot;search_web(query: str) -&gt; str&quot;,
+    &quot;description&quot;: &quot;Fetch static web pages using HTTP&quot;
+  },
+  &quot;render_dynamic_page&quot;: {
+    &quot;type&quot;: &quot;python_function&quot;,
+    &quot;path&quot;: &quot;tools/render_dynamic_page.py&quot;,
+    &quot;signature&quot;: &quot;render_dynamic_page(url: str) -&gt; str&quot;,
+    &quot;description&quot;: &quot;Render dynamic websites to HTML using Playwright/Selenium&quot;
+  }
+}
+</code></pre>
+<p>Agents can &quot;add&quot; and &quot;modify&quot; tools in this list.</p>
+<h3>4. Task and Standard Answer Dataset</h3>
+<p>Your prepared 20 sets (or more):</p>
+<pre><code class="language-json">{
+  &quot;task_id&quot;: &quot;adobe_products&quot;,
+  &quot;instruction&quot;: &quot;Find all Adobe products, output as list&quot;,
+  &quot;gold_output&quot;: &quot;...your confirmed correct result...&quot;,
+  &quot;eval_method&quot;: &quot;exact_match / partial match strategy&quot;
+}
+</code></pre>
+<h2>Training Method: From 20 Task Sets to Stable System</h2>
+<p>&quot;Training&quot; here can be divided into two layers:</p>
+<h3>Layer One: Actual Tool / Agent Process &quot;Search + Filter&quot;</h3>
+<p>This is definitely achievable:</p>
+<ul>
+<li><p>For each task:</p>
+<ul>
+<li>Continuously run &quot;try → fail → generate new tool → retry → evaluate&quot; loop</li>
+<li><strong>Only keep versions that pass evaluation</strong> (tool code + usage flow)</li>
+</ul>
+</li>
+<li><p>Over time, you&#39;ll get:</p>
+<ul>
+<li>A GPT prompt set + tool library + invocation strategy that can stably solve these 20 task sets</li>
+</ul>
+</li>
+</ul>
+<p>This is somewhat like:</p>
+<blockquote>
+<p>Searching for &quot;program + tool combinations&quot;, with your Dataset as the 20 test questions.</p>
+</blockquote>
+<h3>Layer Two: Meta-Learning (Optional)</h3>
+<p>If you have permission to do &quot;fine-tuning&quot; or &quot;prompt engineering&quot;, you can further:</p>
+<ol>
+<li><p><strong>Store successful logs as &quot;demonstration data&quot;</strong></p>
+<ul>
+<li>Prompt: Task description + tool list + log</li>
+<li>Output: Final successful tool invocation plan / chain-of-thought</li>
+</ul>
+</li>
+<li><p>Use these demonstrations:</p>
+<ul>
+<li>As &quot;few-shot examples in system prompt&quot;</li>
+<li>Or send for fine-tuning (if you can train your own model)</li>
+</ul>
+</li>
+</ol>
+<p>This way, when encountering &quot;similar tasks&quot; next time, Planner will have better sense from the start, without needing to guess through many rounds.</p>
+<h2>Making the Loop Actually &quot;Grow Mini Agents&quot;</h2>
+<p>What you want: Newly generated items aren&#39;t just functions, but &quot;mini agents&quot;. Implementation can:</p>
+<h3>Abstract &quot;Capabilities&quot; as Agents, Not Just Functions</h3>
+<p>For example:</p>
+<ul>
+<li><p><code>SearchAgent</code></p>
+<ul>
+<li>Internally calls <code>search_web</code>, <code>render_dynamic_page</code> and other tools</li>
+<li>External interface only: <code>search_and_extract(query) -&gt; structured_data</code></li>
+</ul>
+</li>
+<li><p><code>ProductExtractorAgent</code></p>
+<ul>
+<li>Specialized in extracting product names, categories, etc. from HTML.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Evolution Direction of Loop:</strong></p>
+<ol>
+<li><p>Initially just &quot;functions&quot;:</p>
+<ul>
+<li><code>search_web</code></li>
+<li><code>render_dynamic_page</code></li>
+<li><code>parse_products</code></li>
+</ul>
+</li>
+<li><p>When these functions stabilize, Planner can discover:</p>
+<ul>
+<li>&quot;Every time doing &#39;find products&#39; task, need to call these three tools in similar order&quot;</li>
+<li>Then LLM proposes:<ul>
+<li>&quot;Let&#39;s encapsulate it as a <code>ProductSearchAgent</code>&quot;</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Tool Builder produces a class / module:</p>
+</li>
+</ol>
+<pre><code class="language-python"># agents/product_search_agent.py
+from tools.search_web import search_web
+from tools.render_dynamic_page import render_dynamic_page
+from tools.parse_products import parse_products
+
+class ProductSearchAgent:
+    def run(self, brand: str) -&gt; list[str]:
+        # 1. search_web finds brand product page
+        # 2. render_dynamic_page renders
+        # 3. parse_products extracts
+        ...
+</code></pre>
+<ol start="4">
+<li>Tool Registry now also treats <code>ProductSearchAgent</code> as a &quot;capability&quot;, Planner can directly call it next time without redesigning pipeline.</li>
+</ol>
+<p>This matches what you said:</p>
+<blockquote>
+<p>Limbs can even include other mini agents.</p>
+</blockquote>
+<p>Essentially:</p>
+<p><strong>From &quot;common tool combinations&quot; → Automatically encapsulate into a new agent, and register into capability graph.</strong></p>
+<h2>Three Real-World Pitfalls to Watch</h2>
+<h3>1. False Confidence / Hallucination</h3>
+<p>LLMs easily &quot;think they&#39;re right&quot; but actual results are wrong.</p>
+<p>So <strong>must rely on &quot;computable evaluation&quot;</strong> (your provided gold output), don&#39;t trust LLM saying &quot;I think this result is OK&quot;.</p>
+<h3>2. Poor Tool Quality Leading Astray</h3>
+<p>Without testing, it will write code that runs but has twisted logic.</p>
+<p>At minimum need:</p>
+<ul>
+<li>Basic unit tests (types, simple cases)</li>
+<li>Effectiveness tests (try running 2-3 sample tasks)</li>
+</ul>
+<h3>3. Tool Explosion / Capability Duplication</h3>
+<p>Over time will grow many tools with similar functions.</p>
+<p>You can periodically run a &quot;Refactor Agent&quot;:</p>
+<ul>
+<li>See which tools have overlapping functions</li>
+<li>Propose merge / cleanup</li>
+<li>Similar to code refactoring.</li>
+</ul>
+<h2>Implementation Suggestions: Start with Minimal Version</h2>
+<p>If you want to start implementing this loop, I&#39;d suggest first step:</p>
+<ol>
+<li><p><strong>Prepare those 20 &quot;task + standard answer&quot; sets</strong> (JSON)</p>
+</li>
+<li><p>Build a minimal version:</p>
+<ul>
+<li>Tool Registry (can manually write a few tools first)</li>
+<li>Executor</li>
+<li>Evaluator (compare result vs gold)</li>
+</ul>
+</li>
+<li><p>Let LLM handle:</p>
+<ul>
+<li>Planner + Diagnoser, but <strong>don&#39;t let it modify code automatically yet</strong></li>
+<li>First observe how it proposes &quot;what capabilities I&#39;m missing&quot;, you manually write tools</li>
+</ul>
+</li>
+<li><p>After this flow stabilizes, replace &quot;manual tool writing&quot; step with Tool Builder + Python file writing.</p>
+</li>
+</ol>
+<h2>Practical Application Scenarios</h2>
+<p>This architecture is particularly suitable for:</p>
+<ol>
+<li><strong>Tasks requiring constant adaptation to new data sources</strong>: e.g., scraping product information from different websites</li>
+<li><strong>Scenarios with similar task types but different details</strong>: e.g., &quot;Find all products of company X&quot;</li>
+<li><strong>Complex tasks requiring combination of multiple capabilities</strong>: e.g., &quot;search → parse → clean → format&quot;</li>
+</ol>
+<h2>Conclusion</h2>
+<p>The Self-Evolving Agent architecture provides a new approach: <strong>Instead of pre-defining all capabilities, let the system automatically grow needed capabilities during task execution</strong>.</p>
+<p>Advantages of this method:</p>
+<ul>
+<li><strong>Strong adaptability</strong>: Automatically evolves when encountering new requirements</li>
+<li><strong>Accumulative</strong>: Each solved task leaves reusable tools</li>
+<li><strong>Controllable cost</strong>: Only need 20 sets of high-quality training data, no need for massive annotation</li>
+</ul>
+<p>Of course, this also brings new challenges:</p>
+<ul>
+<li>Need stricter evaluation mechanisms</li>
+<li>Need to prevent tool quality issues</li>
+<li>Need to manage tool library complexity</li>
+</ul>
+<p>But overall, this is a direction worth exploring, especially in scenarios requiring handling diverse tasks.</p>

@@ -1,0 +1,13 @@
+{
+  "slug": "self-evolving-agent-architecture",
+  "title": "自我演化的 Agent：讓 AI 自動長出「手腳」的架構設計",
+  "titleEn": "Self-Evolving Agent: Architecture Design for AI That Grows Its Own \"Limbs\"",
+  "date": "2025-12-05",
+  "tags": ["AI Agent", "自我演化", "架構設計", "LLM", "自動化"],
+  "tagsEn": ["AI Agent", "Self-Evolution", "Architecture Design", "LLM", "Automation"],
+  "summary": "探討如何設計一個自我演化的 Agent 系統，讓 AI 在執行任務的過程中自動長出所需的能力。從固定基底到動態演化，從工具建造到小 Agent 封裝，完整解析六個核心組件的設計思路。",
+  "summaryEn": "Exploring how to design a self-evolving Agent system that allows AI to automatically grow needed capabilities during task execution. From fixed foundation to dynamic evolution, from tool building to mini-agent encapsulation, complete analysis of six core components' design thinking.",
+  "heroImage": "/images/ai-generated/self-evolving-agent-architecture.png",
+  "description": "傳統的 AI Agent 需要預先定義所有工具，但自我演化的 Agent 採用不同思路：透過不斷 loop 任務 → 自動長出新的「手腳」→ 存起來下次用。本文詳細解析 Planner、Tool Builder、Executor、Evaluator、Diagnoser 等核心組件的設計，以及如何從 20 組訓練資料演化出穩定系統。"
+}
+
