@@ -1,8 +1,10 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import { generateSEOTags, generateStructuredData, buildLangPath } from '$lib/utils/seo';
+	import { onMount } from 'svelte';
 
 	let { data }: { data: PageData } = $props();
+	let contentElement: HTMLDivElement;
 	
 	// SEO 数据
 	const seo = $derived(generateSEOTags({
@@ -28,6 +30,24 @@
 		tags: data.post.tags || [],
 		lang: data.lang
 	}));
+
+	// 移除與 hero image 重複的第一張圖片
+	onMount(() => {
+		if (!contentElement) return;
+		
+		const heroImage = data.post.heroImage || data.post.image;
+		if (!heroImage) return;
+
+		// 找到內容中的第一張圖片
+		const firstImg = contentElement.querySelector('img');
+		if (!firstImg) return;
+
+		// 如果第一張圖片的 src 與 hero image 相同，則移除
+		const imgSrc = firstImg.getAttribute('src');
+		if (imgSrc && (imgSrc === heroImage || imgSrc.endsWith(heroImage))) {
+			firstImg.remove();
+		}
+	});
 </script>
 
 <svelte:head>
@@ -100,7 +120,7 @@
 			<img src={data.post.image} alt={data.post.title} class="post-featured-image" />
 		{/if}
 
-		<div class="post-content">
+		<div class="post-content" bind:this={contentElement} data-hero-image={data.post.heroImage || data.post.image || ''}>
 			{@html data.post.htmlContent}
 		</div>
 	</article>
