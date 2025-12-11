@@ -1,6 +1,19 @@
 {
   "AI Development": [
+    "ai-development-efficiency-revolution",
     "ai-verification-cost-principle"
+  ],
+  "Digital Transformation": [
+    "ai-development-efficiency-revolution"
+  ],
+  "Development Efficiency": [
+    "ai-development-efficiency-revolution"
+  ],
+  "Traditional Industries": [
+    "ai-development-efficiency-revolution"
+  ],
+  "Technology Revolution": [
+    "ai-development-efficiency-revolution"
   ],
   "Development Philosophy": [
     "ai-verification-cost-principle"
@@ -16,13 +29,15 @@
   ],
   "Automation": [
     "automated-official-website-finder",
-    "cursor-metabase-push-list-management"
+    "cursor-metabase-push-list-management",
+    "self-evolving-agent-architecture"
   ],
   "Python": [
     "automated-official-website-finder"
   ],
   "LLM": [
-    "automated-official-website-finder"
+    "automated-official-website-finder",
+    "self-evolving-agent-architecture"
   ],
   "Web Search": [
     "automated-official-website-finder"
@@ -63,6 +78,52 @@
   "Tools": [
     "installing-mcp-servers"
   ],
+  "AI Agent": [
+    "multi-ai-agent-frameworks-comparison",
+    "self-evolving-agent-architecture"
+  ],
+  "Multi-Agent": [
+    "multi-ai-agent-frameworks-comparison"
+  ],
+  "Multi-Agent System": [
+    "multi-ai-agent-frameworks-comparison"
+  ],
+  "Framework Comparison": [
+    "multi-ai-agent-frameworks-comparison"
+  ],
+  "AutoGen": [
+    "multi-ai-agent-frameworks-comparison"
+  ],
+  "LangGraph": [
+    "multi-ai-agent-frameworks-comparison"
+  ],
+  "CrewAI": [
+    "multi-ai-agent-frameworks-comparison"
+  ],
+  "AgentMesh": [
+    "multi-ai-agent-frameworks-comparison"
+  ],
+  "AutoAgent": [
+    "multi-ai-agent-frameworks-comparison"
+  ],
+  "InfiAgent": [
+    "multi-ai-agent-frameworks-comparison"
+  ],
+  "MAS²": [
+    "multi-ai-agent-frameworks-comparison"
+  ],
+  "Agent Development": [
+    "multi-ai-agent-frameworks-comparison"
+  ],
+  "AI Framework": [
+    "multi-ai-agent-frameworks-comparison"
+  ],
+  "Multi-Agent Framework": [
+    "multi-ai-agent-frameworks-comparison"
+  ],
+  "LangChain": [
+    "multi-ai-agent-frameworks-comparison"
+  ],
   "Architecture": [
     "precomputed-tags-architecture"
   ],
@@ -77,6 +138,12 @@
   ],
   "AI-Blogging": [
     "precomputed-tags-architecture"
+  ],
+  "Self-Evolution": [
+    "self-evolving-agent-architecture"
+  ],
+  "Architecture Design": [
+    "self-evolving-agent-architecture"
   ],
   "TSMC": [
     "tsmc-latest-research-report"

@@ -1,6 +1,19 @@
 {
   "AI開發": [
+    "ai-development-efficiency-revolution",
     "ai-verification-cost-principle"
+  ],
+  "數位化轉型": [
+    "ai-development-efficiency-revolution"
+  ],
+  "開發效率": [
+    "ai-development-efficiency-revolution"
+  ],
+  "傳統產業": [
+    "ai-development-efficiency-revolution"
+  ],
+  "技術變革": [
+    "ai-development-efficiency-revolution"
   ],
   "開發哲學": [
     "ai-verification-cost-principle"
@@ -16,13 +29,15 @@
   ],
   "自動化": [
     "automated-official-website-finder",
-    "cursor-metabase-push-list-management"
+    "cursor-metabase-push-list-management",
+    "self-evolving-agent-architecture"
   ],
   "Python": [
     "automated-official-website-finder"
   ],
   "LLM": [
-    "automated-official-website-finder"
+    "automated-official-website-finder",
+    "self-evolving-agent-architecture"
   ],
   "網絡搜索": [
     "automated-official-website-finder"
@@ -63,8 +78,55 @@
   "工具設置": [
     "installing-mcp-servers"
   ],
+  "AI Agent": [
+    "multi-ai-agent-frameworks-comparison",
+    "self-evolving-agent-architecture"
+  ],
+  "Multi-Agent": [
+    "multi-ai-agent-frameworks-comparison"
+  ],
+  "多智能體系統": [
+    "multi-ai-agent-frameworks-comparison"
+  ],
+  "框架比較": [
+    "multi-ai-agent-frameworks-comparison"
+  ],
+  "AutoGen": [
+    "multi-ai-agent-frameworks-comparison"
+  ],
+  "LangGraph": [
+    "multi-ai-agent-frameworks-comparison"
+  ],
+  "CrewAI": [
+    "multi-ai-agent-frameworks-comparison"
+  ],
+  "AgentMesh": [
+    "multi-ai-agent-frameworks-comparison"
+  ],
+  "AutoAgent": [
+    "multi-ai-agent-frameworks-comparison"
+  ],
+  "InfiAgent": [
+    "multi-ai-agent-frameworks-comparison"
+  ],
+  "MAS²": [
+    "multi-ai-agent-frameworks-comparison"
+  ],
+  "智能體開發": [
+    "multi-ai-agent-frameworks-comparison"
+  ],
+  "AI 框架": [
+    "multi-ai-agent-frameworks-comparison"
+  ],
+  "多代理系統": [
+    "multi-ai-agent-frameworks-comparison"
+  ],
+  "LangChain": [
+    "multi-ai-agent-frameworks-comparison"
+  ],
   "架構設計": [
-    "precomputed-tags-architecture"
+    "precomputed-tags-architecture",
+    "self-evolving-agent-architecture"
   ],
   "SvelteKit": [
     "precomputed-tags-architecture"
@@ -77,6 +139,9 @@
   ],
   "AI-Blogging": [
     "precomputed-tags-architecture"
+  ],
+  "自我演化": [
+    "self-evolving-agent-architecture"
   ],
   "台積電": [
     "tsmc-latest-research-report"
