@@ -1,0 +1,13 @@
+{
+  "slug": "simvi-ai-behavior-tree-prototype",
+  "title": "SimVi：用自然語言控制遊戲 AI 的行為樹原型",
+  "titleEn": "SimVi: A Behavior Tree Prototype for Natural Language Game AI Control",
+  "date": "2025-12-12",
+  "tags": ["遊戲開發", "AI", "行為樹", "原型", "自然語言處理", "Phaser", "React"],
+  "tagsEn": ["Game Development", "AI", "Behavior Tree", "Prototype", "Natural Language Processing", "Phaser", "React"],
+  "summary": "介紹 SimVi 專案：一個結合自然語言處理與行為樹系統的遊戲 AI 原型。透過自定義 DSL 和 OpenAI API，玩家可以用自然語言描述行為，系統會自動生成並執行對應的行為樹邏輯。",
+  "summaryEn": "Introducing SimVi: a game AI prototype that combines natural language processing with behavior tree systems. Through custom DSL and OpenAI API, players can describe behaviors in natural language, and the system automatically generates and executes corresponding behavior tree logic.",
+  "description": "探索如何用自然語言控制遊戲 AI：SimVi 專案展示了從自然語言指令到行為樹 DSL 的轉換過程，以及如何在 Phaser 遊戲中執行這些行為。",
+  "descriptionEn": "Exploring how to control game AI with natural language: The SimVi project demonstrates the conversion from natural language instructions to behavior tree DSL, and how to execute these behaviors in a Phaser game.",
+  "heroImage": "/images/ai-generated/simvi-hero.png"
+}

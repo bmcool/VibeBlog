@@ -1,0 +1,206 @@
+<h1>SimVi：用自然語言控制遊戲 AI 的行為樹原型</h1>
+
+<p>在探索遊戲 AI 開發的過程中，我嘗試了一個有趣的想法：<strong>能否讓玩家用自然語言描述 AI 的行為，然後系統自動生成並執行對應的邏輯？</strong> SimVi 就是這個想法的初步實踐。</p>
+
+<p>SimVi 是一個結合自然語言處理與行為樹（Behavior Tree）系統的遊戲 AI 原型。透過自定義的 DSL（Domain Specific Language）和 OpenAI API，玩家可以用中文描述村民的行為，系統會自動將這些描述轉換成行為樹 DSL，並在 Phaser 遊戲場景中執行。</p>
+
+<p>專案原始碼已開源在 <a href="https://github.com/bmcool/SimVi" target="_blank" rel="noopener noreferrer">GitHub</a>，歡迎查看和貢獻。</p>
+
+<h2>專案核心概念</h2>
+
+<p>SimVi 的核心目標是降低遊戲 AI 行為定義的門檻。傳統上，定義遊戲 AI 行為需要編寫程式碼或使用複雜的視覺化編輯器。SimVi 嘗試用自然語言作為中介，讓玩家可以更直觀地描述想要的行為。</p>
+
+<h3>從自然語言到行為樹</h3>
+
+<p>整個流程可以分為幾個步驟：</p>
+
+<ol>
+<li><strong>自然語言輸入</strong>：玩家輸入中文指令，例如「讓這個村民持續採木頭，背包滿了就回倉庫存放。」</li>
+<li><strong>DSL 生成</strong>：系統使用 OpenAI API（或 mock 版本）將自然語言轉換成結構化的行為樹 DSL</li>
+<li><strong>DSL 解析與驗證</strong>：解析 DSL 語法，計算複雜度，檢查是否符合限制</li>
+<li><strong>行為樹執行</strong>：在遊戲場景中執行行為樹邏輯，控制村民的行動</li>
+</ol>
+
+<h2>技術架構</h2>
+
+<h3>前端技術棧</h3>
+
+<p>SimVi 使用現代化的前端技術棧：</p>
+
+<ul>
+<li><strong>React + TypeScript + Vite</strong>：提供快速開發體驗和型別安全</li>
+<li><strong>Phaser 3</strong>：遊戲引擎，負責渲染遊戲場景和實體</li>
+<li><strong>React Flow</strong>：視覺化行為樹結構，讓玩家可以直觀地看到生成的邏輯</li>
+</ul>
+
+<h3>行為樹 DSL 設計</h3>
+
+<p>SimVi 定義了一套簡潔的行為樹 DSL，支援以下節點類型：</p>
+
+<ul>
+<li><strong>BEHAVIOR</strong>：定義一個行為的根節點</li>
+<li><strong>LOOP</strong>：循環執行子節點（目前支援 <code>mode=forever</code>）</li>
+<li><strong>SEQUENCE</strong>：依序執行子節點，任一失敗則整體失敗</li>
+<li><strong>SELECTOR</strong>：依序嘗試子節點，任一成功則整體成功</li>
+<li><strong>CONDITION</strong>：條件判斷，例如檢查背包是否滿了</li>
+<li><strong>ACTION</strong>：具體動作，例如移動、採集、存放資源</li>
+</ul>
+
+<p>以下是一個簡單的 DSL 範例：</p>
+
+<pre><code>BEHAVIOR Lumberjack:
+  LOOP mode=forever:
+    SEQUENCE:
+      ACTION move_to target=nearest(tree)
+      ACTION gather resource=wood
+      ACTION move_to target=storage
+      ACTION deposit resource=wood
+</code></pre>
+
+<p>這個 DSL 定義了一個持續採木頭的行為：村民會先移動到最近的樹，採集木材，然後移動到倉庫，最後存放木材，接著重複這個循環。</p>
+
+<h3>複雜度計算機制</h3>
+
+<p>為了避免玩家定義過於複雜的行為，SimVi 實作了複雜度計算機制。每個節點都有對應的複雜度成本，系統會計算整個行為樹的總複雜度，並與設定的上限進行比較。如果超過上限，行為將不會執行。</p>
+
+<p>這個設計讓遊戲可以根據「村莊等級」等機制來限制玩家可用的行為複雜度，增加策略性。</p>
+
+<h2>實作細節</h2>
+
+<h3>DSL 解析器</h3>
+
+<p>DSL 解析器採用遞迴下降的方式，透過縮排來表示節點的層級關係。解析器會：</p>
+
+<ul>
+<li>檢查縮排是否正確（必須是 2 的倍數）</li>
+<li>驗證語法是否符合規範</li>
+<li>建立抽象語法樹（AST）</li>
+<li>提供詳細的錯誤訊息，包含行號和具體錯誤位置</li>
+</ul>
+
+<h3>行為樹執行器</h3>
+
+<p>行為樹執行器（BehaviorRuntime）負責執行解析後的 AST。它實作了完整的行為樹邏輯：</p>
+
+<ul>
+<li><strong>狀態記憶</strong>：使用記憶體儲存節點的執行狀態，支援長時間運行的動作（如移動）</li>
+<li><strong>節點執行</strong>：根據節點類型執行對應邏輯（SEQUENCE、SELECTOR、LOOP 等）</li>
+<li><strong>動作處理</strong>：整合遊戲世界的動作系統，例如移動、採集、存放等</li>
+</ul>
+
+<h3>自然語言到 DSL 的轉換</h3>
+
+<p>系統使用 OpenAI 的 GPT-4o-mini 模型來進行自然語言到 DSL 的轉換。Prompt 設計包含了：</p>
+
+<ul>
+<li>可用的動作和條件列表</li>
+<li>DSL 語法規範</li>
+<li>多個範例，展示不同複雜度的行為描述</li>
+<li>明確的規則，確保生成的 DSL 符合規範</li>
+</ul>
+
+<p>如果沒有提供 OpenAI API Key，系統會使用 mock 版本，根據關鍵字匹配生成簡單的 DSL 範例。</p>
+
+<h2>遊戲場景設計</h2>
+
+<p>目前的遊戲場景包含：</p>
+
+<ul>
+<li><strong>村民</strong>：藍色圓圈，可以執行各種行為</li>
+<li><strong>樹木</strong>：綠色圓圈，可以採集木材</li>
+<li><strong>倉庫</strong>：黃色矩形，可以存放資源</li>
+<li><strong>守衛</strong>：紅色圓圈，會在固定路徑上巡邏</li>
+</ul>
+
+<p>遊戲世界使用簡單的實體-組件系統，每個實體都有位置、背包等屬性。動作系統會根據行為樹的指令來修改這些屬性，並更新視覺表現。</p>
+
+<h2>視覺化功能</h2>
+
+<p>SimVi 使用 React Flow 來視覺化生成的行為樹。當 DSL 解析成功後，系統會自動生成對應的節點和連線，讓玩家可以直觀地看到：</p>
+
+<ul>
+<li>行為樹的整體結構</li>
+<li>節點的類型和參數</li>
+<li>節點之間的層級關係</li>
+</ul>
+
+<p>這個視覺化功能對於理解 AI 的行為邏輯非常有幫助，也讓除錯變得更容易。</p>
+
+<h2>應用場景與發想</h2>
+
+<p>雖然 SimVi 目前只是一個簡單的原型，但這個技術方向在遊戲開發中有許多有趣的應用可能性。以下是我在開發過程中想到的一些應用場景：</p>
+
+<h3>戰隊組合系統</h3>
+
+<p>在動作遊戲或 RPG 中，玩家可以控制主要角色，同時指揮其他夥伴。透過自然語言，玩家可以為每個夥伴定義獨特的作戰策略：</p>
+
+<ul>
+<li><strong>坦克角色</strong>：「當敵人靠近時，優先保護玩家，如果玩家血量低於 50%，使用嘲諷技能吸引敵人注意。」</li>
+<li><strong>治療角色</strong>：「持續跟隨玩家，當玩家或任何隊友血量低於 30% 時，立即使用治療技能。」</li>
+<li><strong>輸出角色</strong>：「優先攻擊玩家正在攻擊的目標，如果目標血量低於 20%，使用終結技能。」</li>
+</ul>
+
+<p>這樣的設計讓玩家可以根據不同的戰鬥情況，即時調整夥伴的戰術，而不需要進入複雜的設定選單。每個夥伴都可以有自己獨特的行為模式，讓戰鬥更加策略化和個人化。</p>
+
+<h3>資源採集優化</h3>
+
+<p>在模擬經營或策略遊戲中，玩家需要管理多個村民進行資源採集。透過自然語言定義每個村民的行為，可以實現更精細的資源管理：</p>
+
+<ul>
+<li><strong>分工協作</strong>：「讓村民 A 專門採集木材，村民 B 專門採集石頭，村民 C 負責在兩者之間運輸資源到倉庫。」</li>
+<li><strong>優先級管理</strong>：「當木材庫存低於 100 時，所有村民優先採集木材；當木材充足時，轉為採集其他資源。」</li>
+<li><strong>效率優化</strong>：「讓距離樹林最近的村民負責採集，距離倉庫最近的村民負責運輸，最大化整體效率。」</li>
+</ul>
+
+<p>玩家可以用自然語言描述理想的資源採集策略，系統會自動生成對應的行為樹，讓多個村民協同工作，達成最快的採集效率。這種方式比傳統的「點擊指派」更加靈活，也讓玩家可以實驗不同的策略組合。</p>
+
+<p>這些應用場景展示了自然語言控制 AI 的潛力：它不僅降低了技術門檻，也讓玩家可以用更直觀的方式表達策略意圖。雖然目前的實作還很簡單，但這個方向值得進一步探索。</p>
+
+<h2>專案的限制與未來方向</h2>
+
+<p>作為一個原型專案，SimVi 目前還有一些限制：</p>
+
+<ul>
+<li>只支援有限的動作和條件類型</li>
+<li>LOOP 節點只支援 <code>forever</code> 模式</li>
+<li>遊戲場景相對簡單，只有基本的實體</li>
+<li>自然語言轉換的準確度還有改進空間</li>
+</ul>
+
+<p>未來可能的改進方向包括：</p>
+
+<ul>
+<li>擴展動作和條件系統，支援更多遊戲機制</li>
+<li>改進自然語言處理，提高轉換準確度</li>
+<li>增加更多遊戲元素，如戰鬥、建造等</li>
+<li>實作更複雜的行為樹節點，如並行執行、中斷機制等</li>
+<li>加入行為樹的編輯功能，讓玩家可以手動調整生成的邏輯</li>
+</ul>
+
+<h2>技術學習與收穫</h2>
+
+<p>在開發 SimVi 的過程中，我學習到了：</p>
+
+<ul>
+<li><strong>行為樹的實作</strong>：如何設計和實作一個完整的行為樹系統</li>
+<li><strong>DSL 設計</strong>：如何設計一個易讀易寫的領域特定語言</li>
+<li><strong>自然語言處理</strong>：如何用 LLM 來處理結構化任務</li>
+<li><strong>遊戲開發</strong>：如何使用 Phaser 3 來建立簡單的遊戲場景</li>
+<li><strong>型別安全</strong>：如何用 TypeScript 來確保 DSL 和行為樹的型別正確性</li>
+</ul>
+
+<h2>實際運作展示</h2>
+
+<p>以下影片展示了 SimVi 的實際運作情況，可以看到如何用自然語言描述行為，系統如何生成 DSL，以及村民如何在遊戲場景中執行這些行為：</p>
+
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; margin: 2rem 0;">
+<iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" src="https://www.youtube.com/embed/r3hk_gpsb8Y" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+
+<h2>結語</h2>
+
+<p>SimVi 是一個探索性的原型專案，嘗試用自然語言來降低遊戲 AI 行為定義的門檻。雖然還有很多改進空間，但這個專案展示了將自然語言處理與遊戲開發結合的可能性。</p>
+
+<p>這個專案也讓我更深入地理解了行為樹系統和自然語言處理在遊戲開發中的應用潛力。如果你對這個專案感興趣，歡迎到 <a href="https://github.com/bmcool/SimVi" target="_blank" rel="noopener noreferrer">GitHub</a> 查看原始碼，或提供任何想法和建議。</p>
+
+<p>未來如果有機會，我會繼續完善這個專案，加入更多功能和改進。如果你有任何想法或建議，歡迎分享！</p>

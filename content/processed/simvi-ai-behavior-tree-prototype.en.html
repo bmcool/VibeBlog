@@ -1,0 +1,206 @@
+<h1>SimVi: A Behavior Tree Prototype for Natural Language Game AI Control</h1>
+
+<p>While exploring game AI development, I experimented with an interesting idea: <strong>Can we let players describe AI behaviors in natural language, and have the system automatically generate and execute the corresponding logic?</strong> SimVi is a preliminary implementation of this concept.</p>
+
+<p>SimVi is a game AI prototype that combines natural language processing with behavior tree systems. Through a custom DSL (Domain Specific Language) and OpenAI API, players can describe villager behaviors in Chinese, and the system automatically converts these descriptions into behavior tree DSL, which is then executed in a Phaser game scene.</p>
+
+<p>The project source code is open-sourced on <a href="https://github.com/bmcool/SimVi" target="_blank" rel="noopener noreferrer">GitHub</a>, feel free to check it out and contribute.</p>
+
+<h2>Core Concept</h2>
+
+<p>The core goal of SimVi is to lower the barrier for defining game AI behaviors. Traditionally, defining game AI behaviors requires writing code or using complex visual editors. SimVi attempts to use natural language as an intermediary, allowing players to more intuitively describe desired behaviors.</p>
+
+<h3>From Natural Language to Behavior Tree</h3>
+
+<p>The entire process can be divided into several steps:</p>
+
+<ol>
+<li><strong>Natural Language Input</strong>：Players input Chinese instructions, such as "讓這個村民持續採木頭，背包滿了就回倉庫存放。" (Make this villager continuously gather wood, and return to storage when the backpack is full.)</li>
+<li><strong>DSL Generation</strong>：The system uses OpenAI API (or a mock version) to convert natural language into structured behavior tree DSL</li>
+<li><strong>DSL Parsing and Validation</strong>：Parse DSL syntax, calculate complexity, and check if it meets restrictions</li>
+<li><strong>Behavior Tree Execution</strong>：Execute behavior tree logic in the game scene to control villager actions</li>
+</ol>
+
+<h2>Technical Architecture</h2>
+
+<h3>Frontend Technology Stack</h3>
+
+<p>SimVi uses a modern frontend technology stack:</p>
+
+<ul>
+<li><strong>React + TypeScript + Vite</strong>：Provides fast development experience and type safety</li>
+<li><strong>Phaser 3</strong>：Game engine responsible for rendering game scenes and entities</li>
+<li><strong>React Flow</strong>：Visualizes behavior tree structure, allowing players to intuitively see the generated logic</li>
+</ul>
+
+<h3>Behavior Tree DSL Design</h3>
+
+<p>SimVi defines a concise behavior tree DSL that supports the following node types:</p>
+
+<ul>
+<li><strong>BEHAVIOR</strong>：Defines the root node of a behavior</li>
+<li><strong>LOOP</strong>：Repeatedly executes child nodes (currently supports <code>mode=forever</code>)</li>
+<li><strong>SEQUENCE</strong>：Executes child nodes sequentially, fails if any child fails</li>
+<li><strong>SELECTOR</strong>：Tries child nodes sequentially, succeeds if any child succeeds</li>
+<li><strong>CONDITION</strong>：Conditional checks, such as checking if the backpack is full</li>
+<li><strong>ACTION</strong>：Specific actions, such as moving, gathering, or depositing resources</li>
+</ul>
+
+<p>Here's a simple DSL example:</p>
+
+<pre><code>BEHAVIOR Lumberjack:
+  LOOP mode=forever:
+    SEQUENCE:
+      ACTION move_to target=nearest(tree)
+      ACTION gather resource=wood
+      ACTION move_to target=storage
+      ACTION deposit resource=wood
+</code></pre>
+
+<p>This DSL defines a continuous wood-gathering behavior: the villager will move to the nearest tree, gather wood, then move to storage, deposit the wood, and repeat this cycle.</p>
+
+<h3>Complexity Calculation Mechanism</h3>
+
+<p>To prevent players from defining overly complex behaviors, SimVi implements a complexity calculation mechanism. Each node has a corresponding complexity cost, and the system calculates the total complexity of the entire behavior tree and compares it with a set limit. If it exceeds the limit, the behavior will not execute.</p>
+
+<p>This design allows the game to limit the complexity of behaviors available to players based on mechanisms like "village level," adding strategic depth.</p>
+
+<h2>Implementation Details</h2>
+
+<h3>DSL Parser</h3>
+
+<p>The DSL parser uses a recursive descent approach, using indentation to represent node hierarchy. The parser will:</p>
+
+<ul>
+<li>Check if indentation is correct (must be multiples of 2)</li>
+<li>Validate syntax against specifications</li>
+<li>Build an Abstract Syntax Tree (AST)</li>
+<li>Provide detailed error messages, including line numbers and specific error locations</li>
+</ul>
+
+<h3>Behavior Tree Executor</h3>
+
+<p>The behavior tree executor (BehaviorRuntime) is responsible for executing the parsed AST. It implements complete behavior tree logic:</p>
+
+<ul>
+<li><strong>State Memory</strong>：Uses memory to store node execution states, supporting long-running actions (such as movement)</li>
+<li><strong>Node Execution</strong>：Executes corresponding logic based on node type (SEQUENCE, SELECTOR, LOOP, etc.)</li>
+<li><strong>Action Handling</strong>：Integrates with the game world's action system, such as movement, gathering, and depositing</li>
+</ul>
+
+<h3>Natural Language to DSL Conversion</h3>
+
+<p>The system uses OpenAI's GPT-4o-mini model to convert natural language to DSL. The prompt design includes:</p>
+
+<ul>
+<li>List of available actions and conditions</li>
+<li>DSL syntax specifications</li>
+<li>Multiple examples showing behavior descriptions of different complexities</li>
+<li>Clear rules to ensure generated DSL conforms to specifications</li>
+</ul>
+
+<p>If no OpenAI API Key is provided, the system uses a mock version that generates simple DSL examples based on keyword matching.</p>
+
+<h2>Game Scene Design</h2>
+
+<p>The current game scene includes:</p>
+
+<ul>
+<li><strong>Villager</strong>：Blue circle that can execute various behaviors</li>
+<li><strong>Tree</strong>：Green circle that can be harvested for wood</li>
+<li><strong>Storage</strong>：Yellow rectangle where resources can be deposited</li>
+<li><strong>Guard</strong>：Red circle that patrols along a fixed path</li>
+</ul>
+
+<p>The game world uses a simple entity-component system, where each entity has properties like position and inventory. The action system modifies these properties based on behavior tree instructions and updates visual representations.</p>
+
+<h2>Visualization Features</h2>
+
+<p>SimVi uses React Flow to visualize generated behavior trees. When DSL parsing succeeds, the system automatically generates corresponding nodes and connections, allowing players to intuitively see:</p>
+
+<ul>
+<li>The overall structure of the behavior tree</li>
+<li>Node types and parameters</li>
+<li>Hierarchical relationships between nodes</li>
+</ul>
+
+<p>This visualization feature is very helpful for understanding AI behavior logic and makes debugging easier.</p>
+
+<h2>Application Scenarios and Ideas</h2>
+
+<p>Although SimVi is currently just a simple prototype, this technical direction has many interesting application possibilities in game development. Here are some application scenarios I thought of during development:</p>
+
+<h3>Squad Formation System</h3>
+
+<p>In action games or RPGs, players can control the main character while commanding other companions. Through natural language, players can define unique combat strategies for each companion:</p>
+
+<ul>
+<li><strong>Tank Character</strong>："When enemies approach, prioritize protecting the player. If the player's health drops below 50%, use taunt skills to attract enemy attention."</li>
+<li><strong>Healer Character</strong>："Continuously follow the player. When the player or any teammate's health drops below 30%, immediately use healing skills."</li>
+<li><strong>DPS Character</strong>："Prioritize attacking the target the player is attacking. If the target's health drops below 20%, use finishing skills."</li>
+</ul>
+
+<p>This design allows players to adjust companion tactics in real-time based on different combat situations, without needing to enter complex settings menus. Each companion can have their own unique behavior pattern, making combat more strategic and personalized.</p>
+
+<h3>Resource Gathering Optimization</h3>
+
+<p>In simulation or strategy games, players need to manage multiple villagers for resource gathering. By defining each villager's behavior through natural language, more refined resource management can be achieved:</p>
+
+<ul>
+<li><strong>Division of Labor</strong>："Have villager A specialize in gathering wood, villager B specialize in gathering stone, and villager C transport resources between them to storage."</li>
+<li><strong>Priority Management</strong>："When wood inventory drops below 100, all villagers prioritize gathering wood. When wood is sufficient, switch to gathering other resources."</li>
+<li><strong>Efficiency Optimization</strong>："Have villagers closest to the forest handle gathering, and villagers closest to storage handle transportation, maximizing overall efficiency."</li>
+</ul>
+
+<p>Players can describe ideal resource gathering strategies in natural language, and the system will automatically generate corresponding behavior trees, allowing multiple villagers to work together to achieve the fastest gathering efficiency. This approach is more flexible than traditional "click-to-assign" methods and allows players to experiment with different strategy combinations.</p>
+
+<p>These application scenarios demonstrate the potential of natural language-controlled AI: it not only lowers the technical barrier but also allows players to express strategic intentions in a more intuitive way. Although the current implementation is still simple, this direction is worth further exploration.</p>
+
+<h2>Project Limitations and Future Directions</h2>
+
+<p>As a prototype project, SimVi currently has some limitations:</p>
+
+<ul>
+<li>Only supports a limited set of action and condition types</li>
+<li>LOOP nodes only support <code>forever</code> mode</li>
+<li>Game scene is relatively simple, with only basic entities</li>
+<li>Natural language conversion accuracy has room for improvement</li>
+</ul>
+
+<p>Possible future improvements include:</p>
+
+<ul>
+<li>Expanding action and condition systems to support more game mechanics</li>
+<li>Improving natural language processing to increase conversion accuracy</li>
+<li>Adding more game elements, such as combat, building, etc.</li>
+<li>Implementing more complex behavior tree nodes, such as parallel execution, interrupt mechanisms, etc.</li>
+<li>Adding behavior tree editing functionality, allowing players to manually adjust generated logic</li>
+</ul>
+
+<h2>Technical Learning and Insights</h2>
+
+<p>During the development of SimVi, I learned about:</p>
+
+<ul>
+<li><strong>Behavior Tree Implementation</strong>：How to design and implement a complete behavior tree system</li>
+<li><strong>DSL Design</strong>：How to design an easy-to-read and easy-to-write domain-specific language</li>
+<li><strong>Natural Language Processing</strong>：How to use LLMs to handle structured tasks</li>
+<li><strong>Game Development</strong>：How to use Phaser 3 to create simple game scenes</li>
+<li><strong>Type Safety</strong>：How to use TypeScript to ensure type correctness of DSL and behavior trees</li>
+</ul>
+
+<h2>Live Demo</h2>
+
+<p>The following video demonstrates SimVi in action, showing how to describe behaviors in natural language, how the system generates DSL, and how villagers execute these behaviors in the game scene:</p>
+
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; margin: 2rem 0;">
+<iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" src="https://www.youtube.com/embed/r3hk_gpsb8Y" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+
+<h2>Conclusion</h2>
+
+<p>SimVi is an exploratory prototype project that attempts to use natural language to lower the barrier for defining game AI behaviors. Although there's still much room for improvement, this project demonstrates the potential of combining natural language processing with game development.</p>
+
+<p>This project has also given me a deeper understanding of behavior tree systems and the application potential of natural language processing in game development. If you're interested in this project, feel free to check out the source code on <a href="https://github.com/bmcool/SimVi" target="_blank" rel="noopener noreferrer">GitHub</a>, or share any ideas and suggestions.</p>
+
+<p>If I have the opportunity in the future, I'll continue to improve this project by adding more features and enhancements. If you have any ideas or suggestions, feel free to share them!</p>

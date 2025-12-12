@@ -1,0 +1,17 @@
+{
+  "request_id": "391b8ea1-3abb-4b3a-b753-f25cdc0c14ed",
+  "prompt": "A modern game development prototype interface showing a village simulation game with AI behavior tree system. The scene shows a split-screen view: left side has a Phaser game canvas with a simple 2D village scene (blue villager circle, green tree, yellow storage building, red guard), right side shows a React UI panel with behavior tree visualization using React Flow nodes. The design is clean and minimalist with a dark theme, code-like aesthetic, showing DSL text editor and complexity metrics.",
+  "model": "Flux1schnell",
+  "width": 768,
+  "height": 768,
+  "seed": -1,
+  "steps": 4,
+  "guidance": 7.5,
+  "loras": [],
+  "negative_prompt": null,
+  "result_url": "https://depinprod.s3.pl-waw.scw.cloud/depin-results/7329224/7yBEWjBHKlDmnN1byGBaW8uivebmTNnGBlwCRoIQ.png?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=SCWP90DSGR7MRZSCCA30%2F20251212%2Fpl-waw%2Fs3%2Faws4_request&X-Amz-Date=20251212T105516Z&X-Amz-SignedHeaders=host&X-Amz-Expires=17987&X-Amz-Signature=0e094a7bdbebbf5522c53e492ff8cb42e9226d68f0d9bedacceab2b1cc161f70",
+  "file_path": "static/images/ai-generated/simvi-hero.png",
+  "generated_at": "2025-12-12T18:55:21.526080",
+  "tags": [],
+  "description": ""
+}
