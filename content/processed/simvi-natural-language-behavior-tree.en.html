@@ -1,0 +1,228 @@
+<h1>SimVi: A Prototype for Generating Game AI Behavior Trees from Natural Language</h1>
+
+<p>In game development, designing AI behavior for NPCs (Non-Player Characters) has always been a complex and time-consuming task. Traditionally, developers need to manually write behavior trees or state machines, which requires not only deep technical knowledge but also repeated testing and adjustment. But what if there was a tool that could let you describe desired behaviors in natural language and automatically generate executable behavior tree code?</p>
+
+<p>This is what the <strong>SimVi</strong> project aims to solve: a village simulation game prototype that demonstrates how to generate game AI behavior tree DSL (Domain Specific Language) from natural language instructions and execute them in real-time within the game.</p>
+
+<h2>Core Feature: From Natural Language to Behavior Tree</h2>
+
+<p>The core innovation of SimVi lies in converting natural language instructions into structured behavior tree DSL. For example, when you input:</p>
+
+<blockquote>
+<p>"Make this villager continuously gather wood, and return to storage when the backpack is full."</p>
+</blockquote>
+
+<p>The system automatically generates the following DSL:</p>
+
+<pre><code>BEHAVIOR Lumberjack:
+  LOOP mode=forever:
+    SELECTOR:
+      SEQUENCE:
+        CONDITION inventory(resource=wood) < 10
+        ACTION move_to target=nearest(tree)
+        ACTION gather resource=wood
+      SEQUENCE:
+        CONDITION inventory(resource=wood) >= 10
+        ACTION move_to target=storage
+        ACTION deposit resource=wood
+</code></pre>
+
+<p>This DSL is parsed into an Abstract Syntax Tree (AST), then executed by the Behavior Runtime to control villager behavior in the game.</p>
+
+<h2>Technical Architecture</h2>
+
+<h3>1. Natural Language Processing: OpenAI API Integration</h3>
+
+<p>SimVi uses OpenAI's GPT-4o-mini model to convert natural language into DSL. The system provides detailed system prompts containing:</p>
+
+<ul>
+<li>DSL syntax rules</li>
+<li>Available actions and conditions</li>
+<li>Multiple examples demonstrating conversion for different scenarios</li>
+</ul>
+
+<p>If no API key is provided, the system uses a mock version that generates simple DSL examples based on keyword matching.</p>
+
+<h3>2. DSL Parser</h3>
+
+<p>The DSL parser uses recursive descent parsing and supports the following node types:</p>
+
+<ul>
+<li><strong>BEHAVIOR</strong>: Root node of the behavior tree</li>
+<li><strong>LOOP</strong>: Loop execution (currently supports mode=forever)</li>
+<li><strong>SEQUENCE</strong>: Sequential execution, fails if any child node fails</li>
+<li><strong>SELECTOR</strong>: Selective execution, succeeds if any child node succeeds</li>
+<li><strong>CONDITION</strong>: Condition evaluation (e.g., inventory(resource=wood) >= 10)</li>
+<li><strong>ACTION</strong>: Action execution (e.g., move_to, gather, deposit)</li>
+</ul>
+
+<p>The parser checks indentation (must be multiples of 2), syntax correctness, and provides detailed error messages including line numbers and specific error locations.</p>
+
+<h3>3. Behavior Tree Runtime</h3>
+
+<p>The behavior tree runtime is responsible for executing the parsed AST and supports three states:</p>
+
+<ul>
+<li><strong>success</strong>: Node execution succeeded</li>
+<li><strong>failure</strong>: Node execution failed</li>
+<li><strong>running</strong>: Node is currently executing (e.g., moving, waiting)</li>
+</ul>
+
+<p>The runtime maintains node memory to preserve state for long-running actions, such as:</p>
+
+<ul>
+<li>Target position for movement actions</li>
+<li>Start time for wait actions</li>
+<li>Current execution index for sequence nodes</li>
+</ul>
+
+<h3>4. Complexity Calculation and Limits</h3>
+
+<p>To prevent generating overly complex behavior trees, SimVi implements a complexity calculation mechanism. Each node type has a corresponding cost:</p>
+
+<ul>
+<li>SEQUENCE: 1</li>
+<li>SELECTOR: 2</li>
+<li>LOOP: 3</li>
+<li>CONDITION: 1</li>
+<li>ACTION_basic: 1 (e.g., move_to, gather)</li>
+<li>ACTION_advanced: 3</li>
+</ul>
+
+<p>The system calculates the total complexity of the entire behavior tree. If it exceeds the set limit (default: 10), the behavior tree will not execute. This can be analogized to a "village level restriction": low-level villages cannot execute overly complex AI behaviors.</p>
+
+<h3>5. Visualization: React Flow Integration</h3>
+
+<p>SimVi uses React Flow to visualize the behavior tree AST as a flowchart, allowing developers to intuitively see the generated behavior tree structure. Each node displays its type and parameters, and edges represent parent-child relationships.</p>
+
+<h3>6. Game Engine: Phaser 3</h3>
+
+<p>The game portion is implemented using Phaser 3, including:</p>
+
+<ul>
+<li>Villagers (blue circles): Controlled by behavior trees</li>
+<li>Guards (red circles): Simple patrol logic</li>
+<li>Trees (green circles): Collectible resources</li>
+<li>Storage (yellow rectangles): Resource storage</li>
+</ul>
+
+<p>The game world state (World State) is synchronized with the Phaser scene, and the behavior tree runtime executes a tick every 100ms to update villager positions and states.</p>
+
+<h2>Implementation Details</h2>
+
+<h3>Action System</h3>
+
+<p>SimVi implements various action types:</p>
+
+<ul>
+<li><strong>move_to</strong>: Move to specified target (storage, nearest(tree), random)</li>
+<li><strong>gather</strong>: Gather resources (currently supports wood)</li>
+<li><strong>deposit</strong>: Deposit resources to storage</li>
+<li><strong>wait</strong>: Wait for specified duration</li>
+<li><strong>follow</strong>: Continuously follow target (returns running state)</li>
+<li><strong>follow_for_duration</strong>: Follow target for specified duration then return success</li>
+</ul>
+
+<p>Each action checks preconditions, for example, gather checks if the backpack is full, and deposit checks if there are resources to deposit.</p>
+
+<h3>Condition System</h3>
+
+<p>Currently supported conditions are mainly inventory checks:</p>
+
+<ul>
+<li><code>inventory(resource=wood) < 10</code>: Inventory less than 10</li>
+<li><code>inventory(resource=wood) >= 10</code>: Inventory greater than or equal to 10</li>
+</ul>
+
+<p>The condition system uses simple expression parsing and can easily be extended to support more condition types.</p>
+
+<h3>World State Management</h3>
+
+<p>The game world state (World State) contains:</p>
+
+<ul>
+<li>Tree list (positions)</li>
+<li>Storage list (positions, inventory)</li>
+<li>Villager list (positions, inventory, capacity)</li>
+</ul>
+
+<p>The world state provides query methods, such as:</p>
+
+<ul>
+<li><code>nearestTree(pos)</code>: Find the nearest tree</li>
+<li><code>nearestVillager(pos, excludeId)</code>: Find the nearest villager (excluding self)</li>
+<li><code>firstStorage()</code>: Get the first storage</li>
+</ul>
+
+<h2>User Experience</h2>
+
+<p>SimVi's interface is divided into two main areas:</p>
+
+<ul>
+<li><strong>Left side</strong>: Phaser game view, displaying villager behavior in real-time</li>
+<li><strong>Right side</strong>: Control panel, including:
+  <ul>
+    <li>OpenAI API Key input (optional)</li>
+    <li>Natural language instruction input</li>
+    <li>DSL editor</li>
+    <li>Complexity display</li>
+    <li>Behavior tree flowchart visualization</li>
+  </ul>
+</li>
+</ul>
+
+<p>Usage flow:</p>
+
+<ol>
+<li>Input natural language instruction (e.g., "Make villager continuously gather wood and return to storage")</li>
+<li>Click "Generate DSL from Natural Language" button</li>
+<li>System generates DSL and displays it in the editor</li>
+<li>If complexity is within limits, behavior tree automatically executes</li>
+<li>Observe villager behavior in the game view</li>
+<li>Manually edit DSL for fine-tuning</li>
+</ol>
+
+<h2>Technical Highlights</h2>
+
+<h3>1. Type Safety</h3>
+
+<p>The entire project is implemented in TypeScript, ensuring type safety. AST nodes, runtime configuration, and world state all have complete type definitions.</p>
+
+<h3>2. Error Handling</h3>
+
+<p>The DSL parser provides detailed error messages, including line numbers, original line content, and specific error reasons. If the DSL is invalid, the system displays errors without crashing.</p>
+
+<h3>3. Extensibility</h3>
+
+<p>The system is designed for easy extension:</p>
+
+<ul>
+<li>Add actions: Implement new ActionHandler in <code>actions.ts</code></li>
+<li>Add conditions: Add condition evaluation logic in <code>evaluateCondition.ts</code></li>
+<li>Extend DSL syntax: Modify parser to support new node types</li>
+</ul>
+
+<h3>4. State Persistence</h3>
+
+<p>The behavior tree runtime uses a memory system to preserve state for long-running actions, ensuring actions can maintain continuity across multiple ticks.</p>
+
+<h2>Future Prospects</h2>
+
+<p>SimVi is currently a prototype, with many directions for improvement:</p>
+
+<ul>
+<li><strong>More action types</strong>: Combat, construction, trading, etc.</li>
+<li><strong>More complex conditions</strong>: Distance checks, time checks, multi-resource checks</li>
+<li><strong>Parallel execution</strong>: Support multiple behavior trees executing simultaneously</li>
+<li><strong>Behavior tree editor</strong>: Visual editing of behavior trees, not just viewing</li>
+<li><strong>Smarter LLM prompts</strong>: Dynamically adjust prompts based on game state</li>
+<li><strong>Behavior tree debugging tools</strong>: Visualize current executing nodes, state transitions, etc.</li>
+</ul>
+
+<h2>Conclusion</h2>
+
+<p>SimVi demonstrates how AI technology can simplify AI behavior design in game development. Although it's still in the prototype stage, it has already proven the feasibility of natural language to behavior tree conversion. For indie game developers or small teams, such tools can significantly lower the barrier to AI behavior design, allowing developers to focus more on gameplay and content creation.</p>
+
+<p>More importantly, SimVi demonstrates an important principle of AI-assisted development: <strong>within the scope of low verification costs, AI can significantly improve development efficiency</strong>. DSL syntax checking, behavior tree visualization, and real-time execution in the game all allow developers to quickly verify whether AI-generated results are correct, which is exactly the most suitable scenario for AI-assisted development.</p>
+
+<p>If you're interested in this project, you can check out the <a href="https://www.youtube.com/watch?v=r3hk_gpsb8Y">Demo video</a> to see how it works in practice. This prototype not only demonstrates technical possibilities but also provides new ideas for future game development tools.</p>

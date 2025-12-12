@@ -1,0 +1,17 @@
+{
+  "request_id": "7cb59b94-1ed6-4048-be39-47f7b9700054",
+  "prompt": "A modern game development interface showing a village simulation game with AI behavior tree visualization. The scene includes a game view on the left showing a 2D top-down village with trees, storage buildings, and villagers, and a code/DSL editor on the right showing behavior tree code. The style should be clean, technical, and modern with a dark theme. Include visual elements like flowcharts, code syntax highlighting, and game sprites.",
+  "model": "Flux1schnell",
+  "width": 1024,
+  "height": 768,
+  "seed": -1,
+  "steps": 4,
+  "guidance": 7.5,
+  "loras": [],
+  "negative_prompt": null,
+  "result_url": "https://depinprod.s3.pl-waw.scw.cloud/depin-results/7329187/VBtCW8DP7J5XMrHP7yeWTumMOTqPgSNpw1WlK754.png?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=SCWP90DSGR7MRZSCCA30%2F20251212%2Fpl-waw%2Fs3%2Faws4_request&X-Amz-Date=20251212T105158Z&X-Amz-SignedHeaders=host&X-Amz-Expires=17988&X-Amz-Signature=497d3d0a18e95bc080599a8b4cd3e735c018d3a76a82991c4b21df285f72dc8e",
+  "file_path": "static/images/ai-generated/simvi-natural-language-behavior-tree.png",
+  "generated_at": "2025-12-12T18:52:01.599894",
+  "tags": [],
+  "description": ""
+}
