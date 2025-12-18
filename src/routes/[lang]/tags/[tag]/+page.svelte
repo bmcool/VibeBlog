@@ -1,18 +1,22 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import { generateSEOTags, buildLangPath } from '$lib/utils/seo';
+	import type { Language } from '$lib/types/blog';
 
 	let { data }: { data: PageData } = $props();
 	
+	// $types currently types lang as string, but runtime is 'zh' | 'en'
+	const lang = $derived((data.lang === 'en' ? 'en' : 'zh') as Language);
+	
 	// SEO 数据
 	const seo = $derived(generateSEOTags({
-		title: data.lang === 'en' ? `Tag: ${data.tag} - VibeBlog` : `標籤：${data.tag} - VibeBlog`,
-		description: data.lang === 'en' 
+		title: lang === 'en' ? `Tag: ${data.tag} - VibeBlog` : `標籤：${data.tag} - VibeBlog`,
+		description: lang === 'en' 
 			? `Browse all articles tagged with "${data.tag}" on VibeBlog. Find ${data.posts.length} article${data.posts.length !== 1 ? 's' : ''} about ${data.tag}.`
 			: `瀏覽 VibeBlog 上標籤為「${data.tag}」的所有文章。找到 ${data.posts.length} 篇關於 ${data.tag} 的文章。`,
-		url: buildLangPath(`/tags/${encodeURIComponent(data.tag)}`, data.lang),
+		url: buildLangPath(`/tags/${encodeURIComponent(data.tag)}`, lang),
 		type: 'website',
-		lang: data.lang
+		lang
 	}));
 </script>
 
@@ -31,15 +35,15 @@
 	<link rel="canonical" href={seo.url} />
 	
 	<!-- Alternate Languages -->
-	<link rel="alternate" hreflang="zh-TW" href={`https://vibeblog.app/tags/${encodeURIComponent(data.tag)}`} />
-	<link rel="alternate" hreflang="en-US" href={`https://vibeblog.app/en/tags/${encodeURIComponent(data.tag)}`} />
+	<link rel="alternate" hreflang="zh-TW" href={`https://vibeblog.app/tags/${encodeURIComponent(data.tagZh ?? data.tag)}`} />
+	<link rel="alternate" hreflang="en-US" href={`https://vibeblog.app/en/tags/${encodeURIComponent(data.tagEn ?? data.tag)}`} />
 </svelte:head>
 
 <div class="tag-posts-container">
-	<h1>{data.lang === 'en' ? `Tag: ${data.tag}` : `標籤：${data.tag}`}</h1>
+	<h1>{lang === 'en' ? `Tag: ${data.tag}` : `標籤：${data.tag}`}</h1>
 
 	{#if data.posts.length === 0}
-		<p>{data.lang === 'en' ? 'No posts yet.' : '目前沒有文章。'}</p>
+		<p>{lang === 'en' ? 'No posts yet.' : '目前沒有文章。'}</p>
 	{:else}
 		<div class="posts-grid">
 			{#each data.posts as post (post.slug)}
@@ -48,17 +52,17 @@
 						<img src={post.heroImage} alt={post.title} class="post-image" />
 					{/if}
 					<div class="post-content">
-						<h2><a href={buildLangPath(`/blog/${post.slug}`, data.lang)}>{post.title}</a></h2>
-						<p class="post-date">{new Date(post.date).toLocaleDateString(data.lang === 'en' ? 'en-US' : 'zh-TW')}</p>
+						<h2><a href={buildLangPath(`/blog/${post.slug}`, lang)}>{post.title}</a></h2>
+						<p class="post-date">{new Date(post.date).toLocaleDateString(lang === 'en' ? 'en-US' : 'zh-TW')}</p>
 						{#if post.summary}
 							<p class="post-summary">{post.summary}</p>
 						{/if}
 						<div class="post-tags">
 							{#each post.tags as tagItem}
-								<a href={buildLangPath(`/tags/${encodeURIComponent(tagItem)}`, data.lang)} class="tag-badge">{tagItem}</a>
+								<a href={buildLangPath(`/tags/${encodeURIComponent(tagItem)}`, lang)} class="tag-badge">{tagItem}</a>
 							{/each}
 						</div>
-						<a href={buildLangPath(`/blog/${post.slug}`, data.lang)} class="read-more">{data.lang === 'en' ? 'Read more →' : '閱讀更多 →'}</a>
+						<a href={buildLangPath(`/blog/${post.slug}`, lang)} class="read-more">{lang === 'en' ? 'Read more →' : '閱讀更多 →'}</a>
 					</div>
 				</article>
 			{/each}
