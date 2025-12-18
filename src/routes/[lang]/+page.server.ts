@@ -1,5 +1,6 @@
 import { getAllPostsMeta, getAllTags } from '$lib/content.server';
 import { parseLanguage } from '$lib/utils/language';
+import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad, EntryGenerator } from './$types';
 
 // 只为英文版本生成条目（中文版本在根路由处理）
@@ -8,6 +9,11 @@ export const entries: EntryGenerator = async () => {
 };
 
 export const load: PageServerLoad = async ({ params, url, depends }) => {
+	// 處理 /en/ 重定向到 /en
+	if (url.pathname === '/en/') {
+		throw redirect(301, '/en');
+	}
+
 	// 从路径参数解析语言
 	// params.lang 应该包含 'en' 或 'zh'
 	const lang = params?.lang === 'en' ? 'en' : 'zh';
