@@ -1,0 +1,17 @@
+{
+  "request_id": "79a529ec-0e65-42dd-ac4c-c14aebbdeab0",
+  "prompt": "Concept image for a Taiwanese personal finance article: a clean infographic-style illustration (NOT containing any text) showing a three-bucket allocation with a -20% guardrail: Bucket 1 growth (stock index), Bucket 2 safety (laddered deposits), Bucket 3 optional diversifier (short-term treasury). Use simple geometric shapes, subtle colors, clear visual hierarchy, minimal icons (shield, calendar, pie slice), white background, modern editorial style, high resolution. No text, no labels, no letters, no numbers.",
+  "model": "Flux1schnell",
+  "width": 960,
+  "height": 540,
+  "seed": -1,
+  "steps": 8,
+  "guidance": 7.5,
+  "loras": [],
+  "negative_prompt": "text, labels, letters, numbers, watermark, logo, clutter, lowres, blurry",
+  "result_url": "https://depinprod.s3.pl-waw.scw.cloud/depin-results/7885125/e1c8ykukPxTtahn2OAl63GvfOLPTzdMQkcfR9Uqb.png?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=SCWP90DSGR7MRZSCCA30%2F20251224%2Fpl-waw%2Fs3%2Faws4_request&X-Amz-Date=20251224T151647Z&X-Amz-SignedHeaders=host&X-Amz-Expires=17978&X-Amz-Signature=0581f40f8a726a83fcbbda54794d5bd87f030caaa183906e48638e5ebb9a2c54",
+  "file_path": "/Users/zephyrlin/Desktop/noregretlab/temp/images/deposit-alternative-10y-d20-set-tw-map.png",
+  "generated_at": "2025-12-24T23:16:47.863587",
+  "tags": [],
+  "description": ""
+}

@@ -1,0 +1,17 @@
+{
+  "request_id": "00442c31-d616-4c25-941c-bc1685cc5cf6",
+  "prompt": "Nord theme website Open Graph preview image (1200x630). Minimalist editorial design, deep blue-gray background, soft gradient, subtle geometric shapes, clean typography placeholder 'NoRegretLab', no logos, no people, no icons, high contrast, modern, calm, professional, flat design.",
+  "model": "Flux1schnell",
+  "width": 1200,
+  "height": 630,
+  "seed": -1,
+  "steps": 6,
+  "guidance": 7.5,
+  "loras": [],
+  "negative_prompt": null,
+  "result_url": "https://depinprod.s3.pl-waw.scw.cloud/depin-results/7582931/1FbV2OSGjkJUcECiO5nvU2l6d1JGr0IyJfwjzEnN.png?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=SCWP90DSGR7MRZSCCA30%2F20251218%2Fpl-waw%2Fs3%2Faws4_request&X-Amz-Date=20251218T150004Z&X-Amz-SignedHeaders=host&X-Amz-Expires=17960&X-Amz-Signature=090d058b901aae1aa5bdaa6a5dece38946fd4898929bfe5eb6dd9a03b1190e9d",
+  "file_path": "static/og/og-default-nord.png",
+  "generated_at": "2025-12-18T23:00:07.505135",
+  "tags": [],
+  "description": ""
+}

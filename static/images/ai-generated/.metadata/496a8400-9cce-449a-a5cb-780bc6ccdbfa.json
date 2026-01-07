@@ -1,0 +1,17 @@
+{
+  "request_id": "496a8400-9cce-449a-a5cb-780bc6ccdbfa",
+  "prompt": "Minimalist editorial hero image for an article about low-volatility cash management in Taiwan. Abstract layered allocation: Layer A (T-bills ladder), Layer B (ultra-short bond ETF), Layer C (FX risk switch). Clean modern flat illustration, muted colors, high contrast, lots of whitespace, financial calm mood. No text, no numbers, no logos, no watermark.",
+  "model": "Flux1schnell",
+  "width": 1440,
+  "height": 900,
+  "seed": -1,
+  "steps": 8,
+  "guidance": 7.5,
+  "loras": [],
+  "negative_prompt": "text, words, numbers, logo, watermark, signature, blurry, low quality",
+  "result_url": "https://depinprod.s3.pl-waw.scw.cloud/depin-results/7862962/q8PHOhADyYYAwndiC3ONTBDs1DnldiAkhJbkqlws.png?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=SCWP90DSGR7MRZSCCA30%2F20251224%2Fpl-waw%2Fs3%2Faws4_request&X-Amz-Date=20251224T055127Z&X-Amz-SignedHeaders=host&X-Amz-Expires=17982&X-Amz-Signature=bb937a6479660c4cc71b2c7c171b5bb8b0cd7fc6f7a7075b3ad129f96d6b5c89",
+  "file_path": "/Users/zephyrlin/Desktop/noregretlab/temp/images/cash-like-deposit-alternative-layering-set-tw-map.png",
+  "generated_at": "2025-12-24T13:51:29.047472",
+  "tags": [],
+  "description": ""
+}

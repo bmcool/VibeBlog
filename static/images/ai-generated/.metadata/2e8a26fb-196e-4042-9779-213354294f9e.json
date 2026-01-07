@@ -1,0 +1,17 @@
+{
+  "request_id": "2e8a26fb-196e-4042-9779-213354294f9e",
+  "prompt": "Open Graph preview image (1200x630) for a decision-focused editorial site. Nord-inspired minimalist style: deep navy / blue-gray palette, soft gradient, subtle abstract geometry (circles, waves, grid lines), calm, modern, high contrast, lots of clean negative space. No UI mockups, no screenshots, no logos, no icons, no symbols, purely abstract background.",
+  "model": "Flux1schnell",
+  "width": 1200,
+  "height": 630,
+  "seed": -1,
+  "steps": 10,
+  "guidance": 8.5,
+  "loras": [],
+  "negative_prompt": "text, typography, letters, words, caption, title, logo, watermark, signature, UI, website, interface, buttons, screenshot, mockup, people, faces, animals, low quality, blurry, noisy",
+  "result_url": "https://depinprod.s3.pl-waw.scw.cloud/depin-results/7583584/bxkWaH4Ss8gezIGrmIkEjGKZw7CSjVGvUnVCqMIP.png?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=SCWP90DSGR7MRZSCCA30%2F20251218%2Fpl-waw%2Fs3%2Faws4_request&X-Amz-Date=20251218T151759Z&X-Amz-SignedHeaders=host&X-Amz-Expires=17982&X-Amz-Signature=8426fe857aebe54f83af42faa5a13678f4d0bef49376b7a2a67b03f1efaed212",
+  "file_path": "static/og/og-default-nord.png",
+  "generated_at": "2025-12-18T23:18:01.613216",
+  "tags": [],
+  "description": ""
+}

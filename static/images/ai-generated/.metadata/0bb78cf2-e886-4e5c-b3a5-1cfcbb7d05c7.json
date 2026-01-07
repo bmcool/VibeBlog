@@ -1,0 +1,17 @@
+{
+  "request_id": "0bb78cf2-e886-4e5c-b3a5-1cfcbb7d05c7",
+  "prompt": "Small content image for a Taiwanese personal finance article: a simple abstract representation of 'annual rebalancing once a year' without text. A calendar icon with one highlighted day and circular arrows, minimal geometric style, white background, clean editorial illustration, no letters, no numbers.",
+  "model": "Flux1schnell",
+  "width": 960,
+  "height": 540,
+  "seed": -1,
+  "steps": 8,
+  "guidance": 7.5,
+  "loras": [],
+  "negative_prompt": "text, letters, numbers, logo, watermark, clutter, lowres",
+  "result_url": "https://depinprod.s3.pl-waw.scw.cloud/depin-results/7885128/Nh6y3fCgImfrYCPOnMfccVLiSKNiQklqwU6WUzFL.png?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=SCWP90DSGR7MRZSCCA30%2F20251224%2Fpl-waw%2Fs3%2Faws4_request&X-Amz-Date=20251224T151650Z&X-Amz-SignedHeaders=host&X-Amz-Expires=17979&X-Amz-Signature=1691fd000e67608b4965cb3ff9e4d4991788889b3765fae5e1feda45ecd92122",
+  "file_path": "/Users/zephyrlin/Desktop/noregretlab/temp/images/deposit-alternative-10y-d20-set-tw-rebalance.png",
+  "generated_at": "2025-12-24T23:16:50.290812",
+  "tags": [],
+  "description": ""
+}

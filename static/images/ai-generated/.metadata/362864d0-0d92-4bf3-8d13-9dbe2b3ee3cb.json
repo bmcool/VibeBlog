@@ -1,0 +1,17 @@
+{
+  "request_id": "362864d0-0d92-4bf3-8d13-9dbe2b3ee3cb",
+  "prompt": "Minimalist infographic-style concept image (not a chart with text): three horizontal layers blocks (A/B/C) with simple icons (ladder, shield, switch) representing duration ladder, low volatility, FX switch. Clean flat design, muted palette, white background, no text, no letters, no numbers, no watermark.",
+  "model": "Flux1schnell",
+  "width": 960,
+  "height": 600,
+  "seed": -1,
+  "steps": 8,
+  "guidance": 7.5,
+  "loras": [],
+  "negative_prompt": "text, words, letters, numbers, logo, watermark, signature, blurry, low quality",
+  "result_url": "https://depinprod.s3.pl-waw.scw.cloud/depin-results/7862961/nmOqxQyeiLqje64LpeHKDA5x0NvAS1hUmLPRM5Oy.png?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=SCWP90DSGR7MRZSCCA30%2F20251224%2Fpl-waw%2Fs3%2Faws4_request&X-Amz-Date=20251224T055117Z&X-Amz-SignedHeaders=host&X-Amz-Expires=17988&X-Amz-Signature=0b96789b2676e92975e98da2fc6b125e22d9b8f68b3103f269a93d5cb1378061",
+  "file_path": "/Users/zephyrlin/Desktop/noregretlab/temp/images/cash-like-deposit-alternative-layering-set-tw-hero.png",
+  "generated_at": "2025-12-24T13:51:20.119267",
+  "tags": [],
+  "description": ""
+}

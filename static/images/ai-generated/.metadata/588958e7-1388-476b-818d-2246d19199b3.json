@@ -1,0 +1,17 @@
+{
+  "request_id": "588958e7-1388-476b-818d-2246d19199b3",
+  "prompt": "Hero image for a Taiwanese personal finance article about '10-year deposit alternative' with a -20% drawdown guardrail, calm pragmatic mood. Minimal modern flat-lay desk scene: a notebook with a 10-year timeline, a simple shield icon representing -20% guardrail, a Taiwan TWD banknote motif (generic, no real banknote), a small index chart rising gently, warm neutral colors, clean composition, lots of whitespace, photorealistic, high quality. No text, no letters, no numbers, no logos, no watermarks.",
+  "model": "Flux1schnell",
+  "width": 1440,
+  "height": 810,
+  "seed": -1,
+  "steps": 8,
+  "guidance": 7.5,
+  "loras": [],
+  "negative_prompt": "text, letters, numbers, logo, watermark, brand, lowres, blurry, messy, over-saturated, UI screenshot",
+  "result_url": "https://depinprod.s3.pl-waw.scw.cloud/depin-results/7885127/LkV8AV21YjXjvx5IDwTXlNnohJQOnvdFq5iEPt8V.png?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=SCWP90DSGR7MRZSCCA30%2F20251224%2Fpl-waw%2Fs3%2Faws4_request&X-Amz-Date=20251224T151642Z&X-Amz-SignedHeaders=host&X-Amz-Expires=17984&X-Amz-Signature=72dabed7d2d113f70a27566648946bd3e56e6c41d437572dcd853790d603a85c",
+  "file_path": "/Users/zephyrlin/Desktop/noregretlab/temp/images/deposit-alternative-10y-d20-set-tw-hero.png",
+  "generated_at": "2025-12-24T23:16:44.909282",
+  "tags": [],
+  "description": ""
+}
