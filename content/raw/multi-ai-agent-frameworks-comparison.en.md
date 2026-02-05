@@ -324,6 +324,41 @@ Require only natural language:
 | InfiAgent | Code | Pyramid | Tool-Based | High | Complex tasks, self-evolution |
 | MAS² | Code | Adaptive | Dynamic Combination | High | Deep research, code generation |
 
+## Choosing by Technical Background and Low-Regret Perspective
+
+When choosing a multi-agent framework, many people look at feature lists before considering their own technical level, which can lead to picking a framework that is either "too powerful to use effectively" or "easy to start with but insufficient later." From a "low-regret" angle, **confirm your technical background and use case first, then map to a framework**—this usually leads to fewer regrets than comparing features alone.
+
+### TL;DR (Quick guide)
+
+- **You are a developer and need high customization** → Choose **LangGraph** (graph architecture, state management, maximum flexibility)
+- **You need rapid prototyping and non-technical usability** → Choose **CrewAI** (intuitive, prompt-engineering focused, gentle learning curve)
+- **You need zero-code, full automation** → Choose **AutoAgent** (natural language setup, no coding)
+- **You need to integrate with existing systems** → Choose **AgentMesh** (layered architecture, multiple run modes, easy integration)
+
+### Why Technical Background Matters More Than Framework Features
+
+Choosing a multi-agent framework is fundamentally about trade-offs:
+
+- **LangGraph**: Trade "steep learning curve and understanding of graph architecture" for "maximum flexibility and customization"
+- **CrewAI**: Trade "limited customization" for "rapid prototyping, ease of use, gentle learning curve"
+- **AutoAgent**: Trade "very low customization" for "zero-code, full automation, non-technical friendly"
+
+Confirm your technical background and use case first, then pick the matching framework, and only then look at feature lists—this is the first step to reducing regret from a bad choice.
+
+### Three Common Regret Scenarios
+
+1. **Choosing LangGraph without enough technical background**: High learning cost and low development efficiency, sometimes leading to abandonment. If you only need rapid prototyping or simple multi-agent collaboration, starting with CrewAI or AutoAgent is more appropriate.
+2. **Choosing AutoAgent but needing deep customization**: Zero-code limits make complex workflows hard or impossible, forcing a framework switch and rewrite, often costing 3–4 weeks.
+3. **Choosing CrewAI but needing maximum flexibility**: Limited customization cannot support complex dynamic workflows. If you know from the start that you need high customization, choosing LangGraph tends to be less regrettable.
+
+### Low-Regret Starting Points
+
+- **Senior developers needing maximum flexibility** → LangGraph
+- **Junior developers needing rapid prototyping** → CrewAI
+- **Non-technical users needing zero-code** → AutoAgent
+
+For a fuller treatment of premises, exclusions, regret scenarios, and "who each framework fits / who to avoid," see [No Regret Lab's Multi AI Agent Framework Low-Regret Set](https://noregretlab.com/sets/multi-ai-agent-framework-set-tw/) (Traditional Chinese; decision flow by technical background and use case, with official links).
+
 ## Selection Recommendations
 
 ### Selection Based on Requirements
@@ -421,5 +456,6 @@ We hope this article can help developers better understand the characteristics a
 ### Other Resources
 - [LangGraph: Flexible and Powerful Agent Framework](https://blog.csdn.net/youmaob/article/details/153329031)
 - [Open Source AI Agent Framework Showdown: Technical Details and Developer Experience Analysis](https://blog.csdn.net/qq_36603091/article/details/147561089)
+- [Multi AI Agent Framework Selection: Low-Regret Set](https://noregretlab.com/sets/multi-ai-agent-framework-set-tw/) (No Regret Lab, Traditional Chinese—decision flow by technical background and use case, common regret scenarios, and low-regret starting points)
 - [AgentMesh: Open Source Multi-Agent Collaboration Framework](https://6wolf.com/ai/agentmesh-%E5%BC%80%E6%BA%90%E7%9A%84%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93-multi-agent-%E5%8D%8F%E4%BD%9C%E6%A1%86%E6%9E%B6)
 
